@@ -10,6 +10,7 @@ class CustomSquareButton extends StatelessWidget {
     required this.iconName,
     required this.iconLength,
     required this.borderRadius,
+    required this.onPressed,
   });
 
   final Color backgroundColor;
@@ -18,13 +19,14 @@ class CustomSquareButton extends StatelessWidget {
   final double iconLength;
   final String iconName;
   final double borderRadius;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: sideLength,
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: onPressed,
         color: backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),

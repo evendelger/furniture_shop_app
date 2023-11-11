@@ -1,74 +1,97 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
+import 'package:talker/talker.dart';
 
 class CardItem extends StatelessWidget {
-  const CardItem({super.key});
+  const CardItem({super.key, required this.product});
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          children: [
-            _TitleImage(),
-            _FavouritedIcon(),
-          ],
-        ),
-        SizedBox(height: 10),
-        _ItemTitle(),
-        SizedBox(height: 5),
-        _ItemPrice(),
-      ],
+    return InkWell(
+      onTap: () => Talker().info('selected ${product.title}'),
+      borderRadius: BorderRadius.circular(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              _ItemImage(imageUrl: product.image),
+              const _FavouritedIcon(),
+            ],
+          ),
+          const SizedBox(height: 10),
+          _ItemTitle(title: product.title),
+          const SizedBox(height: 5),
+          _ItemPrice(price: product.price),
+        ],
+      ),
     );
   }
 }
 
 class _ItemPrice extends StatelessWidget {
-  const _ItemPrice({
-    super.key,
-  });
+  const _ItemPrice({required this.price});
+
+  final double price;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      r'$ 12.00',
+      '\$ ${price}0',
       style: AppFonts.nsBold.copyWith(color: AppColors.blackFont),
     );
   }
 }
 
 class _ItemTitle extends StatelessWidget {
-  const _ItemTitle({
-    super.key,
-  });
+  const _ItemTitle({required this.title});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Black Simple Lamp',
+      title,
       style: AppFonts.nsRegular.copyWith(color: AppColors.black3),
     );
   }
 }
 
-class _TitleImage extends StatelessWidget {
-  const _TitleImage({
-    super.key,
+class _ItemImage extends StatelessWidget {
+  const _ItemImage({
+    required this.imageUrl,
   });
+
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Container(
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
         height: 200,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/sample_lamp.png'),
-            fit: BoxFit.fitWidth,
-          ),
+        fit: BoxFit.fitWidth,
+        imageBuilder: (context, imageProvider) {
+          return Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+        errorWidget: (context, url, error) =>
+            const Icon(Icons.error, color: AppColors.primary),
+        progressIndicatorBuilder: (context, url, progress) =>
+            const CircularIndicator(
+          radius: 10,
         ),
       ),
     );
@@ -76,13 +99,11 @@ class _TitleImage extends StatelessWidget {
 }
 
 class _FavouritedIcon extends StatelessWidget {
-  const _FavouritedIcon({
-    super.key,
-  });
+  const _FavouritedIcon();
 
   @override
   Widget build(BuildContext context) {
-    return const Positioned(
+    return Positioned(
       right: 10,
       bottom: 0,
       child: CustomSquareButton(
@@ -92,6 +113,7 @@ class _FavouritedIcon extends StatelessWidget {
         iconName: 'shopping_bag',
         iconLength: 20,
         borderRadius: 6,
+        onPressed: () {},
       ),
     );
   }

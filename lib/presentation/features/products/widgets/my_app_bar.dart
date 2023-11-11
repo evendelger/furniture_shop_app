@@ -9,7 +9,6 @@ class MyAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       toolbarHeight: 40,
-      pinned: false,
       stretch: true,
       leading: Container(
         width: 24,

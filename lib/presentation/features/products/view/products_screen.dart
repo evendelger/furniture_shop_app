@@ -1,7 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/domain/models/models.dart';
+import 'package:furniture_shop_app/domain/repository/abstract_products_repository.dart';
+import 'package:furniture_shop_app/presentation/features/products/blocs/blocs.dart';
+import 'package:furniture_shop_app/presentation/features/products/constants/categories.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
+import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
+import 'package:furniture_shop_app/service_locator.dart';
 
 @RoutePage()
 class ProductsScreen extends StatelessWidget {
@@ -9,34 +16,82 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverPadding(
-            padding: EdgeInsets.only(top: 20),
-            sliver: MyAppBar(),
-          ),
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: CategoriesListDelegate(),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 15,
-                mainAxisExtent: 270,
-              ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return const CardItem().animate().fadeIn(duration: 1000.ms);
-              },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductsBloc(
+            repository: getIt<AbstractProductsRepository>(),
+          )..add(LoadProducts(category: categoriesList[0])),
+        ),
+        BlocProvider(
+          create: (context) => CategoriesBloc(),
+        ),
+      ],
+      child: Scaffold(
+        body: CustomScrollView(
+          cacheExtent: 3500,
+          slivers: [
+            const SliverPadding(
+              padding: EdgeInsets.only(top: 20),
+              sliver: MyAppBar(),
             ),
-          ),
-        ],
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: CategoriesListDelegate(),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              sliver: BlocListener<CategoriesBloc, CategoriesState>(
+                listener: (context, state) {
+                  context
+                      .read<ProductsBloc>()
+                      .add(LoadProducts(category: state.active));
+                },
+                child: BlocBuilder<ProductsBloc, ProductsState>(
+                  builder: (context, state) {
+                    switch (state) {
+                      case ProductsLoading():
+                        return const SliverToBoxAdapter(
+                          child: CircularIndicator(radius: 15),
+                        );
+                      case ProductsFailed():
+                        return SliverToBoxAdapter(
+                          child: MessageWidget(message: state.message),
+                        );
+                      case ProductsLoaded():
+                        return ProductsSliverGrid(products: state.products);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class ProductsSliverGrid extends StatelessWidget {
+  const ProductsSliverGrid({super.key, required this.products});
+
+  final List<Product> products;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverGrid.builder(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 15,
+        mainAxisExtent: 255,
+      ),
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        return CardItem(product: products[index])
+            .animate()
+            .fadeIn(duration: 1000.ms);
+      },
     );
   }
 }
