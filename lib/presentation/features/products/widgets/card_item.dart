@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
+import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:talker/talker.dart';
@@ -13,7 +15,10 @@ class CardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Talker().info('selected ${product.title}'),
+      onTap: () {
+        Talker().info('open ${product.title}');
+        context.router.push(ProductCardRoute(product: product));
+      },
       borderRadius: BorderRadius.circular(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +81,6 @@ class _ItemImage extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         height: 200,
-        fit: BoxFit.fitWidth,
         imageBuilder: (context, imageProvider) {
           return Container(
             decoration: BoxDecoration(

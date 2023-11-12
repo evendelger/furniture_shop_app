@@ -39,6 +39,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const NotificationsScreen(),
       );
     },
+    ProductCardRoute.name: (routeData) {
+      final args = routeData.argsAs<ProductCardRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ProductCardScreen(
+          key: args.key,
+          product: args.product,
+        ),
+      );
+    },
     ProductsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -102,6 +112,44 @@ class NotificationsRoute extends PageRouteInfo<void> {
   static const String name = 'NotificationsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ProductCardScreen]
+class ProductCardRoute extends PageRouteInfo<ProductCardRouteArgs> {
+  ProductCardRoute({
+    Key? key,
+    required Product product,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ProductCardRoute.name,
+          args: ProductCardRouteArgs(
+            key: key,
+            product: product,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ProductCardRoute';
+
+  static const PageInfo<ProductCardRouteArgs> page =
+      PageInfo<ProductCardRouteArgs>(name);
+}
+
+class ProductCardRouteArgs {
+  const ProductCardRouteArgs({
+    this.key,
+    required this.product,
+  });
+
+  final Key? key;
+
+  final Product product;
+
+  @override
+  String toString() {
+    return 'ProductCardRouteArgs{key: $key, product: $product}';
+  }
 }
 
 /// generated route for

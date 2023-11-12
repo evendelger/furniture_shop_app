@@ -9,13 +9,6 @@ class CategoriesState extends Equatable {
   final Category active;
   final List<Category> categories;
 
-  factory CategoriesState.initial() {
-    return CategoriesState(
-      active: categoriesList.first,
-      categories: categoriesList,
-    );
-  }
-
   @override
   List<Object?> get props => [active, categories];
 
@@ -28,4 +21,12 @@ class CategoriesState extends Equatable {
       categories: categories ?? this.categories,
     );
   }
+}
+
+final class InitialCategories extends CategoriesState {
+  InitialCategories()
+      : super(
+          active: categoriesList.first,
+          categories: categoriesList,
+        );
 }
