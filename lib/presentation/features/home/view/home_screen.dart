@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
-import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -10,27 +10,13 @@ class HomeScreen extends StatelessWidget {
 
   final _navBarItems = const [
     BottomNavigationBarItem(
-      activeIcon: CustomIcon(
-        iconName: 'home_solid',
-        color: AppColors.primary,
-        size: 30,
-      ),
-      icon: CustomIcon(
-        iconName: 'home',
-        color: AppColors.disabled,
-        size: 30,
-      ),
+      activeIcon: Icon(Icons.house_rounded),
+      icon: Icon(Icons.house_outlined),
       label: '',
     ),
     BottomNavigationBarItem(
-      activeIcon: CustomIcon(
-        iconName: 'bookmark_solid',
-        color: AppColors.primary,
-      ),
-      icon: CustomIcon(
-        iconName: 'bookmark',
-        color: AppColors.disabled,
-      ),
+      activeIcon: Icon(Icons.bookmark),
+      icon: Icon(Icons.bookmark_outline),
       label: '',
     ),
     BottomNavigationBarItem(
@@ -66,7 +52,7 @@ class HomeScreen extends StatelessWidget {
               ),
               child: BottomNavigationBar(
                 currentIndex: tabsRouter.activeIndex,
-                onTap: (index) => _openPage(index, tabsRouter),
+                onTap: (index) => _openPage(index, tabsRouter, context),
                 items: _navBarItems,
               ),
             ),
@@ -76,7 +62,10 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _openPage(int index, TabsRouter tabsRouter) {
+  void _openPage(int index, TabsRouter tabsRouter, BuildContext context) {
+    if (index == 1) {
+      context.read<FavoritesBloc>().add(const FetchProducts());
+    }
     tabsRouter.setActiveIndex(index);
   }
 }

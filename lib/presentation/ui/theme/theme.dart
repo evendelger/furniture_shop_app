@@ -26,4 +26,7 @@ final myTheme = ThemeData(
       size: 30,
     ),
   ),
+  dividerTheme: const DividerThemeData(
+    color: AppColors.blueGray,
+  ),
 );

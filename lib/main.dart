@@ -16,5 +16,5 @@ Future<void> main() async {
     ),
   );
 
-  runApp(const FurnitureStoreApp());
+  runApp(FurnitureStoreApp());
 }

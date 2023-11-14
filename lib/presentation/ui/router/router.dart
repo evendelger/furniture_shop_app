@@ -2,7 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/account/account.dart';
-import 'package:furniture_shop_app/presentation/features/featured/featured.dart';
+import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
+import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/home/home.dart';
 import 'package:furniture_shop_app/presentation/features/notifications/notifications.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
@@ -25,7 +26,7 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               page: FeaturedRoute.page,
-              path: 'featured',
+              path: 'favorites',
             ),
             AutoRoute(
               page: NotificationsRoute.page,
@@ -40,6 +41,11 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           path: '/product_card',
           page: ProductCardRoute.page,
+        ),
+        CustomRoute(
+          path: '/cart',
+          page: CartRoute.page,
+          transitionsBuilder: TransitionsBuilders.slideLeftWithFade,
         ),
       ];
 }

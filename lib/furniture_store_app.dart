@@ -1,23 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
+import 'package:furniture_shop_app/presentation/features/home/home.dart';
+import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:furniture_shop_app/service_locator.dart';
 
-class FurnitureStoreApp extends StatefulWidget {
-  const FurnitureStoreApp({super.key});
+class FurnitureStoreApp extends StatelessWidget {
+  FurnitureStoreApp({super.key});
 
-  @override
-  State<FurnitureStoreApp> createState() => _FurnitureStoreAppState();
-}
-
-class _FurnitureStoreAppState extends State<FurnitureStoreApp> {
   final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: myTheme,
-      debugShowCheckedModeBanner: false,
-      routerConfig: _appRouter.config(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductsBloc(
+            repository: getIt<AbstractProductsRepository>(),
+          )..add(LoadProducts(category: categoriesList[0])),
+        ),
+        BlocProvider(
+          create: (context) => CategoriesBloc(),
+        ),
+        BlocProvider(
+          create: (context) => FavoritesBloc(
+            repository: getIt<AbstractFavoritesRepository>(),
+          )..add(const FetchProducts()),
+        ),
+      ],
+      child: MaterialApp.router(
+        theme: myTheme,
+        debugShowCheckedModeBanner: false,
+        routerConfig: _appRouter.config(),
+      ),
     );
   }
 }

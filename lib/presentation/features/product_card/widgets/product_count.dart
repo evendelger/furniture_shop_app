@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 class ProductCount extends StatelessWidget {
   const ProductCount({super.key});
@@ -10,7 +11,11 @@ class ProductCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const _ChangeCountButton(icon: Icons.add, isAdd: true),
+        const ChangeCountButton(
+          icon: Icons.add,
+          increase: true,
+          blocType: BlocType.favorites,
+        ),
         const SizedBox(width: 15),
         BlocBuilder<ProductSelectBloc, ProductSelectState>(
           buildWhen: (p, c) => p.count != c.count,
@@ -25,47 +30,12 @@ class ProductCount extends StatelessWidget {
           },
         ),
         const SizedBox(width: 15),
-        const _ChangeCountButton(icon: Icons.remove, isAdd: false),
+        const ChangeCountButton(
+          icon: Icons.remove,
+          increase: false,
+          blocType: BlocType.favorites,
+        ),
       ],
-    );
-  }
-}
-
-class _ChangeCountButton extends StatelessWidget {
-  const _ChangeCountButton({
-    required this.icon,
-    required this.isAdd,
-  });
-
-  final IconData icon;
-  final bool isAdd;
-
-  void _changeCount(BuildContext context) =>
-      context.read<ProductSelectBloc>().add(ChangeCount(isAdd: isAdd));
-
-  @override
-  Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(6);
-    return Container(
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(
-        borderRadius: borderRadius,
-        color: AppColors.iconGreyColor,
-      ),
-      child: IconButton(
-        onPressed: () => _changeCount(context),
-        padding: EdgeInsets.zero,
-        style: ButtonStyle(
-          shape: MaterialStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: borderRadius),
-          ),
-        ),
-        icon: Icon(
-          icon,
-          color: AppColors.primary,
-        ),
-      ),
     );
   }
 }

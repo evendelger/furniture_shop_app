@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
@@ -25,7 +24,10 @@ class CardItem extends StatelessWidget {
         children: [
           Stack(
             children: [
-              _ItemImage(imageUrl: product.image),
+              RoundedImageWidget(
+                imageUrl: product.image,
+                height: 200,
+              ),
               const _FavouritedIcon(),
             ],
           ),
@@ -63,41 +65,6 @@ class _ItemTitle extends StatelessWidget {
     return Text(
       title,
       style: AppFonts.nsRegular.copyWith(color: AppColors.black3),
-    );
-  }
-}
-
-class _ItemImage extends StatelessWidget {
-  const _ItemImage({
-    required this.imageUrl,
-  });
-
-  final String imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        height: 200,
-        imageBuilder: (context, imageProvider) {
-          return Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
-        },
-        errorWidget: (context, url, error) =>
-            const Icon(Icons.error, color: AppColors.primary),
-        progressIndicatorBuilder: (context, url, progress) =>
-            const CircularIndicator(
-          radius: 10,
-        ),
-      ),
     );
   }
 }

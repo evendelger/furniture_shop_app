@@ -7,6 +7,10 @@ sealed class ProductSelectEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+final class ChangeFavoriteValue extends ProductSelectEvent {
+  const ChangeFavoriteValue();
+}
+
 final class ChangeProduct extends ProductSelectEvent {
   const ChangeProduct({
     required this.product,

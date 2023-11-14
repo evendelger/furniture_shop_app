@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repository/abstract_products_repository.dart';
 import 'package:furniture_shop_app/presentation/features/products/blocs/blocs.dart';
-import 'package:furniture_shop_app/presentation/features/products/constants/categories.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
-import 'package:furniture_shop_app/service_locator.dart';
 
 @RoutePage()
 class ProductsScreen extends StatelessWidget {
@@ -17,77 +14,64 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => ProductsBloc(
-            repository: getIt<AbstractProductsRepository>(),
-          )..add(LoadProducts(category: categoriesList[0])),
-        ),
-        BlocProvider(
-          create: (context) => CategoriesBloc(),
-        ),
-      ],
-      child: Scaffold(
-        body: Builder(
-          builder: (context) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                final catBloc = context.read<CategoriesBloc>();
-                context
-                    .read<ProductsBloc>()
-                    .add(LoadProducts(category: catBloc.state.active));
-                Future.delayed(const Duration(seconds: 2));
-              },
-              color: AppColors.primary,
-              edgeOffset: 180,
-              displacement: 10,
-              child: CustomScrollView(
-                cacheExtent: 3500,
-                slivers: [
-                  const SliverPadding(
-                    padding: EdgeInsets.only(top: 20),
-                    sliver: MyAppBar(),
+    return Scaffold(
+      body: Builder(
+        builder: (context) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              final catBloc = context.read<CategoriesBloc>();
+              context
+                  .read<ProductsBloc>()
+                  .add(LoadProducts(category: catBloc.state.active));
+              Future.delayed(const Duration(seconds: 2));
+            },
+            color: AppColors.primary,
+            edgeOffset: 180,
+            displacement: 10,
+            child: CustomScrollView(
+              cacheExtent: 3500,
+              slivers: [
+                const SliverPadding(
+                  padding: EdgeInsets.only(top: 20),
+                  sliver: ProductsAppBar(),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: CategoriesListDelegate(),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
                   ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: CategoriesListDelegate(),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    sliver: BlocListener<CategoriesBloc, CategoriesState>(
-                      listener: (context, state) {
-                        context
-                            .read<ProductsBloc>()
-                            .add(LoadProducts(category: state.active));
+                  sliver: BlocListener<CategoriesBloc, CategoriesState>(
+                    listener: (context, state) {
+                      context
+                          .read<ProductsBloc>()
+                          .add(LoadProducts(category: state.active));
+                    },
+                    child: BlocBuilder<ProductsBloc, ProductsState>(
+                      builder: (context, state) {
+                        switch (state) {
+                          case ProductsLoading():
+                            return const SliverFillRemaining(
+                              child: CircularIndicator(),
+                            );
+                          case ProductsFailed():
+                            return SliverFillRemaining(
+                              child: MessageWidget(message: state.message),
+                            );
+                          case ProductsLoaded():
+                            return ProductsSliverGrid(products: state.products);
+                        }
                       },
-                      child: BlocBuilder<ProductsBloc, ProductsState>(
-                        builder: (context, state) {
-                          switch (state) {
-                            case ProductsLoading():
-                              return const SliverToBoxAdapter(
-                                child: CircularIndicator(radius: 15),
-                              );
-                            case ProductsFailed():
-                              return SliverToBoxAdapter(
-                                child: MessageWidget(message: state.message),
-                              );
-                            case ProductsLoaded():
-                              return ProductsSliverGrid(
-                                  products: state.products);
-                          }
-                        },
-                      ),
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

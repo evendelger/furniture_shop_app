@@ -15,12 +15,15 @@ abstract class AppColors {
 
   static const greyWithOpacity = Color.fromRGBO(96, 96, 96, 0.4);
   static const black3 = Color(0xFF606060);
-  static const shadowColor = Color(0x338A959E);
+
   static const iconGreyColor = Color(0xFFE0E0E0);
 
   static const colorSelect1 = Color(0xFFF5F5F5);
   static const colorSelect2 = Color(0xFFB4916C);
   static const colorSelect3 = Color(0xFFE4CBAD);
+
+  static const shadowColor1 = Color(0x338A959E);
+  static const shadowColor2 = Color(0x3F303030);
 
   static const yellow = Colors.yellow;
 }

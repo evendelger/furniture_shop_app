@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
+import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
+import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 class ActionButtons extends StatelessWidget {
   const ActionButtons({
@@ -12,11 +16,19 @@ class ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        _AddToFeaturedButton(),
-        SizedBox(width: 15),
-        Expanded(
+        BlocBuilder<ProductSelectBloc, ProductSelectState>(
+          //buildWhen: (p, c) => p.isFavorite != c.isFavorite,
+          builder: (context, state) {
+            return _AddToFeaturedButton(
+              product: state.product,
+              isFavorite: state.isFavorite,
+            );
+          },
+        ),
+        const SizedBox(width: 15),
+        const Expanded(
           child: _AddToCartButton(),
         ),
       ],
@@ -25,14 +37,30 @@ class ActionButtons extends StatelessWidget {
 }
 
 class _AddToFeaturedButton extends StatelessWidget {
-  const _AddToFeaturedButton();
+  const _AddToFeaturedButton({
+    this.product,
+    required this.isFavorite,
+  });
+
+  final Product? product;
+  final bool isFavorite;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: product == null
+          ? null
+          : () {
+              context
+                  .read<ProductSelectBloc>()
+                  .add(const ChangeFavoriteValue());
+              context
+                  .read<FavoritesBloc>()
+                  .add(ChangeStatus(product: product!));
+            },
       style: ButtonStyle(
-        backgroundColor: const MaterialStatePropertyAll(AppColors.blueGray),
+        backgroundColor: MaterialStatePropertyAll(
+            isFavorite ? AppColors.primary : AppColors.blueGray),
         fixedSize: const MaterialStatePropertyAll(Size(60, 60)),
         padding: const MaterialStatePropertyAll(EdgeInsets.zero),
         shape: MaterialStatePropertyAll(
@@ -42,17 +70,19 @@ class _AddToFeaturedButton extends StatelessWidget {
         ),
         elevation: const MaterialStatePropertyAll(0),
       ),
-      child: const Icon(
-        Icons.bookmark_outline,
-        color: AppColors.primary,
-        size: 30,
-      ),
+      child: product == null
+          ? const CircularIndicator(radius: 10)
+          : Icon(
+              Icons.bookmark_outline,
+              color: isFavorite ? AppColors.white : AppColors.primary,
+              size: 30,
+            ),
     );
   }
 }
 
 class _AddToCartButton extends StatelessWidget {
-  const _AddToCartButton({super.key});
+  const _AddToCartButton();
 
   @override
   Widget build(BuildContext context) {

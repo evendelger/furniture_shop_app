@@ -1,20 +1,23 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
-class MyAppBar extends StatelessWidget {
-  const MyAppBar({super.key});
+class ProductsAppBar extends StatelessWidget {
+  const ProductsAppBar({super.key});
+
+  void _goToCart(BuildContext context) =>
+      context.router.push(const CartRoute());
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       toolbarHeight: 40,
       stretch: true,
-      leading: Container(
-        width: 24,
-        height: 24,
-        color: Colors.transparent,
-        child: SvgPicture.asset(
+      leading: IconButton(
+        onPressed: () {},
+        icon: SvgPicture.asset(
           'assets/icons/search.svg',
           color: AppColors.grey,
           fit: BoxFit.scaleDown,
@@ -43,11 +46,14 @@ class MyAppBar extends StatelessWidget {
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: SvgPicture.asset(
-            'assets/icons/shopping_cart.svg',
-            width: 26,
-            height: 26,
+          padding: const EdgeInsets.only(right: 5),
+          child: IconButton(
+            onPressed: () => _goToCart(context),
+            icon: SvgPicture.asset(
+              'assets/icons/shopping_cart.svg',
+              width: 26,
+              height: 26,
+            ),
           ),
         ),
       ],
