@@ -6,6 +6,7 @@ abstract class AppColors {
   static const dark = Color(0xFF232323);
 
   static const white = Color(0xFFFFFFFF);
+  static const whiteWithOpacity = Color.fromRGBO(255, 255, 255, 0.7);
   static const lightGrey = Color(0xFF909090);
   static const grey = Color(0xFF808080);
   static const blackFont = Color(0xFF303030);

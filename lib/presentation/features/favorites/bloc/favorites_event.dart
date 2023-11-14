@@ -7,12 +7,12 @@ sealed class FavoritesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class FetchProducts extends FavoritesEvent {
-  const FetchProducts();
+final class FetchFavorites extends FavoritesEvent {
+  const FetchFavorites();
 }
 
-final class ChangeStatus extends FavoritesEvent {
-  const ChangeStatus({
+final class ChangeFavoriteStatus extends FavoritesEvent {
+  const ChangeFavoriteStatus({
     required this.product,
   });
 

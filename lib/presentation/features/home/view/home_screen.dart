@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
 
   void _openPage(int index, TabsRouter tabsRouter, BuildContext context) {
     if (index == 1) {
-      context.read<FavoritesBloc>().add(const FetchProducts());
+      context.read<FavoritesBloc>().add(const FetchFavorites());
     }
     tabsRouter.setActiveIndex(index);
   }

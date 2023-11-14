@@ -13,7 +13,7 @@ class FeaturedScreen extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           ScrollBody(),
-          AddAllButton(),
+          AddAllWidget(),
         ],
       ),
     );

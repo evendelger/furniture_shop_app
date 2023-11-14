@@ -12,6 +12,7 @@ class CartScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           CartAppBar(),
+          CartProducts(),
         ],
       ),
     );

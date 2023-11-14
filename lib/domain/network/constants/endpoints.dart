@@ -1,6 +1,4 @@
 class Endpoints {
-  Endpoints._();
-
   static const String baseUrl =
       'https://getpantry.cloud/apiv1/pantry/de1d5c85-db03-4aa4-b0b8-32c47ad18c08/basket';
 

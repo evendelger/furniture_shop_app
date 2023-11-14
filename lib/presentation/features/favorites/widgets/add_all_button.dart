@@ -6,9 +6,8 @@ import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 class AddAllButton extends StatelessWidget {
   const AddAllButton({super.key});
 
-  void _addAll(BuildContext context) {
-    context.read<FavoritesBloc>().add(const AddAllToCart());
-  }
+  void _addAll(BuildContext context) =>
+      context.read<FavoritesBloc>().add(const AddAllToCart());
 
   @override
   Widget build(BuildContext context) {

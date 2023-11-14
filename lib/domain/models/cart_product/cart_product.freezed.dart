@@ -121,7 +121,7 @@ class __$$CartProductImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CartProductImpl implements _CartProduct {
-  const _$CartProductImpl({required this.product, required this.inCartValue});
+  const _$CartProductImpl({required this.product, this.inCartValue = 1});
 
   factory _$CartProductImpl.fromJson(Map<String, dynamic> json) =>
       _$$CartProductImplFromJson(json);
@@ -129,6 +129,7 @@ class _$CartProductImpl implements _CartProduct {
   @override
   final Product product;
   @override
+  @JsonKey()
   final int inCartValue;
 
   @override
@@ -167,7 +168,7 @@ class _$CartProductImpl implements _CartProduct {
 abstract class _CartProduct implements CartProduct {
   const factory _CartProduct(
       {required final Product product,
-      required final int inCartValue}) = _$CartProductImpl;
+      final int inCartValue}) = _$CartProductImpl;
 
   factory _CartProduct.fromJson(Map<String, dynamic> json) =
       _$CartProductImpl.fromJson;

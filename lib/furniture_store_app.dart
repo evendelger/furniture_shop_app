@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/home/home.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
@@ -28,7 +29,12 @@ class FurnitureStoreApp extends StatelessWidget {
         BlocProvider(
           create: (context) => FavoritesBloc(
             repository: getIt<AbstractFavoritesRepository>(),
-          )..add(const FetchProducts()),
+          )..add(const FetchFavorites()),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc(
+            repository: getIt<AbstractCartRepository>(),
+          )..add(const FetchCart()),
         ),
       ],
       child: MaterialApp.router(

@@ -16,11 +16,10 @@ class FavoritesRepository implements AbstractFavoritesRepository {
   Future<void> addAllToCart() => database.addAllFavoritesToCart();
 
   @override
-  Future<bool> isFavorite(Product product) =>
-      database.isProductInFavorites(product);
+  Future<bool> isFavorite(String id) => database.isProductInFavorites(id);
 
   @override
-  Future<void> remove(Product product) => database.removeFromFavorites(product);
+  Future<void> remove(String id) => database.removeFromFavorites(id);
 
   @override
   Future<List<Product>> getProducts() => database.getProductsFromFavorites();

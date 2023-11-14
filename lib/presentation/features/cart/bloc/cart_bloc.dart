@@ -8,47 +8,77 @@ part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc({required this.repository}) : super(const CartLoading()) {
-    on<ChangeStatus>(_changeStatus);
+    on<FetchCart>(_fetchCart);
+    on<ChangeValue>(_changeValue);
+    on<ChangeCartStatus>(_changeCartStatus);
     on<_AddProduct>(_addProduct);
     on<_RemoveProduct>(_removeProduct);
   }
 
   final AbstractCartRepository repository;
 
-  Future<void> _changeStatus(
-    ChangeStatus event,
+  Future<void> _fetchCart(
+    FetchCart event,
     Emitter<CartState> emit,
   ) async {
-    final products = await repository.getProducts();
-    final product = event.cartProduct.product;
+    emit(const CartLoading());
 
-    if (products.contains(product)) {
-      add(_RemoveProduct(product: product));
-    } else {
-      add(_AddProduct(product: product));
+    final cartProducts = await repository.getProducts();
+    // имитация запроса к api
+    await Future.delayed(const Duration(milliseconds: 300));
+    emit(CartLoaded(cartProducts: cartProducts));
+  }
+
+  Future<void> _changeValue(
+    ChangeValue event,
+    Emitter<CartState> emit,
+  ) async {
+    if (state is CartLoaded) {
+      repository.changeValue(event.cartProduct.product.id, event.increase);
+      final copyOfState =
+          List<CartProduct>.of((state as CartLoaded).cartProducts);
+      final productInState = copyOfState
+          .firstWhere((pr) => pr.product == event.cartProduct.product);
+
+      if (event.increase && productInState.inCartValue != 99 ||
+          !event.increase && productInState.inCartValue != 1) {
+        final numberToChange = event.increase ? 1 : -1;
+        final productWithChangedValue = productInState.copyWith(
+            inCartValue: productInState.inCartValue + numberToChange);
+        copyOfState[copyOfState.indexOf(productInState)] =
+            productWithChangedValue;
+
+        emit(CartLoaded(cartProducts: copyOfState));
+      }
     }
   }
 
-  // Future<void> _getStatus(
-  //   GetStatus event,
-  //   Emitter<CartState> emit,
-  // ) async {
-  //   final status = await repository.isInCart(event.product);
+  Future<void> _changeCartStatus(
+    ChangeCartStatus event,
+    Emitter<CartState> emit,
+  ) async {
+    final dbCartProducts = await repository.getProducts();
 
-  // }
+    final founded =
+        dbCartProducts.where((cp) => cp.product.id == event.product.id);
+    if (founded.isEmpty) {
+      add(_AddProduct(product: event.product, countToAdd: event.countToAdd));
+    } else {
+      add(_RemoveProduct(product: founded.first.product));
+    }
+  }
 
   Future<void> _addProduct(
     _AddProduct event,
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoaded) {
-      await repository.add(event.product);
+      final valueToAdd = event.countToAdd ?? 1;
+      await repository.add(event.product, valueToAdd);
       final productsCopy =
           List<CartProduct>.from((state as CartLoaded).cartProducts);
-      productsCopy.add(CartProduct(
-        product: event.product,
-        inCartValue: 1,
-      ));
+      productsCopy
+          .add(CartProduct(product: event.product, inCartValue: valueToAdd));
       emit(CartLoaded(cartProducts: productsCopy));
     }
   }
@@ -58,13 +88,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoaded) {
-      await repository.remove(event.product);
+      await repository.remove(event.product.id);
       final productsCopy =
           List<CartProduct>.from((state as CartLoaded).cartProducts);
-      productsCopy.remove(CartProduct(
-        product: event.product,
-        inCartValue: 1,
-      ));
+      productsCopy.removeWhere((prcpy) => prcpy.product.id == event.product.id);
       emit(CartLoaded(cartProducts: productsCopy));
     }
   }

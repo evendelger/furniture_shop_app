@@ -3,6 +3,7 @@ import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:talker/talker.dart';
 
 class DbHelper {
   DbHelper._();
@@ -53,37 +54,37 @@ class DbHelper {
   // -------------------------------------------------
   //                        CART
   // -------------------------------------------------
-  Future<void> changeValueFromCart(Product product, bool increase) async {
+  Future<void> changeValueFromCart(String id, bool increase) async {
     final db = await instance.database;
 
     if (increase) {
       await db.rawUpdate('''
         UPDATE ${CartDBConsts.dbName}
         SET ${CartDBConsts.quantity} = CASE WHEN ${CartDBConsts.quantity} = 99 THEN 99 ELSE (${CartDBConsts.quantity} + 1) END
-        WHERE ${CartDBConsts.id} = '${product.id}'
+        WHERE ${CartDBConsts.id} = '$id'
       ''');
     } else {
       await db.rawUpdate('''
         UPDATE ${CartDBConsts.dbName}
         SET ${CartDBConsts.quantity} = CASE WHEN ${CartDBConsts.quantity} = 1 THEN 1 ELSE (${CartDBConsts.quantity} - 1) END
-        WHERE ${CartDBConsts.id} = '${product.id}'
+        WHERE ${CartDBConsts.id} = '$id'
       ''');
     }
   }
 
-  Future<void> removeFromCart(Product product) async {
+  Future<void> removeFromCart(String id) async {
     final db = await instance.database;
     await db.rawDelete('''
         DELETE FROM ${CartDBConsts.dbName}
-        WHERE ${CartDBConsts.id} = '${product.id}';
+        WHERE ${CartDBConsts.id} = '$id';
     ''');
   }
 
-  Future<void> addToCart(Product product) async {
+  Future<void> addToCart(Product product, int count) async {
     final db = await instance.database;
     db.rawInsert('''
         INSERT INTO ${CartDBConsts.dbName} VALUES
-        ('${product.id}', '${product.title}', ${product.price}, '${product.image}', ${product.rating}, ${product.reviews}, 1);
+        ('${product.id}', '${product.title}', ${product.price}, '${product.image}', ${product.rating}, ${product.reviews}, $count);
     ''');
   }
 
@@ -94,11 +95,24 @@ class DbHelper {
     ''');
   }
 
-  Future<bool> isProductInCart(Product product) async =>
-      _isProductInTable(CartDBConsts.dbName, product);
+  Future<bool> isProductInCart(String id) async =>
+      _isProductInTable(CartDBConsts.dbName, id);
 
-  Future<List<Product>> getProductsFromCart() async =>
-      _getProductsFromTable(CartDBConsts.dbName);
+  Future<List<CartProduct>> getProductsFromCart() async {
+    final db = await instance.database;
+
+    final dataMap = await db.rawQuery('''
+        SELECT * FROM ${CartDBConsts.dbName}
+    ''');
+
+    final cartProducts = dataMap
+        .map(
+          (dbmodel) => CartProduct.fromDbModel(CartDBProduct.fromJson(dbmodel)),
+        )
+        .toList();
+
+    return cartProducts;
+  }
 
   // -------------------------------------------------
 
@@ -114,52 +128,50 @@ class DbHelper {
     ''');
   }
 
-  Future<void> removeFromFavorites(Product product) async {
+  Future<void> removeFromFavorites(String id) async {
     final db = await instance.database;
     await db.rawDelete('''
         DELETE FROM ${FavoritesDBConsts.dbName}
-        WHERE ${FavoritesDBConsts.id} = '${product.id}';
+        WHERE ${FavoritesDBConsts.id} = '$id';
     ''');
   }
 
   Future<void> addAllFavoritesToCart() async {
-    final cartProducts = await _getProductsFromTable(CartDBConsts.dbName);
-    final favoritedProducts =
-        await _getProductsFromTable(FavoritesDBConsts.dbName);
+    final cartProducts = await getProductsFromCart();
+    final favoritedProducts = await getProductsFromFavorites();
 
-    final batch = _database!.batch();
+    Talker().good(cartProducts);
+
+    final batch = (await instance.database).batch();
     for (var favProd in favoritedProducts) {
-      if (!cartProducts.contains(favProd)) {
+      if (!cartProducts.contains(CartProduct(product: favProd))) {
         _addToCartWithBatch(batch, favProd);
       }
     }
     await batch.commit();
   }
 
-  Future<bool> isProductInFavorites(Product product) async =>
-      _isProductInTable(FavoritesDBConsts.dbName, product);
+  Future<bool> isProductInFavorites(String id) async =>
+      _isProductInTable(FavoritesDBConsts.dbName, id);
 
-  Future<List<Product>> getProductsFromFavorites() async =>
-      _getProductsFromTable(FavoritesDBConsts.dbName);
-
-  // -------------------------------------------------
-
-  Future<List<Product>> _getProductsFromTable(String tableName) async {
+  Future<List<Product>> getProductsFromFavorites() async {
     final db = await instance.database;
 
     final dataMap = await db.rawQuery('''
-        SELECT * FROM $tableName
+        SELECT * FROM ${FavoritesDBConsts.dbName}
     ''');
-    final persons = dataMap.map((map) => Product.fromJson(map)).toList();
-    return persons;
+    final products = dataMap.map((pmap) => Product.fromJson(pmap)).toList();
+    return products;
   }
 
-  Future<bool> _isProductInTable(String table, Product product) async {
+  // -------------------------------------------------
+
+  Future<bool> _isProductInTable(String table, String id) async {
     final db = await instance.database;
     final dataMap = await db.rawQuery('''
         SELECT id
         FROM $table
-        WHERE id = '${product.id}';
+        WHERE id = '$id';
     ''');
     if (dataMap.isEmpty) {
       return false;

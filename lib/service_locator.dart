@@ -18,5 +18,9 @@ class ServiceLocator {
     getIt.registerLazySingleton<AbstractFavoritesRepository>(
       () => FavoritesRepository(database: DbHelper.instance),
     );
+
+    getIt.registerLazySingleton<AbstractCartRepository>(
+      () => CartRepository(database: DbHelper.instance),
+    );
   }
 }

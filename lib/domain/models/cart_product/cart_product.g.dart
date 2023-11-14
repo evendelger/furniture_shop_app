@@ -9,7 +9,7 @@ part of 'cart_product.dart';
 _$CartProductImpl _$$CartProductImplFromJson(Map<String, dynamic> json) =>
     _$CartProductImpl(
       product: Product.fromJson(json['product'] as Map<String, dynamic>),
-      inCartValue: json['inCartValue'] as int,
+      inCartValue: json['inCartValue'] as int? ?? 1,
     );
 
 Map<String, dynamic> _$$CartProductImplToJson(_$CartProductImpl instance) =>

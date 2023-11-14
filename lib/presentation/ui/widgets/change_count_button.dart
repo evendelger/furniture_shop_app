@@ -6,7 +6,7 @@ import 'package:furniture_shop_app/presentation/features/product_card/product_ca
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 enum BlocType {
-  favorites,
+  productCard,
   cart,
 }
 
@@ -26,12 +26,12 @@ class ChangeCountButton extends StatelessWidget {
 
   void _changeCount(BuildContext context) {
     switch (blocType) {
-      case BlocType.favorites:
+      case BlocType.productCard:
         context.read<ProductSelectBloc>().add(ChangeCount(isAdd: increase));
         break;
       case BlocType.cart:
         context.read<CartBloc>().add(ChangeValue(
-              product: cartProduct!,
+              cartProduct: cartProduct!,
               increase: increase,
             ));
         break;

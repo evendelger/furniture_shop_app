@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
@@ -50,7 +51,9 @@ class FavoritesList extends StatelessWidget {
     return SliverList.separated(
       itemCount: products.length,
       itemBuilder: (context, index) =>
-          FavoriteProductWidget(product: products[index]),
+          FavoriteProductWidget(product: products[index])
+              .animate()
+              .fadeIn(duration: 1000.ms),
       separatorBuilder: (_, __) => const Padding(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Divider(),

@@ -10,8 +10,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({
     required this.repository,
   }) : super(const FavoritesLoading()) {
-    on<FetchProducts>(_fetchProducts);
-    on<ChangeStatus>(_changeStatus);
+    on<FetchFavorites>(_fetchProducts);
+    on<ChangeFavoriteStatus>(_changeStatus);
     on<AddAllToCart>(_addAllToCart);
     on<_AddProduct>(_addProduct);
     on<_RemoveProduct>(_removeProduct);
@@ -20,19 +20,19 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   final AbstractFavoritesRepository repository;
 
   Future<void> _fetchProducts(
-    FetchProducts event,
+    FetchFavorites event,
     Emitter<FavoritesState> emit,
   ) async {
     emit(const FavoritesLoading());
 
     final products = await repository.getProducts();
     // имитация запроса к api
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 350));
     emit(FavoritesLoaded(products: products));
   }
 
   Future<void> _changeStatus(
-    ChangeStatus event,
+    ChangeFavoriteStatus event,
     Emitter<FavoritesState> emit,
   ) async {
     final products = await repository.getProducts();
@@ -61,7 +61,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     Emitter<FavoritesState> emit,
   ) async {
     if (state is FavoritesLoaded) {
-      await repository.remove(event.product);
+      await repository.remove(event.product.id);
       final productsCopy =
           List<Product>.from((state as FavoritesLoaded).products);
       productsCopy.remove(event.product);

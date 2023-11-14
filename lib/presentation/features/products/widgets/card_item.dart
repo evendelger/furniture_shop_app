@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
+import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
@@ -26,9 +28,9 @@ class CardItem extends StatelessWidget {
             children: [
               RoundedImageWidget(
                 imageUrl: product.image,
-                height: 200,
+                widthSize: 200,
               ),
-              const _FavouritedIcon(),
+              _CartIcon(product: product),
             ],
           ),
           const SizedBox(height: 10),
@@ -69,22 +71,41 @@ class _ItemTitle extends StatelessWidget {
   }
 }
 
-class _FavouritedIcon extends StatelessWidget {
-  const _FavouritedIcon();
+class _CartIcon extends StatelessWidget {
+  const _CartIcon({
+    required this.product,
+  });
+
+  final Product product;
+
+  void _changeCartStatus(BuildContext context) =>
+      context.read<CartBloc>().add(ChangeCartStatus(product: product));
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
       right: 10,
       bottom: 0,
-      child: CustomSquareButton(
-        backgroundColor: AppColors.greyWithOpacity,
-        iconColor: AppColors.white,
-        sideLength: 30,
-        iconName: 'shopping_bag',
-        iconLength: 20,
-        borderRadius: 6,
-        onPressed: () {},
+      child: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          bool isInCart = false;
+          if (state is CartLoaded) {
+            final foundedProduct =
+                state.cartProducts.where((cp) => cp.product.id == product.id);
+            isInCart = foundedProduct.isEmpty ? false : true;
+          }
+          return CustomSquareButton(
+            backgroundColor: isInCart
+                ? AppColors.whiteWithOpacity
+                : AppColors.greyWithOpacity,
+            iconColor: isInCart ? AppColors.primary : AppColors.white,
+            sideLength: 30,
+            iconName: 'shopping_bag',
+            iconLength: 20,
+            borderRadius: 6,
+            onPressed: () => _changeCartStatus(context),
+          );
+        },
       ),
     );
   }

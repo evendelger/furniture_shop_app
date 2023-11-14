@@ -20,27 +20,28 @@ class CartProductWidget extends StatelessWidget {
   }
 
   void _removeProduct(BuildContext context) {
-    context.read<CartBloc>().add(ChangeStatus(cartProduct: cartProduct));
+    context
+        .read<CartBloc>()
+        .add(ChangeCartStatus(product: cartProduct.product));
   }
 
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
             onTap: () => _openProduct(context),
             child: RoundedImageWidget(
               imageUrl: cartProduct.product.image,
-              height: 100,
+              widthSize: 100,
             ),
           ),
           const SizedBox(width: 20),
-          Column(
-            children: [
-              ProductDataColumn(product: cartProduct.product),
-              ProductCountRow(cartProduct: cartProduct),
-            ],
+          ProductInfoColumn(
+            product: cartProduct.product,
+            addition: ProductCountRow(cartProduct: cartProduct),
           ),
           const Spacer(),
           InkWell(

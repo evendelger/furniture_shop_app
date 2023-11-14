@@ -1,4 +1,5 @@
 import 'package:furniture_shop_app/data/db/db.dart';
+import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/models/product/product.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 
@@ -10,18 +11,19 @@ class CartRepository implements AbstractCartRepository {
   final DbHelper database;
 
   @override
-  Future<void> add(Product product) => database.addToCart(product);
+  Future<void> add(Product product, int count) =>
+      database.addToCart(product, count);
 
   @override
-  Future<void> changeValue(Product product, bool increase) =>
-      database.changeValueFromCart(product, increase);
+  Future<void> changeValue(String id, bool increase) =>
+      database.changeValueFromCart(id, increase);
 
   @override
-  Future<bool> isInCart(Product product) => database.isProductInCart(product);
+  Future<bool> isInCart(String id) => database.isProductInCart(id);
 
   @override
-  Future<void> remove(Product product) => database.removeFromCart(product);
+  Future<void> remove(String id) => database.removeFromCart(id);
 
   @override
-  Future<List<Product>> getProducts() => database.getProductsFromCart();
+  Future<List<CartProduct>> getProducts() => database.getProductsFromCart();
 }

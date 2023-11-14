@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
-class ProductDataColumn extends StatelessWidget {
-  const ProductDataColumn({
+class ProductInfoColumn extends StatelessWidget {
+  const ProductInfoColumn({
     super.key,
     required this.product,
+    this.addition,
   });
 
   final Product product;
+  final Widget? addition;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,10 @@ class ProductDataColumn extends StatelessWidget {
             fontSize: 16,
           ),
         ),
+        if (addition != null) ...[
+          const Spacer(),
+          addition!,
+        ],
       ],
     );
   }

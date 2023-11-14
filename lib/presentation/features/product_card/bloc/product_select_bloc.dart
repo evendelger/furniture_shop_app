@@ -28,7 +28,7 @@ class ProductSelectBloc extends Bloc<ProductSelectEvent, ProductSelectState> {
     ChangeProduct event,
     Emitter<ProductSelectState> emit,
   ) async {
-    final isFavorite = await repository.isFavorite(event.product);
+    final isFavorite = await repository.isFavorite(event.product.id);
     emit(state.copyWith(
       product: event.product,
       isFavorite: isFavorite,

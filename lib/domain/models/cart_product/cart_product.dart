@@ -8,9 +8,16 @@ part 'cart_product.g.dart';
 class CartProduct with _$CartProduct {
   const factory CartProduct({
     required Product product,
-    required int inCartValue,
+    @Default(1) int inCartValue,
   }) = _CartProduct;
 
   factory CartProduct.fromJson(Map<String, Object?> json) =>
       _$CartProductFromJson(json);
+
+  factory CartProduct.fromDbModel(CartDBProduct dbModel) {
+    return CartProduct(
+      product: Product.fromDbModel(dbModel),
+      inCartValue: dbModel.quantity,
+    );
+  }
 }

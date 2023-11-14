@@ -15,10 +15,11 @@ class ProductCountRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const ChangeCountButton(
+        ChangeCountButton(
           icon: Icons.add,
           increase: true,
           blocType: BlocType.cart,
+          cartProduct: cartProduct,
         ),
         const SizedBox(width: 15),
         Text(
@@ -29,10 +30,11 @@ class ProductCountRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 15),
-        const ChangeCountButton(
+        ChangeCountButton(
           icon: Icons.remove,
           increase: false,
           blocType: BlocType.cart,
+          cartProduct: cartProduct,
         ),
       ],
     );

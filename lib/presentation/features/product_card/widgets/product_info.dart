@@ -41,7 +41,7 @@ class ProductInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ProductPrice(price: product.price),
-                const ProductCount(),
+                ProductCount(product: product),
               ],
             ),
           ),

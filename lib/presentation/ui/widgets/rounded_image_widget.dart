@@ -7,11 +7,11 @@ class RoundedImageWidget extends StatelessWidget {
   const RoundedImageWidget({
     super.key,
     required this.imageUrl,
-    required this.height,
+    required this.widthSize,
   });
 
   final String imageUrl;
-  final double height;
+  final double widthSize;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,11 @@ class RoundedImageWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        height: height,
+        height: widthSize,
         imageBuilder: (context, imageProvider) {
           return Container(
-            height: height,
-            width: height,
+            height: widthSize,
+            width: widthSize,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: imageProvider,
@@ -34,8 +34,11 @@ class RoundedImageWidget extends StatelessWidget {
         },
         errorWidget: (context, url, error) =>
             const Icon(Icons.error, color: AppColors.primary),
-        progressIndicatorBuilder: (context, url, progress) =>
-            const CircularIndicator(radius: 10),
+        progressIndicatorBuilder: (context, url, progress) => SizedBox(
+          height: widthSize,
+          width: widthSize,
+          child: const CircularIndicator(radius: 10),
+        ),
       ),
     );
   }
