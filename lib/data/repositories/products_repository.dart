@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/network/network.dart';
+import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 
 class ProductsRepository implements AbstractProductsRepository {

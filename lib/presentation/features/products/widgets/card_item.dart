@@ -18,7 +18,7 @@ class CardItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         Talker().info('open ${product.title}');
-        context.router.push(ProductCardRoute(product: product));
+        context.router.navigate(ProductCardRoute(product: product));
       },
       borderRadius: BorderRadius.circular(8),
       child: Column(

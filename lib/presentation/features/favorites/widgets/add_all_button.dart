@@ -13,7 +13,7 @@ class AddAllButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
-      child: Container(
+      child: DecoratedBox(
         decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(

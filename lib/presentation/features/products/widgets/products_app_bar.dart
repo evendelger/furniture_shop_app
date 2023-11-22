@@ -8,7 +8,7 @@ class ProductsAppBar extends StatelessWidget {
   const ProductsAppBar({super.key});
 
   void _goToCart(BuildContext context) =>
-      context.router.push(const CartRoute());
+      context.router.navigate(const CartRoute());
 
   @override
   Widget build(BuildContext context) {

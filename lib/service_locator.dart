@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/data/db/db.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
-import 'package:furniture_shop_app/domain/network/network.dart';
+import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:get_it/get_it.dart';
 

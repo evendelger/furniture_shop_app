@@ -24,7 +24,7 @@ class ProductImage extends StatelessWidget {
         child: CachedNetworkImage(
           imageUrl: imageUrl,
           imageBuilder: (context, imageProvider) {
-            return Container(
+            return DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(50),

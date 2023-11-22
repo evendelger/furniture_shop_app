@@ -20,7 +20,7 @@ class FavoriteProductWidget extends StatelessWidget {
       context.read<FavoritesBloc>().add(ChangeFavoriteStatus(product: product));
 
   void _openProduct(BuildContext context) =>
-      context.router.push(ProductCardRoute(product: product));
+      context.router.navigate(ProductCardRoute(product: product));
 
   void _changeCartStatus(BuildContext context) =>
       context.read<CartBloc>().add(ChangeCartStatus(product: product));

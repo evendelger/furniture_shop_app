@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
       routes: const [
         ProductsRoute(),
         FeaturedRoute(),
-        NotificationsRoute(),
+        NotificationRoute(),
         AccountRoute(),
       ],
       builder: (context, child) {

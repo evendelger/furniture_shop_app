@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AccountScreen(),
       );
     },
+    BoardingRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const BoardingScreen(),
+      );
+    },
     CartRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -39,10 +45,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeScreen(),
       );
     },
-    NotificationsRoute.name: (routeData) {
+    LoginRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const NotificationsScreen(),
+        child: const LoginScreen(),
+      );
+    },
+    NotificationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const NotificationScreen(),
       );
     },
     ProductCardRoute.name: (routeData) {
@@ -74,6 +86,20 @@ class AccountRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AccountRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [BoardingScreen]
+class BoardingRoute extends PageRouteInfo<void> {
+  const BoardingRoute({List<PageRouteInfo>? children})
+      : super(
+          BoardingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'BoardingRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -121,15 +147,29 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [NotificationsScreen]
-class NotificationsRoute extends PageRouteInfo<void> {
-  const NotificationsRoute({List<PageRouteInfo>? children})
+/// [LoginScreen]
+class LoginRoute extends PageRouteInfo<void> {
+  const LoginRoute({List<PageRouteInfo>? children})
       : super(
-          NotificationsRoute.name,
+          LoginRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'NotificationsRoute';
+  static const String name = 'LoginRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [NotificationScreen]
+class NotificationRoute extends PageRouteInfo<void> {
+  const NotificationRoute({List<PageRouteInfo>? children})
+      : super(
+          NotificationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NotificationRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
