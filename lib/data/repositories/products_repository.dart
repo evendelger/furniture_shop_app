@@ -14,7 +14,7 @@ class ProductsRepository implements AbstractProductsRepository {
       final products = await dioClient.getProducts(category);
       return products;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      final errorMessage = DioExceptions.fromDioError(e).message;
       throw errorMessage;
     }
   }

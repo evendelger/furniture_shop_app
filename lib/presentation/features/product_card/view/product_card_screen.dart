@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
-import 'package:furniture_shop_app/service_locator.dart';
+import 'package:furniture_shop_app/locator.dart';
 
 @RoutePage()
 class ProductCardScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class ProductCardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProductSelectBloc(
-        repository: getIt<AbstractFavoritesRepository>(),
+        repository: locator<AbstractFavoritesRepository>(),
       )..add(ChangeProduct(product: product)),
       child: Scaffold(
         extendBodyBehindAppBar: true,

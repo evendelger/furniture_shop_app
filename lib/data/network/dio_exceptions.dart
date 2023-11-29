@@ -1,37 +1,39 @@
 import 'package:dio/dio.dart';
 
 class DioExceptions implements Exception {
-  late String message;
+  late String _message;
+
+  String get message => _message;
 
   DioExceptions.fromDioError(DioException dioError) {
     switch (dioError.type) {
       case DioExceptionType.cancel:
-        message = "Request to API server was cancelled";
+        _message = "Request to API server was cancelled";
         break;
       case DioExceptionType.connectionTimeout:
-        message = "Connection timeout with API server";
+        _message = "Connection timeout with API server";
         break;
       case DioExceptionType.receiveTimeout:
-        message = "Receive timeout in connection with API server";
+        _message = "Receive timeout in connection with API server";
         break;
       case DioExceptionType.badResponse:
-        message = _handleError(
+        _message = _handleError(
           dioError.response?.statusCode,
           dioError.response?.data,
         );
         break;
       case DioExceptionType.sendTimeout:
-        message = "Send timeout in connection with API server";
+        _message = "Send timeout in connection with API server";
         break;
       case DioExceptionType.unknown:
         if (dioError.message!.contains("SocketException")) {
-          message = 'No Internet';
+          _message = 'No Internet';
           break;
         }
-        message = "Unexpected error occurred";
+        _message = "Unexpected error occurred";
         break;
       default:
-        message = "Something went wrong";
+        _message = "Something went wrong";
         break;
     }
   }
@@ -54,7 +56,4 @@ class DioExceptions implements Exception {
         return 'Oops something went wrong';
     }
   }
-
-  @override
-  String toString() => message;
 }

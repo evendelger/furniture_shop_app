@@ -4,6 +4,7 @@ abstract class AppColors {
   static const primary = Color(0xFF242424);
   static const success = Color(0xFF27AE60);
   static const dark = Color(0xFF232323);
+  static const loadingTransparent = Color.fromARGB(96, 255, 255, 255);
 
   static const white = Color(0xFFFFFFFF);
   static const whiteWithOpacity = Color.fromRGBO(255, 255, 255, 0.7);
@@ -29,4 +30,5 @@ abstract class AppColors {
   static const shadowColor3 = Color(0x4C303030);
 
   static const yellow = Colors.yellow;
+  static const red = Colors.red;
 }

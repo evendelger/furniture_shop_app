@@ -1,6 +1,5 @@
 import 'package:furniture_shop_app/data/db/db.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/models/product/product.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 
 class CartRepository implements AbstractCartRepository {

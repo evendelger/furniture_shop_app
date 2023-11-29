@@ -6,7 +6,8 @@ import 'package:furniture_shop_app/presentation/features/boarding/boarding.dart'
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/home/home.dart';
-import 'package:furniture_shop_app/presentation/features/login/login.dart';
+import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
+import 'package:furniture_shop_app/presentation/features/loading/loading.dart';
 import 'package:furniture_shop_app/presentation/features/notification/notification.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
@@ -18,9 +19,16 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
-          page: BoardingRoute.page,
+          page: LoadingRoute.page,
           path: '/',
-          initial: true,
+        ),
+        AutoRoute(
+          page: BoardingRoute.page,
+          path: '/boarding',
+        ),
+        AutoRoute(
+          page: AuthRoute.page,
+          path: '/auth',
         ),
         AutoRoute(
           page: HomeRoute.page,
@@ -32,7 +40,7 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               page: FeaturedRoute.page,
-              path: 'favorites',
+              path: 'featured',
             ),
             AutoRoute(
               page: NotificationRoute.page,
@@ -45,17 +53,13 @@ class AppRouter extends _$AppRouter {
           ],
         ),
         AutoRoute(
-          path: '/product_card',
           page: ProductCardRoute.page,
+          path: '/product_card',
         ),
         CustomRoute(
-          path: '/cart',
           page: CartRoute.page,
+          path: '/cart',
           transitionsBuilder: TransitionsBuilders.slideLeftWithFade,
-        ),
-        AutoRoute(
-          path: '/login',
-          page: LoginRoute.page,
         ),
       ];
 }

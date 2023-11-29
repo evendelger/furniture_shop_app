@@ -28,7 +28,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
   }
 
   void _goToLogin(BuildContext context) =>
-      context.router.navigate(const LoginRoute());
+      context.router.navigate(const AuthRoute());
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,10 @@ class _GetStartedButtonState extends State<GetStartedButton> {
           ),
         ),
       ).animate().fadeIn(
-          curve: Curves.fastOutSlowIn, delay: _delay, duration: 3000.ms),
+            curve: Curves.fastOutSlowIn,
+            delay: _delay,
+            duration: 3000.ms,
+          ),
     );
   }
 }

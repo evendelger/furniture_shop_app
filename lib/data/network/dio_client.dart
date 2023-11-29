@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 class DioClient {
   DioClient({required Dio dio}) {
     _dio = dio
       ..options.baseUrl = Endpoints.baseUrl
-      ..interceptors.add(PrettyDioLogger());
+      ..interceptors.add(TalkerDioLogger());
   }
 
   late final Dio _dio;

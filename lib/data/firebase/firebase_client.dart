@@ -1,8 +1,65 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:furniture_shop_app/domain/models/user_model.dart';
+import 'package:talker/talker.dart';
 
 class FirebaseClient {
-  Future<FirebaseApp> _initFirebase() async {
-    final firebaseApp = await Firebase.initializeApp();
-    return firebaseApp;
+  FirebaseClient();
+
+  final _auth = FirebaseAuth.instance;
+
+  Stream<UserModel> retrieveCurrentUser() =>
+      _auth.authStateChanges().map((user) => UserModel.fromFbModel(user));
+
+  Future<UserCredential> signUp({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      Talker().error(e);
+      rethrow;
+    }
   }
+
+  Future<UserCredential> signIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      Talker().error(e);
+      rethrow;
+    }
+  }
+
+  Future<UserCredential> signInAnonymous() async {
+    try {
+      final userCredential = await _auth.signInAnonymously();
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      Talker().error(e);
+      rethrow;
+    }
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      Talker().error(e);
+      rethrow;
+    }
+  }
+
+  Future<void> signOut() async => await _auth.signOut();
 }
