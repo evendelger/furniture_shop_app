@@ -7,7 +7,11 @@ class DioClient {
   DioClient({required Dio dio}) {
     _dio = dio
       ..options.baseUrl = Endpoints.baseUrl
-      ..interceptors.add(TalkerDioLogger());
+      ..interceptors.add(TalkerDioLogger(
+        settings: const TalkerDioLoggerSettings(
+          printResponseData: false,
+        ),
+      ));
   }
 
   late final Dio _dio;

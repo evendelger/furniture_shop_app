@@ -1,8 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/presentation/features/boarding/boarding.dart';
 
-@RoutePage()
 class BoardingScreen extends StatelessWidget {
   const BoardingScreen({super.key});
 
@@ -41,5 +39,3 @@ class BoardingScreen extends StatelessWidget {
     );
   }
 }
-// SizedBox(height: 35),
-                // TextWidget(),

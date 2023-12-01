@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 void changeFormType(BuildContext context) =>
-    context.read<AuthBloc>().add(const ChangeAuthType());
+    locator<AuthBloc>().add(const ChangeAuthType());
 
 Text getLabel(String text) {
   return Text(

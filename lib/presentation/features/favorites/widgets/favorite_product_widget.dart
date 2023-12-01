@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
@@ -7,6 +6,7 @@ import 'package:furniture_shop_app/presentation/features/favorites/favorites.dar
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 class FavoriteProductWidget extends StatelessWidget {
   const FavoriteProductWidget({
@@ -20,7 +20,7 @@ class FavoriteProductWidget extends StatelessWidget {
       context.read<FavoritesBloc>().add(ChangeFavoriteStatus(product: product));
 
   void _openProduct(BuildContext context) =>
-      context.router.navigate(ProductCardRoute(product: product));
+      context.push(Routes.productCard, extra: product);
 
   void _changeCartStatus(BuildContext context) =>
       context.read<CartBloc>().add(ChangeCartStatus(product: product));

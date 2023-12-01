@@ -5,14 +5,12 @@ import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/home/home.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
-import 'package:furniture_shop_app/presentation/ui/router/router.dart';
+import 'package:furniture_shop_app/presentation/ui/router/app_router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/locator.dart';
 
 class FurnitureStoreApp extends StatelessWidget {
-  FurnitureStoreApp({super.key});
-
-  final _appRouter = AppRouter();
+  const FurnitureStoreApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class FurnitureStoreApp extends StatelessWidget {
       child: MaterialApp.router(
         theme: myTheme,
         debugShowCheckedModeBanner: false,
-        routerConfig: _appRouter.config(),
+        routerConfig: AppRouter.router,
       ),
     );
   }

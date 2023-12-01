@@ -1,6 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:go_router/go_router.dart';
 
 class PopButton extends StatelessWidget {
   const PopButton({super.key});
@@ -21,7 +21,7 @@ class PopButton extends StatelessWidget {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () => context.router.pop(),
+        onPressed: () => context.pop(),
         style: ButtonStyle(
           padding: const MaterialStatePropertyAll(EdgeInsets.zero),
           shape: MaterialStatePropertyAll(RoundedRectangleBorder(

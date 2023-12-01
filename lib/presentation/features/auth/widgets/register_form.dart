@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
@@ -101,11 +101,11 @@ class _RegisterFormState extends State<RegisterForm> {
   void _validateRegisterForm() {
     if (_registerFormKey.currentState!.validate()) {
       _registerFormKey.currentState!.save();
-      context.read<AuthBloc>().add(Register(
-            name: _nameController.text,
-            email: _emailController.text,
-            password: _passwordController.text,
-          ));
+      locator<AuthBloc>().add(Register(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      ));
     }
   }
 

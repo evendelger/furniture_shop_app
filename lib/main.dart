@@ -4,5 +4,5 @@ import 'package:furniture_shop_app/locator.dart';
 
 Future<void> main() async {
   await Locator.init();
-  runApp(FurnitureStoreApp());
+  runApp(const FurnitureStoreApp());
 }

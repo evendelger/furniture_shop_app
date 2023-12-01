@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
@@ -7,15 +9,29 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({required this.authRepository})
-      : super(const AuthInitial(authType: AuthType.login)) {
+  AuthBloc({required this.authRepository}) : super(const AuthLoading()) {
     on<ChangeAuthType>(_changeType);
     on<LogIn>(_login);
     on<Register>(_authRegister);
     on<LogInAnonymously>(_logInAnonymously);
+    on<_FetchStatus>(_fetchStatus);
+
+    add(const _FetchStatus());
   }
 
   final AbstractAuthRepository authRepository;
+
+  Future<void> _fetchStatus(
+    _FetchStatus event,
+    Emitter<AuthState> emit,
+  ) async {
+    final user = await authRepository.getUserStream().first;
+    if (user.isAuthorized) {
+      emit(AuthSuccess(userModel: user));
+    } else {
+      emit(const AuthInitial());
+    }
+  }
 
   void _changeType(ChangeAuthType event, Emitter<AuthState> emit) {
     if (state is AuthInitial) {

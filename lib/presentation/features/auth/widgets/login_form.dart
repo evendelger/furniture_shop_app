@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
@@ -100,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: TextButton(
-        onPressed: () => context.read<AuthBloc>().add(const LogInAnonymously()),
+        onPressed: () => locator<AuthBloc>().add(const LogInAnonymously()),
         child: Text(
           'Log in Anonymously',
           style: AppFonts.nsSemiBold.copyWith(
@@ -166,10 +166,10 @@ class _LoginFormState extends State<LoginForm> {
   void _validateLoginForm(BuildContext context) {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      context.read<AuthBloc>().add(LogIn(
-            email: _emailController.text,
-            password: _passwordController.text,
-          ));
+      locator<AuthBloc>().add(LogIn(
+        email: _emailController.text,
+        password: _passwordController.text,
+      ));
     }
   }
 }

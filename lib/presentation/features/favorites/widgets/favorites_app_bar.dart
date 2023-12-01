@@ -1,14 +1,13 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:go_router/go_router.dart';
 
 class FavoritesAppBar extends StatelessWidget {
   const FavoritesAppBar({super.key});
 
-  void _goToCart(BuildContext context) =>
-      context.router.navigate(const CartRoute());
+  void _goToCart(BuildContext context) => context.push(Routes.cart);
 
   @override
   Widget build(BuildContext context) {

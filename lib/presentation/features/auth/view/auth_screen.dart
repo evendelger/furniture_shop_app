@@ -1,13 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
-import 'package:furniture_shop_app/locator.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 enum MessageType {
@@ -16,71 +14,65 @@ enum MessageType {
   anon,
 }
 
-@RoutePage()
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(
-        authRepository: locator<AbstractAuthRepository>(),
-      ),
-      child: LoaderOverlay(
-        useDefaultLoading: false,
-        overlayColor: AppColors.loadingTransparent,
-        overlayWidgetBuilder: (_) => const Center(child: CircularIndicator()),
-        child: Scaffold(
-          appBar: const LoginAppBar(),
-          body: BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if (state is AuthLoading) {
-                context.loaderOverlay.show();
-              } else if (state is AuthFailure) {
-                if (context.loaderOverlay.visible) {
-                  context.loaderOverlay.hide();
-                }
-                _showErrorBar(context, state.message);
-              } else if (state is AuthSuccess) {
-                if (context.loaderOverlay.visible) {
-                  context.loaderOverlay.hide();
-                }
-                _showSuccessBar(context, state.userModel);
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayColor: AppColors.loadingTransparent,
+      overlayWidgetBuilder: (_) => const Center(child: CircularIndicator()),
+      child: Scaffold(
+        appBar: const LoginAppBar(),
+        body: BlocListener<AuthBloc, AuthState>(
+          bloc: locator<AuthBloc>(),
+          listener: (context, state) {
+            if (state is AuthLoading) {
+              context.loaderOverlay.show();
+            } else if (state is AuthFailure) {
+              if (context.loaderOverlay.visible) {
+                context.loaderOverlay.hide();
               }
-            },
-            child: ListView(
-              physics: const ClampingScrollPhysics(),
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: LoginWelcomeText(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 25, right: 30, bottom: 40),
-                  child: BlocBuilder<AuthBloc, AuthState>(
-                    buildWhen: (_, c) {
-                      if (c is AuthInitial) return true;
-                      return false;
-                    },
-                    builder: (context, state) {
-                      final authType = state is AuthInitial
-                          ? state.authType
-                          : AuthType.login;
+              _showErrorBar(context, state.message);
+            } else if (state is AuthSuccess) {
+              if (context.loaderOverlay.visible) {
+                context.loaderOverlay.hide();
+              }
+              _showSuccessBar(context, state.userModel);
+            }
+          },
+          child: ListView(
+            physics: const ClampingScrollPhysics(),
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: LoginWelcomeText(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 25, right: 30, bottom: 40),
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  bloc: locator<AuthBloc>(),
+                  buildWhen: (_, c) {
+                    if (c is AuthInitial) return true;
+                    return false;
+                  },
+                  builder: (context, state) {
+                    final authType =
+                        state is AuthInitial ? state.authType : AuthType.login;
 
-                      return AnimatedCrossFade(
-                        firstChild: const FormContainer(child: LoginForm()),
-                        secondChild: const FormContainer(child: RegisterForm()),
-                        crossFadeState: authType == AuthType.login
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                        duration: 300.ms,
-                      );
-                    },
-                  ),
+                    return AnimatedCrossFade(
+                      firstChild: const FormContainer(child: LoginForm()),
+                      secondChild: const FormContainer(child: RegisterForm()),
+                      crossFadeState: authType == AuthType.login
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: 300.ms,
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

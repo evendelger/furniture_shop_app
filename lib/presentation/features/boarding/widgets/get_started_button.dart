@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:go_router/go_router.dart';
 
 class GetStartedButton extends StatefulWidget {
   const GetStartedButton({super.key});
@@ -27,8 +27,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
     });
   }
 
-  void _goToLogin(BuildContext context) =>
-      context.router.navigate(const AuthRoute());
+  void _goToLogin(BuildContext context) => context.goNamed(RouteNames.auth);
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,12 @@ enum AuthType {
   register,
 }
 
+enum AuthStatus {
+  waiting,
+  authorized,
+  unauthorized,
+}
+
 sealed class AuthState extends Equatable {
   const AuthState();
 
@@ -13,9 +19,9 @@ sealed class AuthState extends Equatable {
 }
 
 final class AuthInitial extends AuthState {
-  const AuthInitial({required this.authType});
+  const AuthInitial({this.authType = AuthType.login});
 
-  final AuthType authType;
+  final AuthType? authType;
 
   @override
   List<Object?> get props => [authType];
@@ -27,6 +33,15 @@ final class AuthLoading extends AuthState {
   @override
   List<Object?> get props => [];
 }
+
+// final class AuthListenableStatus extends AuthState {
+//   const AuthListenableStatus({required this.authStatus});
+
+//   final AuthStatus authStatus;
+
+//   @override
+//   List<Object?> get props => [authStatus];
+// }
 
 final class AuthSuccess extends AuthState {
   const AuthSuccess({required this.userModel});

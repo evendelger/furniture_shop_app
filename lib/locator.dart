@@ -8,6 +8,7 @@ import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:furniture_shop_app/firebase_options.dart';
+import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker/talker.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
@@ -21,6 +22,7 @@ abstract class Locator {
     await _initFirebase();
     _initApiClient();
     _initRepositories();
+    _initBlocs();
     _initBlocObserver();
     _initTalker();
   }
@@ -47,6 +49,12 @@ abstract class Locator {
 
     locator.registerLazySingleton<AbstractCartRepository>(
       () => CartRepository(database: DbHelper.instance),
+    );
+  }
+
+  static void _initBlocs() async {
+    locator.registerLazySingleton<AuthBloc>(
+      () => AuthBloc(authRepository: locator<AbstractAuthRepository>()),
     );
   }
 

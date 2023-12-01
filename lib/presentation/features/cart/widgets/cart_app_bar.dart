@@ -1,11 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:go_router/go_router.dart';
 
 class CartAppBar extends StatelessWidget {
   const CartAppBar({super.key});
 
-  void _popBack(BuildContext context) => context.router.pop();
+  void _popBack(BuildContext context) => context.pop();
 
   @override
   Widget build(BuildContext context) {
