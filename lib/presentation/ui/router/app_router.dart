@@ -82,21 +82,14 @@ class AppRouter {
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: Routes.cart,
-        name: Routes.cart,
         pageBuilder: (context, state) =>
             RightSlideTransition(child: const CartScreen()),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: Routes.productCard,
-        name: Routes.productCard,
-        // builder: (context, state) => ProductCardScreen(
-        //   product: state.extra as Product,
-        // ),
-        pageBuilder: (context, state) => CustomScaleTransition(
-          child: ProductCardScreen(
-            product: state.extra as Product,
-          ),
+        pageBuilder: (context, state) => CustomFadeTransition(
+          child: ProductCardScreen(product: state.extra as Product),
         ),
       ),
     ],

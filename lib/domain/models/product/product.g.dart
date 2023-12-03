@@ -14,6 +14,7 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
       image: json['image'] as String,
       rating: (json['rating'] as num).toDouble(),
       reviews: json['reviews'] as int,
+      type: json['type'] as String,
     );
 
 Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'image': instance.image,
       'rating': instance.rating,
       'reviews': instance.reviews,
+      'type': instance.type,
     };

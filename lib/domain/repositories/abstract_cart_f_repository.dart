@@ -1,9 +1,9 @@
 import 'package:furniture_shop_app/domain/models/models.dart';
 
-abstract class AbstractCartRepository {
+abstract class AbstractCartFRepository {
   Future<void> changeValue(String id, bool increase);
   Future<void> remove(String id);
-  Future<void> add(Product product, int count);
+  Future<void> add(String id, int count);
   Future<bool> isInCart(String id);
-  Future<List<CartProduct>> getProducts();
+  Future<List<Product>> getProducts();
 }

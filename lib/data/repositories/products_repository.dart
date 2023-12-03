@@ -11,8 +11,19 @@ class ProductsRepository implements AbstractProductsRepository {
   @override
   Future<List<Product>> getProducts(String category) async {
     try {
-      final products = await dioClient.getProducts(category);
+      final products = await dioClient.getProductsByCategory(category);
       return products;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
+    }
+  }
+
+  @override
+  Future<Product> getProductById(String id) async {
+    try {
+      final product = await dioClient.getProductById(id);
+      return product;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).message;
       throw errorMessage;

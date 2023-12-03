@@ -11,6 +11,7 @@ class CartDBProduct with _$CartDBProduct {
     required double price,
     required String image,
     required double rating,
+    required String type,
     required int reviews,
     required int quantity,
   }) = _CartDBProduct;

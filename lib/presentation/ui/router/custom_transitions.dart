@@ -70,6 +70,7 @@ class CustomScaleTransition extends CustomTransitionPage {
       : super(transitionsBuilder:
             (context, animation, secondaryAnimation, child) {
           return ScaleTransition(
+            alignment: Alignment.bottomCenter,
             scale: Tween<double>(
               begin: 0.0,
               end: 1.0,
@@ -109,3 +110,25 @@ class CustomScaleTransition extends CustomTransitionPage {
 //           );
 //         });
 // }
+//----------------------------------------------------------
+//                        FADE
+//----------------------------------------------------------
+class CustomFadeTransition extends CustomTransitionPage {
+  CustomFadeTransition({required super.child})
+      : super(transitionsBuilder:
+            (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutSine,
+                reverseCurve: Curves.easeInSine,
+              ),
+            ),
+            child: child,
+          );
+        });
+}

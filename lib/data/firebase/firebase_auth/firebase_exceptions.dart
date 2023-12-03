@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 
-class FirebaseExceptions {
+class FirebaseAuthExceptions {
   late String _message;
 
   String get message => _message;
 
-  FirebaseExceptions.fromFirebaseError(FirebaseException firebaseError) {
+  FirebaseAuthExceptions.fromFirebaseError(FirebaseException firebaseError) {
     switch (firebaseError.code) {
       // sign out
       case 'weak-password':

@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/data/db/db.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_client.dart';
+import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth_client.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
@@ -13,6 +13,8 @@ import 'package:get_it/get_it.dart';
 import 'package:talker/talker.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
+
+import 'data/firebase/firebase_firestore/firestore_client.dart';
 
 final locator = GetIt.instance;
 
@@ -27,28 +29,36 @@ abstract class Locator {
     _initTalker();
   }
 
-  static Future<void> _initFirebase() async => await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+  static Future<void> _initFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    locator.registerLazySingleton<AuthClient>(
+      () => AuthClient(),
+    );
+    locator.registerLazySingleton<FirestoreClient>(
+      () => FirestoreClient(),
+    );
+  }
 
   static void _initApiClient() =>
       locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
 
   static void _initRepositories() {
     locator.registerSingleton<AbstractAuthRepository>(
-      AuthRepository(firebaseClient: FirebaseClient()),
+      AuthRepository(firebaseClient: AuthClient()),
     );
 
-    locator.registerLazySingleton<AbstractProductsRepository>(
-      () => ProductsRepository(dioClient: locator<DioClient>()),
+    locator.registerSingleton<AbstractProductsRepository>(
+      ProductsRepository(dioClient: locator<DioClient>()),
     );
 
-    locator.registerLazySingleton<AbstractFavoritesRepository>(
-      () => FavoritesRepository(database: DbHelper.instance),
+    locator.registerSingleton<AbstractFavoritesRepository>(
+      FavoritesRepository(database: DbHelper.instance),
     );
 
-    locator.registerLazySingleton<AbstractCartRepository>(
-      () => CartRepository(database: DbHelper.instance),
+    locator.registerSingleton<AbstractCartRepository>(
+      CartRepository(database: DbHelper.instance),
     );
   }
 
@@ -58,8 +68,7 @@ abstract class Locator {
     );
   }
 
-  static void _initTalker() =>
-      locator.registerLazySingleton<Talker>(() => Talker());
+  static void _initTalker() => locator.registerSingleton<Talker>(Talker());
 
   static void _initBlocObserver() => Bloc.observer = TalkerBlocObserver(
         settings: const TalkerBlocLoggerSettings(

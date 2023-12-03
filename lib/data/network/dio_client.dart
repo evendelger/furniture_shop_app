@@ -16,14 +16,35 @@ class DioClient {
 
   late final Dio _dio;
 
-  Future<List<Product>> getProducts(String category) async {
+  Future<List<Product>> getProductsByCategory(String category) async {
     try {
-      final queryCategory = category == 'popular' ? category : '${category}s';
-      final response = await _dio.get('/$queryCategory');
-      final productListJson = response.data[queryCategory] as List;
+      final queryParameters = {
+        "category": category,
+      };
+      final response =
+          await _dio.get('/products', queryParameters: queryParameters);
+      final productsListJson =
+          response.data['products'] as List<Map<String, dynamic>>;
       final products =
-          productListJson.map((product) => Product.fromJson(product)).toList();
+          productsListJson.map((product) => Product.fromJson(product)).toList();
       return products;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Product> getProductById(String id) async {
+    try {
+      final queryParameters = {
+        "id": id,
+      };
+      final response =
+          await _dio.get('/product', queryParameters: queryParameters);
+      // получаю List объектов, а не сингл объект, из-за специфики fastgen'а
+      final productJson =
+          response.data['product'] as List<Map<String, dynamic>>;
+      final product = Product.fromJson(productJson[0]);
+      return product;
     } catch (e) {
       rethrow;
     }

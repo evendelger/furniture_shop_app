@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:furniture_shop_app/domain/models/user_model.dart';
 import 'package:talker/talker.dart';
 
-class FirebaseClient {
-  FirebaseClient();
+class AuthClient {
+  AuthClient();
 
   final _auth = FirebaseAuth.instance;
 

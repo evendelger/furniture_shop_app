@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_client.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_exceptions.dart';
+import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth_client.dart';
+import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_exceptions.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:talker/talker.dart';
@@ -8,7 +8,7 @@ import 'package:talker/talker.dart';
 class AuthRepository implements AbstractAuthRepository {
   const AuthRepository({required this.firebaseClient});
 
-  final FirebaseClient firebaseClient;
+  final AuthClient firebaseClient;
 
   @override
   Stream<UserModel> getUserStream() => firebaseClient.retrieveCurrentUser();
@@ -32,7 +32,7 @@ class AuthRepository implements AbstractAuthRepository {
       }
       return userCredential;
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }
@@ -46,7 +46,7 @@ class AuthRepository implements AbstractAuthRepository {
       );
       return userCredential;
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }
@@ -59,7 +59,7 @@ class AuthRepository implements AbstractAuthRepository {
     try {
       await firebaseClient.resetPassword(email: user.email!);
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }
@@ -70,7 +70,7 @@ class AuthRepository implements AbstractAuthRepository {
       final userCredential = await firebaseClient.signInAnonymous();
       return userCredential;
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }

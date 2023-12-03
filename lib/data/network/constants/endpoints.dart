@@ -1,6 +1,5 @@
 class Endpoints {
-  static const String baseUrl =
-      'https://getpantry.cloud/apiv1/pantry/de1d5c85-db03-4aa4-b0b8-32c47ad18c08/basket';
+  static const String baseUrl = 'https://furn-shop-2754-api.fastgenapp.com';
 
   static const String popular = '/popular';
   static const String chairs = '/chairs';
