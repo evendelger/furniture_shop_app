@@ -31,7 +31,7 @@ class FurnitureStoreApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CartBloc(
-            repository: locator<AbstractCartRepository>(),
+            cartRepository: locator<AbstractCartRepository>(),
           )..add(const FetchCart()),
         ),
       ],

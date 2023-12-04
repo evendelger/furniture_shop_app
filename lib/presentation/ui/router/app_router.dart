@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/locator.dart';
-import 'package:furniture_shop_app/presentation/features/account/account.dart';
+import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
 import 'package:furniture_shop_app/presentation/features/boarding/boarding.dart';
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
@@ -72,8 +72,8 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.account,
-                builder: (context, state) => const AccountScreen(),
+                path: Routes.profile,
+                builder: (context, state) => const ProfileScreen(),
               ),
             ],
           ),

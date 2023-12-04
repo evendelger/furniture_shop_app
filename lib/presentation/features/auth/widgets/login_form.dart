@@ -100,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: TextButton(
-        onPressed: () => locator<AuthBloc>().add(const LogInAnonymously()),
+        onPressed: () => locator<AuthBloc>().add(const AuthLogInAnonymously()),
         child: Text(
           'Log in Anonymously',
           style: AppFonts.nsSemiBold.copyWith(
@@ -166,7 +166,7 @@ class _LoginFormState extends State<LoginForm> {
   void _validateLoginForm(BuildContext context) {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      locator<AuthBloc>().add(LogIn(
+      locator<AuthBloc>().add(AuthLogIn(
         email: _emailController.text,
         password: _passwordController.text,
       ));

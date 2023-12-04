@@ -7,7 +7,7 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc({required this.repository}) : super(const CartLoading()) {
+  CartBloc({required this.cartRepository}) : super(const CartLoading()) {
     on<FetchCart>(_fetchCart);
     on<ChangeValue>(_changeValue);
     on<ChangeCartStatus>(_changeCartStatus);
@@ -15,7 +15,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<_RemoveProduct>(_removeProduct);
   }
 
-  final AbstractCartRepository repository;
+  final AbstractCartRepository cartRepository;
 
   Future<void> _fetchCart(
     FetchCart event,
@@ -23,7 +23,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     emit(const CartLoading());
 
-    final cartProducts = await repository.getProducts();
+    final cartProducts = await cartRepository.getProducts();
     // имитация запроса к api
     await Future.delayed(const Duration(milliseconds: 300));
     emit(CartLoaded(cartProducts: cartProducts));
@@ -34,7 +34,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoaded) {
-      repository.changeValue(event.cartProduct.product.id, event.increase);
+      cartRepository.changeValue(
+        id: event.cartProduct.product.id,
+        increase: event.increase,
+      );
       final copyOfState =
           List<CartProduct>.of((state as CartLoaded).cartProducts);
       final productInState = copyOfState
@@ -57,7 +60,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     ChangeCartStatus event,
     Emitter<CartState> emit,
   ) async {
-    final dbCartProducts = await repository.getProducts();
+    final dbCartProducts = await cartRepository.getProducts();
 
     final founded =
         dbCartProducts.where((cp) => cp.product.id == event.product.id);
@@ -74,7 +77,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     if (state is CartLoaded) {
       final valueToAdd = event.countToAdd ?? 1;
-      await repository.add(event.product, valueToAdd);
+      await cartRepository.add(id: event.product.id);
       final productsCopy =
           List<CartProduct>.from((state as CartLoaded).cartProducts);
       productsCopy
@@ -88,7 +91,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoaded) {
-      await repository.remove(event.product.id);
+      await cartRepository.remove(id: event.product.id);
       final productsCopy =
           List<CartProduct>.from((state as CartLoaded).cartProducts);
       productsCopy.removeWhere((prcpy) => prcpy.product.id == event.product.id);

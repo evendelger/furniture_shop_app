@@ -1,26 +1,90 @@
-import 'package:furniture_shop_app/data/db/db.dart';
+import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth.dart';
+import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
+import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/product/product.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/locator.dart';
+import 'package:talker/talker.dart';
 
 class FavoritesRepository implements AbstractFavoritesRepository {
   const FavoritesRepository({
-    required this.database,
+    required this.authClient,
+    required this.firestoreClient,
+    required this.dioClient,
   });
 
-  final DbHelper database;
+  final AuthClient authClient;
+  final FirestoreClient firestoreClient;
+  final DioClient dioClient;
 
   @override
-  Future<void> add(Product product) => database.addToFavorites(product);
+  Future<void> add({required String id}) async {
+    try {
+      firestoreClient.addToFavorites(
+        userId: authClient.getUserId,
+        productId: id,
+      );
+    } catch (e) {
+      locator<Talker>().error(e);
+      rethrow;
+    }
+  }
 
   @override
-  Future<void> addAllToCart() => database.addAllFavoritesToCart();
+  Future<void> addAllToCart() async {
+    try {
+      firestoreClient.addAllToCart(
+        userId: authClient.getUserId,
+      );
+    } catch (e) {
+      locator<Talker>().error(e);
+      rethrow;
+    }
+  }
 
   @override
-  Future<bool> isFavorite(String id) => database.isProductInFavorites(id);
+  Future<List<Product>> getProducts() async {
+    try {
+      // получаю данные о избранном из db
+      final favoriteItems = await firestoreClient.getFavoriteItems(
+        userId: authClient.getUserId,
+      );
+      // получаю список товаров по id
+      final favoriteProducts = await dioClient.getProductsByIds(favoriteItems);
+      return favoriteProducts;
+    } catch (e) {
+      locator<Talker>().error(e);
+      rethrow;
+    }
+  }
 
   @override
-  Future<void> remove(String id) => database.removeFromFavorites(id);
+  Future<bool> isFavorite({required String id}) async {
+    try {
+      final isFavorite = await firestoreClient.isFavorite(
+        userId: authClient.getUserId,
+        productId: id,
+      );
+      if (isFavorite) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      locator<Talker>().error(e);
+      rethrow;
+    }
+  }
 
   @override
-  Future<List<Product>> getProducts() => database.getProductsFromFavorites();
+  Future<void> remove({required String id}) async {
+    try {
+      firestoreClient.removeFromFavorites(
+        userId: authClient.getUserId,
+        productId: id,
+      );
+    } catch (e) {
+      locator<Talker>().error(e);
+      rethrow;
+    }
+  }
 }

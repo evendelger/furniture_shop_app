@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/data/db/db.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth_client.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
@@ -46,7 +45,10 @@ abstract class Locator {
 
   static void _initRepositories() {
     locator.registerSingleton<AbstractAuthRepository>(
-      AuthRepository(firebaseClient: AuthClient()),
+      AuthRepository(
+        firebaseClient: locator<AuthClient>(),
+        firestoreClient: locator<FirestoreClient>(),
+      ),
     );
 
     locator.registerSingleton<AbstractProductsRepository>(
@@ -54,11 +56,18 @@ abstract class Locator {
     );
 
     locator.registerSingleton<AbstractFavoritesRepository>(
-      FavoritesRepository(database: DbHelper.instance),
+      FavoritesRepository(
+          authClient: locator<AuthClient>(),
+          firestoreClient: locator<FirestoreClient>(),
+          dioClient: locator<DioClient>()),
     );
 
     locator.registerSingleton<AbstractCartRepository>(
-      CartRepository(database: DbHelper.instance),
+      CartRepository(
+        authClient: locator<AuthClient>(),
+        firestoreClient: locator<FirestoreClient>(),
+        dioClient: locator<DioClient>(),
+      ),
     );
   }
 

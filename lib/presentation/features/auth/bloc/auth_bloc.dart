@@ -10,19 +10,20 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.authRepository}) : super(const AuthLoading()) {
-    on<ChangeAuthType>(_changeType);
-    on<LogIn>(_login);
+    on<AuthChangeType>(_changeType);
+    on<AuthLogIn>(_login);
     on<Register>(_authRegister);
-    on<LogInAnonymously>(_logInAnonymously);
-    on<_FetchStatus>(_fetchStatus);
-
-    add(const _FetchStatus());
+    on<AuthLogInAnonymously>(_logInAnonymously);
+    on<_AuthFetchStatus>(_fetchStatus);
+    on<AuthLogOut>(_logout);
+    // FetchStatus при инициализации блока(приложения)
+    add(const _AuthFetchStatus());
   }
 
   final AbstractAuthRepository authRepository;
 
   Future<void> _fetchStatus(
-    _FetchStatus event,
+    _AuthFetchStatus event,
     Emitter<AuthState> emit,
   ) async {
     final user = await authRepository.getUserStream().first;
@@ -33,7 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _changeType(ChangeAuthType event, Emitter<AuthState> emit) {
+  void _changeType(AuthChangeType event, Emitter<AuthState> emit) {
     if (state is AuthInitial) {
       final newAuthType = (state as AuthInitial).authType == AuthType.login
           ? AuthType.register
@@ -42,7 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _login(LogIn event, Emitter<AuthState> emit) async {
+  Future<void> _login(AuthLogIn event, Emitter<AuthState> emit) async {
     final authType = (state as AuthInitial).authType;
     emit(const AuthLoading());
 
@@ -85,7 +86,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _logInAnonymously(
-    LogInAnonymously event,
+    AuthLogInAnonymously event,
     Emitter<AuthState> emit,
   ) async {
     final authType = (state as AuthInitial).authType;
@@ -99,6 +100,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(AuthFailure(message: e.toString()));
       emit(AuthInitial(authType: authType));
+    }
+  }
+
+  Future<void> _logout(
+    AuthLogOut event,
+    Emitter<AuthState> emit,
+  ) async {
+    final stateBeforeLogOut = state;
+    try {
+      await authRepository.signOut();
+      emit(const AuthInitial());
+    } catch (e) {
+      emit(AuthFailure(message: e.toString()));
+      emit(stateBeforeLogOut);
     }
   }
 }

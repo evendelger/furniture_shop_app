@@ -25,7 +25,6 @@ mixin _$CartDBProduct {
   double get price => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
   double get rating => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
   int get reviews => throw _privateConstructorUsedError;
   int get quantity => throw _privateConstructorUsedError;
 
@@ -47,7 +46,6 @@ abstract class $CartDBProductCopyWith<$Res> {
       double price,
       String image,
       double rating,
-      String type,
       int reviews,
       int quantity});
 }
@@ -70,7 +68,6 @@ class _$CartDBProductCopyWithImpl<$Res, $Val extends CartDBProduct>
     Object? price = null,
     Object? image = null,
     Object? rating = null,
-    Object? type = null,
     Object? reviews = null,
     Object? quantity = null,
   }) {
@@ -95,10 +92,6 @@ class _$CartDBProductCopyWithImpl<$Res, $Val extends CartDBProduct>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
       reviews: null == reviews
           ? _value.reviews
           : reviews // ignore: cast_nullable_to_non_nullable
@@ -125,7 +118,6 @@ abstract class _$$CartDBProductImplCopyWith<$Res>
       double price,
       String image,
       double rating,
-      String type,
       int reviews,
       int quantity});
 }
@@ -146,7 +138,6 @@ class __$$CartDBProductImplCopyWithImpl<$Res>
     Object? price = null,
     Object? image = null,
     Object? rating = null,
-    Object? type = null,
     Object? reviews = null,
     Object? quantity = null,
   }) {
@@ -171,10 +162,6 @@ class __$$CartDBProductImplCopyWithImpl<$Res>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
       reviews: null == reviews
           ? _value.reviews
           : reviews // ignore: cast_nullable_to_non_nullable
@@ -196,7 +183,6 @@ class _$CartDBProductImpl implements _CartDBProduct {
       required this.price,
       required this.image,
       required this.rating,
-      required this.type,
       required this.reviews,
       required this.quantity});
 
@@ -214,15 +200,13 @@ class _$CartDBProductImpl implements _CartDBProduct {
   @override
   final double rating;
   @override
-  final String type;
-  @override
   final int reviews;
   @override
   final int quantity;
 
   @override
   String toString() {
-    return 'CartDBProduct(id: $id, title: $title, price: $price, image: $image, rating: $rating, type: $type, reviews: $reviews, quantity: $quantity)';
+    return 'CartDBProduct(id: $id, title: $title, price: $price, image: $image, rating: $rating, reviews: $reviews, quantity: $quantity)';
   }
 
   @override
@@ -235,7 +219,6 @@ class _$CartDBProductImpl implements _CartDBProduct {
             (identical(other.price, price) || other.price == price) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.rating, rating) || other.rating == rating) &&
-            (identical(other.type, type) || other.type == type) &&
             (identical(other.reviews, reviews) || other.reviews == reviews) &&
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity));
@@ -244,7 +227,7 @@ class _$CartDBProductImpl implements _CartDBProduct {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, title, price, image, rating, type, reviews, quantity);
+      runtimeType, id, title, price, image, rating, reviews, quantity);
 
   @JsonKey(ignore: true)
   @override
@@ -267,7 +250,6 @@ abstract class _CartDBProduct implements CartDBProduct {
       required final double price,
       required final String image,
       required final double rating,
-      required final String type,
       required final int reviews,
       required final int quantity}) = _$CartDBProductImpl;
 
@@ -284,8 +266,6 @@ abstract class _CartDBProduct implements CartDBProduct {
   String get image;
   @override
   double get rating;
-  @override
-  String get type;
   @override
   int get reviews;
   @override

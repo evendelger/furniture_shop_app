@@ -63,7 +63,7 @@ class _RegisterFormState extends State<RegisterForm> {
             TextFormField(
               controller: _passwordController,
               keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.next,
               obscureText: _obscureText,
               validator: validatePassword,
               decoration: InputDecoration(

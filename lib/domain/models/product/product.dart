@@ -13,7 +13,6 @@ class Product with _$Product {
     required String image,
     required double rating,
     required int reviews,
-    required String type,
   }) = _Product;
 
   factory Product.fromJson(Map<String, Object?> json) =>
@@ -27,7 +26,6 @@ class Product with _$Product {
       image: dbModel.image,
       rating: dbModel.rating,
       reviews: dbModel.reviews,
-      type: dbModel.type,
     );
   }
 }

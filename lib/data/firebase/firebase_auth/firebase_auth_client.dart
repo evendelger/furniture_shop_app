@@ -7,6 +7,8 @@ class AuthClient {
 
   final _auth = FirebaseAuth.instance;
 
+  String get getUserId => _auth.currentUser!.uid;
+
   Stream<UserModel> retrieveCurrentUser() =>
       _auth.authStateChanges().map((user) => UserModel.fromFbModel(user));
 

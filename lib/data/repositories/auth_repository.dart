@@ -1,14 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth_client.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_exceptions.dart';
+import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:talker/talker.dart';
 
 class AuthRepository implements AbstractAuthRepository {
-  const AuthRepository({required this.firebaseClient});
+  const AuthRepository({
+    required this.firestoreClient,
+    required this.firebaseClient,
+  });
 
   final AuthClient firebaseClient;
+  final FirestoreClient firestoreClient;
 
   @override
   Stream<UserModel> getUserStream() => firebaseClient.retrieveCurrentUser();
@@ -30,6 +35,7 @@ class AuthRepository implements AbstractAuthRepository {
       if (user.displayName != null) {
         await userCredential.user?.updateDisplayName(user.displayName);
       }
+      firestoreClient.createCollections(userId: userCredential.user!.uid);
       return userCredential;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
@@ -68,6 +74,7 @@ class AuthRepository implements AbstractAuthRepository {
   Future<UserCredential> signInAnonymously() async {
     try {
       final userCredential = await firebaseClient.signInAnonymous();
+      firestoreClient.createCollections(userId: userCredential.user!.uid);
       return userCredential;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;

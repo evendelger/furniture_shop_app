@@ -48,7 +48,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     Emitter<FavoritesState> emit,
   ) async {
     if (state is FavoritesLoaded) {
-      await repository.add(event.product);
+      await repository.add(id: event.product.id);
       final productsCopy =
           List<Product>.from((state as FavoritesLoaded).products);
       productsCopy.add(event.product);
@@ -61,7 +61,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     Emitter<FavoritesState> emit,
   ) async {
     if (state is FavoritesLoaded) {
-      await repository.remove(event.product.id);
+      await repository.remove(id: event.product.id);
       final productsCopy =
           List<Product>.from((state as FavoritesLoaded).products);
       productsCopy.remove(event.product);

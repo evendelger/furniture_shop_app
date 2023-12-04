@@ -4,7 +4,7 @@ import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 void changeFormType(BuildContext context) =>
-    locator<AuthBloc>().add(const ChangeAuthType());
+    locator<AuthBloc>().add(const AuthChangeType());
 
 Text getLabel(String text) {
   return Text(
