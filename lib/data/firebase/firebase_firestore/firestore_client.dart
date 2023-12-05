@@ -6,32 +6,58 @@ class FirestoreClient {
 
   final _firestore = FirebaseFirestore.instance;
 
-  CollectionReference get _cartCollection => _firestore.collection('Cart');
+  CollectionReference get _cartRef => _firestore.collection('Cart');
 
-  CollectionReference get _favoritesCollection =>
-      _firestore.collection('Favorites');
+  CollectionReference get _favoritesRef => _firestore.collection('Favorites');
 
-  Future<List<Map<String, dynamic>>> _getRawCartItems(String userId) async {
-    final cartItemsJson = await _cartCollection.doc(userId).get();
-    return (cartItemsJson.data() as Map)['items'] as List<Map<String, dynamic>>;
+  Future<List> _getRawCartItems(String userId) async {
+    final cartItemsJson = await _cartRef.doc(userId).get();
+    return (cartItemsJson.data() as Map)['items'] as List; //
   }
 
-  Future<List<CartItem>> getCartItems({required String userId}) async =>
-      (await _getRawCartItems(userId))
-          .map((cartItem) => CartItem.fromJson(cartItem))
-          .toList();
-
-  Future<List<String>> getFavoriteItems({required String userId}) async {
-    final favoriteItemsJson = await _favoritesCollection.doc(userId).get();
-    return (favoriteItemsJson.data() as Map)['items'] as List<String>;
+  Future<List> _getRawFavoriteItems({required String userId}) async {
+    final favoriteItemsJson = await _favoritesRef.doc(userId).get();
+    return (favoriteItemsJson.data() as Map)['items'] as List;
   }
+
+  // Future<List<CartItem>> getCartItems({required String userId}) async {
+  //   final rawItems = await _getRawCartItems(userId);
+  //   if (rawItems.isEmpty) return <CartItem>[];
+  //   return rawItems.map((cartItem) => CartItem.fromJson(cartItem)).toList();
+  // }
+
+  Future<List<String>> _getFavoriteItems({required String userId}) async {
+    final rawItems = await _getRawFavoriteItems(userId: userId);
+    if (rawItems.isEmpty) return <String>[];
+    return rawItems as List<String>;
+  }
+
+  /////////////////////////////////////////////
+
+  Stream<List<String>> streamFavoriteItems({required String userId}) =>
+      _favoritesRef.doc(userId).snapshots().map((snapshot) {
+        final listOfItems = (snapshot.data() as Map)['items'] as List;
+        if (listOfItems.isEmpty) return <String>[];
+        return listOfItems as List<String>;
+      });
+
+  Stream<List<CartItem>> streamCartItems({required String userId}) =>
+      _cartRef.doc(userId).snapshots().map((snapshot) {
+        final listOfItems = (snapshot.data() as Map)['items'] as List;
+        if (listOfItems.isEmpty) return <CartItem>[];
+        return listOfItems
+            .map((cartItem) => CartItem.fromJson(cartItem))
+            .toList();
+      });
+
+  /////////////////////////////////////////////
 
   Future<void> createCollections({required String userId}) async {
     try {
-      _cartCollection.doc(userId).set({
+      _cartRef.doc(userId).set({
         "items": [],
       });
-      _favoritesCollection.doc(userId).set({
+      _favoritesRef.doc(userId).set({
         "items": [],
       });
     } catch (e) {
@@ -44,7 +70,7 @@ class FirestoreClient {
     required String productId,
   }) async {
     try {
-      final items = await getFavoriteItems(userId: userId);
+      final items = await _getFavoriteItems(userId: userId);
       if (items.contains(productId)) {
         return true;
       }
@@ -57,11 +83,8 @@ class FirestoreClient {
   Future<void> addAllToCart({
     required String userId,
   }) async {
-    try {} catch (e) {
-      rethrow;
-    }
     try {
-      final productsId = await getFavoriteItems(userId: userId);
+      final productsId = await _getFavoriteItems(userId: userId);
       final listMappedNewItems = List.generate(
         productsId.length,
         (index) => {
@@ -69,7 +92,7 @@ class FirestoreClient {
           'value': 1,
         },
       );
-      final userCartRef = _cartCollection.doc(userId);
+      final userCartRef = _cartRef.doc(userId);
       userCartRef.update({
         "items": FieldValue.arrayUnion(listMappedNewItems),
       });
@@ -83,7 +106,7 @@ class FirestoreClient {
     required String productId,
   }) async {
     try {
-      _favoritesCollection.doc(userId).update({
+      _favoritesRef.doc(userId).update({
         "items": FieldValue.arrayUnion([productId]),
       });
     } catch (e) {
@@ -96,7 +119,7 @@ class FirestoreClient {
     required String productId,
   }) async {
     try {
-      _favoritesCollection.doc(userId).update({
+      _favoritesRef.doc(userId).update({
         "items": FieldValue.arrayRemove([productId]),
       });
     } catch (e) {
@@ -104,8 +127,6 @@ class FirestoreClient {
     }
   }
 
-  // можно сделать без where - через простой get() по id, но раз в доке указан ТОЛЬКО
-  // такой способ, а другого where просто не существует, то использую этот
   Future<bool> isInCart({
     required String userId,
     required String productId,
@@ -148,7 +169,7 @@ class FirestoreClient {
         }
         return item;
       });
-      _cartCollection.doc(userId).update({
+      _cartRef.doc(userId).update({
         "items": changedItems,
       });
     } catch (e) {
@@ -161,7 +182,7 @@ class FirestoreClient {
     required String productId,
   }) async {
     try {
-      final userCartRef = _cartCollection.doc(userId);
+      final userCartRef = _cartRef.doc(userId);
       userCartRef.update({
         "items": FieldValue.arrayUnion([
           {
@@ -183,7 +204,7 @@ class FirestoreClient {
       final cartItems = await _getRawCartItems(userId);
       cartItems.removeWhere((item) => item['id'] == productId);
 
-      await _cartCollection.doc(userId).set({
+      await _cartRef.doc(userId).set({
         "items": cartItems,
       });
     } catch (e) {

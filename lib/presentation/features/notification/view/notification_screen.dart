@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth_client.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
-import 'package:furniture_shop_app/locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/notification/notification.dart';
-//import 'package:talker/talker.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -13,12 +11,8 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  void testFunc() async {
-    await locator<FirestoreClient>().addToCart(
-      userId: locator<AuthClient>().getUserId,
-      productId: "520f26d2-c5d7-46fa-b80d-639754e88fc2",
-    );
-    //Talker().log(result);
+  void testFunc() {
+    context.read<FavoritesBloc>().add(const FetchFavorites());
   }
 
   @override

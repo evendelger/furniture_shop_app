@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
@@ -16,11 +14,10 @@ class ProductsScreen extends StatelessWidget {
         builder: (context) {
           return RefreshIndicator(
             onRefresh: () async {
-              final catBloc = context.read<CategoriesBloc>();
+              final category = context.read<CategoriesBloc>().state.selected;
               context
                   .read<ProductsBloc>()
-                  .add(LoadProducts(category: catBloc.state.active));
-              Future.delayed(const Duration(seconds: 2));
+                  .add(FetchProducts(category: category));
             },
             color: AppColors.primary,
             edgeOffset: 180,
@@ -45,21 +42,22 @@ class ProductsScreen extends StatelessWidget {
                     listener: (context, state) {
                       context
                           .read<ProductsBloc>()
-                          .add(LoadProducts(category: state.active));
+                          .add(FetchProducts(category: state.selected));
                     },
                     child: BlocBuilder<ProductsBloc, ProductsState>(
                       builder: (context, state) {
                         switch (state) {
                           case ProductsLoading():
-                            return const SliverFillRemaining(
-                              child: CircularIndicator(),
+                            return const SliverToBoxAdapter(
+                              child: ShimmerProductsGrid(),
                             );
                           case ProductsFailed():
                             return SliverFillRemaining(
-                              child: MessageWidget(message: state.message),
+                              hasScrollBody: false,
+                              child: ErrorMessageWidget(message: state.message),
                             );
                           case ProductsLoaded():
-                            return ProductsSliverGrid(products: state.products);
+                            return ProductsGrid(products: state.products);
                         }
                       },
                     ),
@@ -70,30 +68,6 @@ class ProductsScreen extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-}
-
-class ProductsSliverGrid extends StatelessWidget {
-  const ProductsSliverGrid({super.key, required this.products});
-
-  final List<Product> products;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverGrid.builder(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 15,
-        mainAxisExtent: 255,
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        return CardItem(product: products[index])
-            .animate()
-            .fadeIn(duration: 1000.ms);
-      },
     );
   }
 }

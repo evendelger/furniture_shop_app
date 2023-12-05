@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 
-class FirebaseAuthExceptions {
+class FirebaseExceptions {
   late String _message;
 
   String get message => _message;
 
-  FirebaseAuthExceptions.fromFirebaseError(FirebaseException firebaseError) {
+  FirebaseExceptions.fromFirebaseError(FirebaseException firebaseError) {
     switch (firebaseError.code) {
       // sign out
       case 'weak-password':
@@ -28,7 +28,7 @@ class FirebaseAuthExceptions {
         _message = 'User not found';
         break;
       default:
-        _message = 'Unknown error.';
+        _message = firebaseError.toString();
     }
   }
 }

@@ -7,10 +7,10 @@ sealed class ProductsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class LoadProducts extends ProductsEvent {
-  const LoadProducts({required this.category});
+final class FetchProducts extends ProductsEvent {
+  const FetchProducts({this.category});
 
-  final Category category;
+  final Category? category;
 
   @override
   List<Object?> get props => [category];

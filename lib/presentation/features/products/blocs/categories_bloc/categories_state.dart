@@ -2,22 +2,22 @@ part of 'categories_bloc.dart';
 
 class CategoriesState extends Equatable {
   const CategoriesState({
-    required this.active,
+    required this.selected,
     required this.categories,
   });
 
-  final Category active;
+  final Category selected;
   final List<Category> categories;
 
   @override
-  List<Object?> get props => [active, categories];
+  List<Object?> get props => [selected, categories];
 
   CategoriesState copyWith({
-    Category? active,
+    Category? selected,
     List<Category>? categories,
   }) {
     return CategoriesState(
-      active: active ?? this.active,
+      selected: selected ?? this.selected,
       categories: categories ?? this.categories,
     );
   }
@@ -26,7 +26,7 @@ class CategoriesState extends Equatable {
 final class InitialCategories extends CategoriesState {
   InitialCategories()
       : super(
-          active: categoriesList.first,
-          categories: categoriesList,
+          selected: Categories.list.first,
+          categories: Categories.list,
         );
 }

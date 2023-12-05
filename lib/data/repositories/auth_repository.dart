@@ -38,7 +38,7 @@ class AuthRepository implements AbstractAuthRepository {
       firestoreClient.createCollections(userId: userCredential.user!.uid);
       return userCredential;
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }
@@ -52,7 +52,7 @@ class AuthRepository implements AbstractAuthRepository {
       );
       return userCredential;
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }
@@ -65,7 +65,7 @@ class AuthRepository implements AbstractAuthRepository {
     try {
       await firebaseClient.resetPassword(email: user.email!);
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }
@@ -77,7 +77,7 @@ class AuthRepository implements AbstractAuthRepository {
       firestoreClient.createCollections(userId: userCredential.user!.uid);
       return userCredential;
     } on FirebaseException catch (e) {
-      final errorMessage = FirebaseAuthExceptions.fromFirebaseError(e).message;
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
     }
   }

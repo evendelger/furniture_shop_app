@@ -14,10 +14,10 @@ class FavoriteProductWidget extends StatelessWidget {
     required this.product,
   });
 
-  final Product product;
+  final ProductPreview product;
 
   void _remove(BuildContext context) =>
-      context.read<FavoritesBloc>().add(ChangeFavoriteStatus(product: product));
+      context.read<FavoritesBloc>().add(RemoveProduct(product: product));
 
   void _openProduct(BuildContext context) =>
       context.push(Routes.productCard, extra: product);

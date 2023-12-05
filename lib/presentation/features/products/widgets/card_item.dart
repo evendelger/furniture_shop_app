@@ -6,12 +6,13 @@ import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:talker/talker.dart';
 
-class CardItem extends StatelessWidget {
-  const CardItem({super.key, required this.product});
+class ProductCardItem extends StatelessWidget {
+  const ProductCardItem({super.key, required this.product});
 
-  final Product product;
+  final ProductPreview product;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class CardItem extends StatelessWidget {
         Talker().info('open ${product.title}');
         context.push(Routes.productCard, extra: product);
       },
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -76,10 +77,7 @@ class _CartIcon extends StatelessWidget {
     required this.product,
   });
 
-  final Product product;
-
-  void _changeCartStatus(BuildContext context) =>
-      context.read<CartBloc>().add(ChangeCartStatus(product: product));
+  final ProductPreview product;
 
   @override
   Widget build(BuildContext context) {
@@ -88,25 +86,68 @@ class _CartIcon extends StatelessWidget {
       bottom: 0,
       child: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          bool isInCart = false;
-          if (state is CartLoaded) {
-            final foundedProduct =
-                state.cartProducts.where((cp) => cp.product.id == product.id);
-            isInCart = foundedProduct.isEmpty ? false : true;
+          switch (state) {
+            case CartLoading():
+              context.read<CartBloc>().add(const FetchCart());
+              return const _ShimmerLoadingIcon();
+            case CartLoaded():
+              {
+                final foundedProduct = state.cartProducts.where(
+                  (cp) => cp.product.id == product.id,
+                );
+                final isInCart = foundedProduct.isEmpty ? false : true;
+                return _LoadedIcon(
+                  isInCart: isInCart,
+                  product: product,
+                );
+              }
           }
-          return CustomSquareButton(
-            backgroundColor: isInCart
-                ? AppColors.whiteWithOpacity
-                : AppColors.greyWithOpacity,
-            iconColor: isInCart ? AppColors.primary : AppColors.white,
-            sideLength: 30,
-            iconName: 'shopping_bag',
-            iconLength: 20,
-            borderRadius: 6,
-            onPressed: () => _changeCartStatus(context),
-          );
         },
       ),
+    );
+  }
+}
+
+class _ShimmerLoadingIcon extends StatelessWidget {
+  const _ShimmerLoadingIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: AppColors.shimmerBase,
+      highlightColor: AppColors.shimmerHighlight,
+      child: Container(
+        width: 30,
+        height: 30,
+        color: AppColors.shimmerBackground,
+      ),
+    );
+  }
+}
+
+class _LoadedIcon extends StatelessWidget {
+  const _LoadedIcon({
+    required this.isInCart,
+    required this.product,
+  });
+
+  final bool isInCart;
+  final ProductPreview product;
+
+  void _changeCartStatus(BuildContext context) =>
+      context.read<CartBloc>().add(ChangeCartStatus(product: product));
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomSquareButton(
+      backgroundColor:
+          isInCart ? AppColors.whiteWithOpacity : AppColors.greyWithOpacity,
+      iconColor: isInCart ? AppColors.primary : AppColors.white,
+      sideLength: 30,
+      iconName: 'shopping_bag',
+      iconLength: 20,
+      borderRadius: 6,
+      onPressed: () => _changeCartStatus(context),
     );
   }
 }

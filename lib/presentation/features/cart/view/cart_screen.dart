@@ -15,7 +15,7 @@ class CartScreen extends StatelessWidget {
               shrinkWrap: true,
               slivers: [
                 CartAppBar(),
-                CartProducts(),
+                CartBodyWidget(),
               ],
             ),
           ),

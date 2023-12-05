@@ -3,30 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
-import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
-part 'product_select_event.dart';
-part 'product_select_state.dart';
+part 'product_card_event.dart';
+part 'product_card_state.dart';
 
-class ProductSelectBloc extends Bloc<ProductSelectEvent, ProductSelectState> {
-  ProductSelectBloc({
+class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
+  ProductCardBloc({
     required this.repository,
-  }) : super(const InitialProduct()) {
-    on<ChangeFavoriteValue>(_changeFavoriteValue);
-    on<ChangeProduct>(_changeProduct);
+  }) : super(const ProductCardLoading()) {
+    on<ChangeFavoriteStatus>(_changeFavoriteStatus);
+    on<OpenProductCard>(_changeProduct);
     on<ChangeColor>(_changeColor);
     on<ChangeCount>(_changeCount);
   }
 
   final AbstractFavoritesRepository repository;
 
-  void _changeFavoriteValue(
-          ChangeFavoriteValue event, Emitter<ProductSelectState> emit) =>
-      emit(state.copyWith(isFavorite: !state.isFavorite));
+  void _changeFavoriteStatus(
+      ChangeFavoriteStatus event, Emitter<ProductCardState> emit) {
+    emit(state.copyWith(isFavorite: !state.isFavorite));
+  }
 
   Future<void> _changeProduct(
-    ChangeProduct event,
-    Emitter<ProductSelectState> emit,
+    OpenProductCard event,
+    Emitter<ProductCardState> emit,
   ) async {
     final isFavorite = await repository.isFavorite(id: event.product.id);
     emit(state.copyWith(
@@ -35,11 +35,11 @@ class ProductSelectBloc extends Bloc<ProductSelectEvent, ProductSelectState> {
     ));
   }
 
-  void _changeColor(ChangeColor event, Emitter<ProductSelectState> emit) =>
+  void _changeColor(ChangeColor event, Emitter<ProductCardState> emit) =>
       emit(state.copyWith(color: event.color));
 
-  void _changeCount(ChangeCount event, Emitter<ProductSelectState> emit) {
-    var currentCount = state.count;
+  void _changeCount(ChangeCount event, Emitter<ProductCardState> emit) {
+    var currentCount = state.inCartValue;
     if (event.isAdd) {
       currentCount++;
     } else {

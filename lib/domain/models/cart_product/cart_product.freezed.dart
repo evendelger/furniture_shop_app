@@ -20,7 +20,7 @@ CartProduct _$CartProductFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CartProduct {
-  Product get product => throw _privateConstructorUsedError;
+  ProductPreview get product => throw _privateConstructorUsedError;
   int get inCartValue => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,9 +35,9 @@ abstract class $CartProductCopyWith<$Res> {
           CartProduct value, $Res Function(CartProduct) then) =
       _$CartProductCopyWithImpl<$Res, CartProduct>;
   @useResult
-  $Res call({Product product, int inCartValue});
+  $Res call({ProductPreview product, int inCartValue});
 
-  $ProductCopyWith<$Res> get product;
+  $ProductPreviewCopyWith<$Res> get product;
 }
 
 /// @nodoc
@@ -60,7 +60,7 @@ class _$CartProductCopyWithImpl<$Res, $Val extends CartProduct>
       product: null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
+              as ProductPreview,
       inCartValue: null == inCartValue
           ? _value.inCartValue
           : inCartValue // ignore: cast_nullable_to_non_nullable
@@ -70,8 +70,8 @@ class _$CartProductCopyWithImpl<$Res, $Val extends CartProduct>
 
   @override
   @pragma('vm:prefer-inline')
-  $ProductCopyWith<$Res> get product {
-    return $ProductCopyWith<$Res>(_value.product, (value) {
+  $ProductPreviewCopyWith<$Res> get product {
+    return $ProductPreviewCopyWith<$Res>(_value.product, (value) {
       return _then(_value.copyWith(product: value) as $Val);
     });
   }
@@ -85,10 +85,10 @@ abstract class _$$CartProductImplCopyWith<$Res>
       __$$CartProductImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Product product, int inCartValue});
+  $Res call({ProductPreview product, int inCartValue});
 
   @override
-  $ProductCopyWith<$Res> get product;
+  $ProductPreviewCopyWith<$Res> get product;
 }
 
 /// @nodoc
@@ -109,7 +109,7 @@ class __$$CartProductImplCopyWithImpl<$Res>
       product: null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
+              as ProductPreview,
       inCartValue: null == inCartValue
           ? _value.inCartValue
           : inCartValue // ignore: cast_nullable_to_non_nullable
@@ -127,7 +127,7 @@ class _$CartProductImpl implements _CartProduct {
       _$$CartProductImplFromJson(json);
 
   @override
-  final Product product;
+  final ProductPreview product;
   @override
   @JsonKey()
   final int inCartValue;
@@ -167,14 +167,14 @@ class _$CartProductImpl implements _CartProduct {
 
 abstract class _CartProduct implements CartProduct {
   const factory _CartProduct(
-      {required final Product product,
+      {required final ProductPreview product,
       final int inCartValue}) = _$CartProductImpl;
 
   factory _CartProduct.fromJson(Map<String, dynamic> json) =
       _$CartProductImpl.fromJson;
 
   @override
-  Product get product;
+  ProductPreview get product;
   @override
   int get inCartValue;
   @override

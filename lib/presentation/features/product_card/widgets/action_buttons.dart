@@ -25,7 +25,7 @@ class ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        BlocBuilder<ProductSelectBloc, ProductSelectState>(
+        BlocBuilder<ProductCardBloc, ProductCardState>(
           builder: (context, state) {
             return _AddToFavoritesButton(
               product: state.product,
@@ -83,12 +83,13 @@ class _AddToFavoritesButton extends StatelessWidget {
       onPressed: product == null
           ? null
           : () {
-              context
-                  .read<ProductSelectBloc>()
-                  .add(const ChangeFavoriteValue());
-              context
-                  .read<FavoritesBloc>()
-                  .add(ChangeFavoriteStatus(product: product!));
+              // TODO
+              // context
+              //     .read<ProductSelectBloc>()
+              //     .add(const ChangeFavoriteValue());
+              // context
+              //     .read<FavoritesBloc>()
+              //     .add(ChangeFavoriteStatus(product: product!));
             },
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(
@@ -123,7 +124,7 @@ class _AddToCartButton extends StatelessWidget {
   final CartButtonStatus cartButtonStatus;
 
   void _addToCart(BuildContext context) {
-    final count = context.read<ProductSelectBloc>().state.count;
+    final count = context.read<ProductCardBloc>().state.inCartValue;
     context.read<CartBloc>().add(ChangeCartStatus(
           product: product,
           countToAdd: count,

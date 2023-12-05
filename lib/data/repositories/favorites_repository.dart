@@ -1,7 +1,7 @@
 import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
-import 'package:furniture_shop_app/domain/models/product/product.dart';
+import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:talker/talker.dart';
@@ -43,22 +43,6 @@ class FavoritesRepository implements AbstractFavoritesRepository {
   }
 
   @override
-  Future<List<Product>> getProducts() async {
-    try {
-      // получаю данные о избранном из db
-      final favoriteItems = await firestoreClient.getFavoriteItems(
-        userId: authClient.getUserId,
-      );
-      // получаю список товаров по id
-      final favoriteProducts = await dioClient.getProductsByIds(favoriteItems);
-      return favoriteProducts;
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
-    }
-  }
-
-  @override
   Future<bool> isFavorite({required String id}) async {
     try {
       final isFavorite = await firestoreClient.isFavorite(
@@ -87,4 +71,13 @@ class FavoritesRepository implements AbstractFavoritesRepository {
       rethrow;
     }
   }
+
+  @override
+  Stream<List<ProductPreview>> streamProducts() => firestoreClient
+          .streamFavoriteItems(userId: authClient.getUserId)
+          .asyncMap((listOfIds) async {
+        if (listOfIds.isEmpty) return <ProductPreview>[];
+        final favoriteProducts = await dioClient.getProductsByIds(listOfIds);
+        return favoriteProducts;
+      });
 }

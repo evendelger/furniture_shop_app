@@ -16,9 +16,9 @@ class ProductCardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductSelectBloc(
+      create: (context) => ProductCardBloc(
         repository: locator<AbstractFavoritesRepository>(),
-      )..add(ChangeProduct(product: product)),
+      )..add(OpenProductCard(product: product)),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         body: Stack(

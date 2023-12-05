@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-import 'package:furniture_shop_app/presentation/ui/widgets/circular_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RoundedImageWidget extends StatelessWidget {
   const RoundedImageWidget({
@@ -34,10 +34,15 @@ class RoundedImageWidget extends StatelessWidget {
         },
         errorWidget: (context, url, error) =>
             const Icon(Icons.error, color: AppColors.primary),
-        progressIndicatorBuilder: (context, url, progress) => SizedBox(
-          height: widthSize,
-          width: widthSize,
-          child: const CircularIndicator(radius: 10),
+        progressIndicatorBuilder: (context, url, progress) =>
+            Shimmer.fromColors(
+          baseColor: AppColors.shimmerBase,
+          highlightColor: AppColors.shimmerHighlight,
+          child: Container(
+            height: widthSize,
+            width: widthSize,
+            color: AppColors.shimmerBackground,
+          ),
         ),
       ),
     );

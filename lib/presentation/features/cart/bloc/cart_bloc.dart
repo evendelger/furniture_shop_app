@@ -24,8 +24,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     emit(const CartLoading());
 
     final cartProducts = await cartRepository.getProducts();
-    // имитация запроса к api
-    await Future.delayed(const Duration(milliseconds: 300));
+    // TODO
+    await Future.delayed(const Duration(seconds: 20));
     emit(CartLoaded(cartProducts: cartProducts));
   }
 
@@ -35,13 +35,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     if (state is CartLoaded) {
       cartRepository.changeValue(
-        id: event.cartProduct.product.id,
+        id: event.id,
         increase: event.increase,
       );
       final copyOfState =
           List<CartProduct>.of((state as CartLoaded).cartProducts);
-      final productInState = copyOfState
-          .firstWhere((pr) => pr.product == event.cartProduct.product);
+      final productInState =
+          copyOfState.firstWhere((pr) => pr.product.id == event.id);
 
       if (event.increase && productInState.inCartValue != 99 ||
           !event.increase && productInState.inCartValue != 1) {
@@ -62,8 +62,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     final dbCartProducts = await cartRepository.getProducts();
 
-    final founded =
-        dbCartProducts.where((cp) => cp.product.id == event.product.id);
+    final founded = dbCartProducts.where((cp) => cp.product == event.product);
     if (founded.isEmpty) {
       add(_AddProduct(product: event.product, countToAdd: event.countToAdd));
     } else {

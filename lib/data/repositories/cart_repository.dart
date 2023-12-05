@@ -1,10 +1,10 @@
+import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
-import 'package:furniture_shop_app/locator.dart';
-import 'package:talker/talker.dart';
 
 class CartRepository implements AbstractCartRepository {
   const CartRepository({
@@ -21,9 +21,12 @@ class CartRepository implements AbstractCartRepository {
   Future<void> add({required String id}) async {
     try {
       firestoreClient.addToCart(userId: authClient.getUserId, productId: id);
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 
@@ -35,33 +38,12 @@ class CartRepository implements AbstractCartRepository {
         productId: id,
         increase: increase,
       );
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<List<CartProduct>> getProducts() async {
-    try {
-      // получаю данные о корзине из db
-      final cartItems = await firestoreClient.getCartItems(
-        userId: authClient.getUserId,
-      );
-      // получаю список товаров по id
-      final products =
-          await dioClient.getProductsByIds(cartItems.map((i) => i.id));
-      final cartProducts = <CartProduct>[];
-      // объединяю данные в модель
-      for (int i = 0; i < cartItems.length; i++) {
-        cartProducts.add(
-          CartProduct(product: products[i], inCartValue: cartItems[i].value),
-        );
-      }
-      return cartProducts;
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 
@@ -76,9 +58,12 @@ class CartRepository implements AbstractCartRepository {
         return true;
       }
       return false;
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 
@@ -89,9 +74,30 @@ class CartRepository implements AbstractCartRepository {
         userId: authClient.getUserId,
         productId: id,
       );
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
+
+  @override
+  Stream<List<CartProduct>> streamProducts() =>
+      firestoreClient.streamCartItems(userId: authClient.getUserId).asyncMap(
+        (cartItems) async {
+          if (cartItems.isEmpty) return <CartProduct>[];
+          final products = await dioClient.getProductsByIds(
+            cartItems.map((i) => i.id),
+          );
+          return List<CartProduct>.generate(
+            products.length,
+            (i) => CartProduct(
+              product: products[i],
+              inCartValue: cartItems[i].value,
+            ),
+          );
+        },
+      );
 }

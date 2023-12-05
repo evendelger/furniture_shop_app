@@ -27,11 +27,11 @@ class ChangeCountButton extends StatelessWidget {
   void _changeCount(BuildContext context) {
     switch (blocType) {
       case BlocType.productCard:
-        context.read<ProductSelectBloc>().add(ChangeCount(isAdd: increase));
+        context.read<ProductCardBloc>().add(ChangeCount(isAdd: increase));
         break;
       case BlocType.cart:
         context.read<CartBloc>().add(ChangeValue(
-              cartProduct: cartProduct!,
+              id: cartProduct!.product.id,
               increase: increase,
             ));
         break;

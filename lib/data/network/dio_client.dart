@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
@@ -16,7 +18,7 @@ class DioClient {
 
   late final Dio _dio;
 
-  Future<List<Product>> getProductsByCategory(String category) async {
+  Future<List<ProductPreview>> getProductsByCategory(String category) async {
     try {
       final queryParameters = {
         "category": category,
@@ -25,10 +27,10 @@ class DioClient {
         Endpoints.products,
         queryParameters: queryParameters,
       );
-      final productsListJson =
-          response.data['products'] as List<Map<String, dynamic>>;
-      final products =
-          productsListJson.map((product) => Product.fromJson(product)).toList();
+      final productsListJson = jsonDecode(response.data)['products'] as List;
+      final products = productsListJson
+          .map((product) => ProductPreview.fromJson(product))
+          .toList();
       return products;
     } catch (e) {
       rethrow;
@@ -41,8 +43,7 @@ class DioClient {
       final response =
           await _dio.get(Endpoints.product, queryParameters: queryParameters);
       // получаю List объектов, а не сингл объект, из-за специфики fastgen'а
-      final productJson =
-          response.data['product'] as List<Map<String, dynamic>>;
+      final productJson = jsonDecode(response.data)['product'] as List;
       final product = Product.fromJson(productJson[0]);
       return product;
     } catch (e) {
@@ -50,16 +51,16 @@ class DioClient {
     }
   }
 
-  Future<List<Product>> getProductsByIds(Iterable<String> ids) async {
+  Future<List<ProductPreview>> getProductsByIds(Iterable<String> ids) async {
     try {
       final response =
           await _dio.get(Endpoints.productsByIds, queryParameters: {
         "ids": ids.join(','),
       });
-      final productListJson =
-          response.data['products'] as List<Map<String, dynamic>>;
-      final products =
-          productListJson.map((prdJson) => Product.fromJson(prdJson)).toList();
+      final productListJson = jsonDecode(response.data)['products'] as List;
+      final products = productListJson
+          .map((prdJson) => ProductPreview.fromJson(prdJson))
+          .toList();
       return products;
     } catch (e) {
       rethrow;

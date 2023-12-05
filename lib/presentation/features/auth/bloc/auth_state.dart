@@ -34,15 +34,6 @@ final class AuthLoading extends AuthState {
   List<Object?> get props => [];
 }
 
-// final class AuthListenableStatus extends AuthState {
-//   const AuthListenableStatus({required this.authStatus});
-
-//   final AuthStatus authStatus;
-
-//   @override
-//   List<Object?> get props => [authStatus];
-// }
-
 final class AuthSuccess extends AuthState {
   const AuthSuccess({required this.userModel});
 

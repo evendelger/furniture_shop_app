@@ -13,7 +13,6 @@ import 'package:furniture_shop_app/presentation/features/product_card/product_ca
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:go_router/go_router.dart';
-import 'package:talker/talker.dart';
 
 class AppRouter {
   static final _rootNavigatorKey =
@@ -98,8 +97,6 @@ class AppRouter {
       final authBlocState = locator<AuthBloc>().state;
       final onAuthPage = state.fullPath!.contains(Routes.auth);
       final onLoadingPage = state.fullPath! == Routes.loading;
-
-      Talker().debug('NEW PATH - ${state.fullPath}');
 
       if (authBlocState is AuthInitial && !onAuthPage) {
         return Routes.boarding;

@@ -9,7 +9,7 @@ class ProductInfoColumn extends StatelessWidget {
     this.addition,
   });
 
-  final Product product;
+  final ProductPreview product;
   final Widget? addition;
 
   @override

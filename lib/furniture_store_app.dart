@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
-import 'package:furniture_shop_app/presentation/features/home/home.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/router/app_router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
@@ -18,8 +17,8 @@ class FurnitureStoreApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ProductsBloc(
-            repository: locator<AbstractProductsRepository>(),
-          )..add(LoadProducts(category: categoriesList[0])),
+            productsRepository: locator<AbstractProductsRepository>(),
+          )..add(FetchProducts(category: Categories.list[0])),
         ),
         BlocProvider(
           create: (context) => CategoriesBloc(),
@@ -32,7 +31,7 @@ class FurnitureStoreApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CartBloc(
             cartRepository: locator<AbstractCartRepository>(),
-          )..add(const FetchCart()),
+          ),
         ),
       ],
       child: MaterialApp.router(

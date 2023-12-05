@@ -6,9 +6,7 @@ import 'package:furniture_shop_app/presentation/features/favorites/favorites.dar
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 class ScrollBody extends StatelessWidget {
-  const ScrollBody({
-    super.key,
-  });
+  const ScrollBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +22,8 @@ class ScrollBody extends StatelessWidget {
             builder: (context, state) {
               switch (state) {
                 case FavoritesLoading():
-                  return const SliverFillRemaining(
-                    child: CircularIndicator(),
+                  return const SliverToBoxAdapter(
+                    child: ShimmerProductsList(),
                   );
                 case FavoritesLoaded():
                   return FavoritesList(products: state.products);
@@ -44,7 +42,7 @@ class FavoritesList extends StatelessWidget {
     required this.products,
   });
 
-  final List<Product> products;
+  final List<ProductPreview> products;
 
   @override
   Widget build(BuildContext context) {

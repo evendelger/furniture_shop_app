@@ -1,29 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cart_db_product.dart';
+part of 'product_preview.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CartDBProductImpl _$$CartDBProductImplFromJson(Map<String, dynamic> json) =>
-    _$CartDBProductImpl(
+_$ProductPreviewImpl _$$ProductPreviewImplFromJson(Map<String, dynamic> json) =>
+    _$ProductPreviewImpl(
       id: json['id'] as String,
       title: json['title'] as String,
       price: (json['price'] as num).toDouble(),
       image: json['image'] as String,
-      rating: (json['rating'] as num).toDouble(),
-      reviews: json['reviews'] as int,
-      quantity: json['quantity'] as int,
     );
 
-Map<String, dynamic> _$$CartDBProductImplToJson(_$CartDBProductImpl instance) =>
+Map<String, dynamic> _$$ProductPreviewImplToJson(
+        _$ProductPreviewImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'price': instance.price,
       'image': instance.image,
-      'rating': instance.rating,
-      'reviews': instance.reviews,
-      'quantity': instance.quantity,
     };

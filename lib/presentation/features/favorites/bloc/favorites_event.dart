@@ -11,34 +11,23 @@ final class FetchFavorites extends FavoritesEvent {
   const FetchFavorites();
 }
 
-final class ChangeFavoriteStatus extends FavoritesEvent {
-  const ChangeFavoriteStatus({
+final class AddProduct extends FavoritesEvent {
+  const AddProduct({
     required this.product,
   });
 
-  final Product product;
+  final ProductPreview product;
 
   @override
   List<Object?> get props => [product];
 }
 
-final class _AddProduct extends FavoritesEvent {
-  const _AddProduct({
+final class RemoveProduct extends FavoritesEvent {
+  const RemoveProduct({
     required this.product,
   });
 
-  final Product product;
-
-  @override
-  List<Object?> get props => [product];
-}
-
-final class _RemoveProduct extends FavoritesEvent {
-  const _RemoveProduct({
-    required this.product,
-  });
-
-  final Product product;
+  final ProductPreview product;
 
   @override
   List<Object?> get props => [product];

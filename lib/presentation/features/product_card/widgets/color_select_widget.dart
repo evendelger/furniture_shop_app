@@ -22,7 +22,7 @@ class ColorSelectWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: BlocBuilder<ProductSelectBloc, ProductSelectState>(
+      child: BlocBuilder<ProductCardBloc, ProductCardState>(
         buildWhen: (p, c) => p.color != c.color,
         builder: (context, state) {
           return Column(
@@ -58,7 +58,7 @@ class _SingleColorWidget extends StatelessWidget {
   final bool isSelected;
 
   void _selectColor(BuildContext context) =>
-      context.read<ProductSelectBloc>().add(ChangeColor(color: color));
+      context.read<ProductCardBloc>().add(ChangeColor(color: color));
 
   @override
   Widget build(BuildContext context) {

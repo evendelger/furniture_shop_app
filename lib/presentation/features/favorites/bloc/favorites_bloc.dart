@@ -11,10 +11,9 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     required this.repository,
   }) : super(const FavoritesLoading()) {
     on<FetchFavorites>(_fetchProducts);
-    on<ChangeFavoriteStatus>(_changeStatus);
     on<AddAllToCart>(_addAllToCart);
-    on<_AddProduct>(_addProduct);
-    on<_RemoveProduct>(_removeProduct);
+    on<AddProduct>(_addProduct);
+    on<RemoveProduct>(_removeProduct);
   }
 
   final AbstractFavoritesRepository repository;
@@ -24,48 +23,35 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     Emitter<FavoritesState> emit,
   ) async {
     emit(const FavoritesLoading());
-
     final products = await repository.getProducts();
-    // имитация запроса к api
-    await Future.delayed(const Duration(milliseconds: 350));
     emit(FavoritesLoaded(products: products));
   }
 
-  Future<void> _changeStatus(
-    ChangeFavoriteStatus event,
-    Emitter<FavoritesState> emit,
-  ) async {
-    final products = await repository.getProducts();
-    if (products.contains(event.product)) {
-      add(_RemoveProduct(product: event.product));
-    } else {
-      add(_AddProduct(product: event.product));
-    }
-  }
-
   Future<void> _addProduct(
-    _AddProduct event,
+    AddProduct event,
     Emitter<FavoritesState> emit,
   ) async {
     if (state is FavoritesLoaded) {
       await repository.add(id: event.product.id);
       final productsCopy =
-          List<Product>.from((state as FavoritesLoaded).products);
+          List<ProductPreview>.from((state as FavoritesLoaded).products);
       productsCopy.add(event.product);
       emit(FavoritesLoaded(products: productsCopy));
     }
   }
 
   Future<void> _removeProduct(
-    _RemoveProduct event,
+    RemoveProduct event,
     Emitter<FavoritesState> emit,
   ) async {
+    // TODO
     if (state is FavoritesLoaded) {
-      await repository.remove(id: event.product.id);
       final productsCopy =
-          List<Product>.from((state as FavoritesLoaded).products);
+          List<ProductPreview>.from((state as FavoritesLoaded).products);
       productsCopy.remove(event.product);
+
       emit(FavoritesLoaded(products: productsCopy));
+      await repository.remove(id: event.product.id);
     }
   }
 

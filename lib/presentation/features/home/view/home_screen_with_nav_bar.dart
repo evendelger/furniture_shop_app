@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeScreenNavBar extends StatelessWidget {
@@ -55,9 +53,6 @@ class HomeScreenNavBar extends StatelessWidget {
   }
 
   void _openPage(int index, BuildContext context) {
-    if (index == 1) {
-      context.read<FavoritesBloc>().add(const FetchFavorites());
-    }
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,

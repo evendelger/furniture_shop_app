@@ -85,10 +85,10 @@ class _ProductCartDataRow extends StatelessWidget {
           blocType: BlocType.productCard,
         ),
         const SizedBox(width: 15),
-        BlocBuilder<ProductSelectBloc, ProductSelectState>(
+        BlocBuilder<ProductCardBloc, ProductCardState>(
           builder: (context, state) {
             return Text(
-              state.count.toString().padLeft(2, '0'),
+              state.inCartValue.toString().padLeft(2, '0'),
               style: AppFonts.nsSemiBold.copyWith(
                 fontSize: 18,
                 color: AppColors.primary,

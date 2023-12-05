@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 class DioExceptions implements Exception {
@@ -6,6 +8,11 @@ class DioExceptions implements Exception {
   String get message => _message;
 
   DioExceptions.fromDioError(DioException dioError) {
+    if (dioError.error is SocketException) {
+      _message = "Cannot connect to the server, check your internet connection";
+      return;
+    }
+
     switch (dioError.type) {
       case DioExceptionType.cancel:
         _message = "Request to API server was cancelled";

@@ -21,10 +21,11 @@ final class ProductsFailed extends ProductsState {
 }
 
 final class ProductsLoaded extends ProductsState {
-  const ProductsLoaded({required this.products});
+  const ProductsLoaded({required this.category, required this.products});
 
-  final List<Product> products;
+  final List<ProductPreview> products;
+  final Category category;
 
   @override
-  List<Object?> get props => [products];
+  List<Object?> get props => [products, category];
 }

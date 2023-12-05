@@ -13,15 +13,15 @@ final class FetchCart extends CartEvent {
 
 final class ChangeValue extends CartEvent {
   const ChangeValue({
-    required this.cartProduct,
+    required this.id,
     required this.increase,
   });
 
-  final CartProduct cartProduct;
+  final String id;
   final bool increase;
 
   @override
-  List<Object?> get props => [cartProduct];
+  List<Object?> get props => [id, increase];
 }
 
 final class ChangeCartStatus extends CartEvent {
@@ -30,7 +30,7 @@ final class ChangeCartStatus extends CartEvent {
     this.countToAdd,
   });
 
-  final Product product;
+  final ProductPreview product;
   final int? countToAdd;
 
   @override
@@ -43,7 +43,7 @@ final class _AddProduct extends CartEvent {
     this.countToAdd,
   });
 
-  final Product product;
+  final ProductPreview product;
   final int? countToAdd;
 
   @override
@@ -55,7 +55,7 @@ final class _RemoveProduct extends CartEvent {
     required this.product,
   });
 
-  final Product product;
+  final ProductPreview product;
 
   @override
   List<Object?> get props => [product];

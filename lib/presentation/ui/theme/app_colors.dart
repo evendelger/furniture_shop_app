@@ -31,4 +31,8 @@ abstract class AppColors {
 
   static const yellow = Colors.yellow;
   static const red = Colors.red;
+
+  static final shimmerBase = Colors.grey.shade300;
+  static const shimmerHighlight = Colors.white10;
+  static const shimmerBackground = Colors.grey;
 }

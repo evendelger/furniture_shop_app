@@ -18,6 +18,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _passwordController = TextEditingController();
   final _confirmPassController = TextEditingController();
 
+  final _confirmPassfocusNode = FocusNode();
   bool _obscureText = true;
 
   @override
@@ -66,6 +67,8 @@ class _RegisterFormState extends State<RegisterForm> {
               textInputAction: TextInputAction.next,
               obscureText: _obscureText,
               validator: validatePassword,
+              onFieldSubmitted: (_) =>
+                  FocusScope.of(context).requestFocus(_confirmPassfocusNode),
               decoration: InputDecoration(
                 label: getLabel('Password'),
                 suffixIcon:
@@ -76,6 +79,7 @@ class _RegisterFormState extends State<RegisterForm> {
             const SizedBox(height: 30),
             TextFormField(
               controller: _confirmPassController,
+              focusNode: _confirmPassfocusNode,
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.done,
               obscureText: _obscureText,

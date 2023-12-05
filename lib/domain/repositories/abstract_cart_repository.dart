@@ -7,5 +7,6 @@ abstract class AbstractCartRepository {
   Future<void> remove({required String id});
   Future<void> add({required String id});
   Future<bool> isInCart({required String id});
-  Future<List<CartProduct>> getProducts();
+  //Future<List<CartProduct>> getProducts();
+  Stream<List<CartProduct>> streamProducts();
 }

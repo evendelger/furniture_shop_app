@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:furniture_shop_app/domain/models/models.dart';
 
 part 'product.freezed.dart';
 part 'product.g.dart';
@@ -17,15 +16,4 @@ class Product with _$Product {
 
   factory Product.fromJson(Map<String, Object?> json) =>
       _$ProductFromJson(json);
-
-  factory Product.fromDbModel(CartDBProduct dbModel) {
-    return Product(
-      id: dbModel.id,
-      title: dbModel.title,
-      price: dbModel.price,
-      image: dbModel.image,
-      rating: dbModel.rating,
-      reviews: dbModel.reviews,
-    );
-  }
 }

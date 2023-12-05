@@ -3,8 +3,10 @@ import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:talker/talker.dart';
 
+@Deprecated(
+  'Changed storage from local db to firestore. Use [FirestoreClient] instead',
+)
 class DbHelper {
   DbHelper._();
   static final DbHelper instance = DbHelper._();
@@ -98,21 +100,21 @@ class DbHelper {
   Future<bool> isProductInCart(String id) async =>
       _isProductInTable(CartDBConsts.dbName, id);
 
-  Future<List<CartProduct>> getProductsFromCart() async {
-    final db = await instance.database;
+  // Future<List<CartProduct>> getProductsFromCart() async {
+  //   final db = await instance.database;
 
-    final dataMap = await db.rawQuery('''
-        SELECT * FROM ${CartDBConsts.dbName}
-    ''');
+  //   final dataMap = await db.rawQuery('''
+  //       SELECT * FROM ${CartDBConsts.dbName}
+  //   ''');
 
-    final cartProducts = dataMap
-        .map(
-          (dbmodel) => CartProduct.fromDbModel(CartDBProduct.fromJson(dbmodel)),
-        )
-        .toList();
+  //   final cartProducts = dataMap
+  //       .map(
+  //         (dbmodel) => CartProduct.fromDbModel(CartDBProduct.fromJson(dbmodel)),
+  //       )
+  //       .toList();
 
-    return cartProducts;
-  }
+  //   return cartProducts;
+  // }
 
   // -------------------------------------------------
 
@@ -136,20 +138,17 @@ class DbHelper {
     ''');
   }
 
-  Future<void> addAllFavoritesToCart() async {
-    final cartProducts = await getProductsFromCart();
-    final favoritedProducts = await getProductsFromFavorites();
-
-    Talker().good(cartProducts);
-
-    final batch = (await instance.database).batch();
-    for (var favProd in favoritedProducts) {
-      if (!cartProducts.contains(CartProduct(product: favProd))) {
-        _addToCartWithBatch(batch, favProd);
-      }
-    }
-    await batch.commit();
-  }
+  // Future<void> addAllFavoritesToCart() async {
+  //   final cartProducts = await getProductsFromCart();
+  //   final favoritedProducts = await getProductsFromFavorites();
+  //   final batch = (await instance.database).batch();
+  //   for (var favProd in favoritedProducts) {
+  //     if (!cartProducts.contains(CartProduct(product: favProd))) {
+  //       _addToCartWithBatch(batch, favProd);
+  //     }
+  //   }
+  //   await batch.commit();
+  // }
 
   Future<bool> isProductInFavorites(String id) async =>
       _isProductInTable(FavoritesDBConsts.dbName, id);

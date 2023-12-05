@@ -45,7 +45,6 @@ class CategoriesListDelegate extends SliverPersistentHeaderDelegate {
 
 class _CategoryItem extends StatelessWidget {
   const _CategoryItem({
-    super.key,
     required this.category,
   });
 
@@ -53,7 +52,7 @@ class _CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isActive = context.read<CategoriesBloc>().state.active == category;
+    final isActive = context.read<CategoriesBloc>().state.selected == category;
     final fontColor = isActive ? AppColors.primary : AppColors.disabled;
     final backgroundColor =
         isActive ? AppColors.blackFont : AppColors.disabledField;
