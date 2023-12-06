@@ -11,35 +11,45 @@ import 'package:go_router/go_router.dart';
 class FavoriteProductWidget extends StatelessWidget {
   const FavoriteProductWidget({
     super.key,
-    required this.product,
+    required this.favProduct,
   });
 
-  final ProductPreview product;
+  final FavoriteProduct favProduct;
 
-  void _remove(BuildContext context) =>
-      context.read<FavoritesBloc>().add(RemoveProduct(product: product));
+  void _remove(BuildContext context) => context
+      .read<FavoritesBloc>()
+      .add(RemoveFavoriteProduct(id: favProduct.product.id));
 
   void _openProduct(BuildContext context) =>
-      context.push(Routes.productCard, extra: product);
+      context.push(Routes.productCard, extra: favProduct.product.id);
 
-  void _changeCartStatus(BuildContext context) =>
-      context.read<CartBloc>().add(ChangeCartStatus(product: product));
+  void _changeCartStatus(BuildContext context) {
+    if (favProduct.isInCart) {
+      context.read<CartBloc>().add(
+            RemoveCartProduct(id: favProduct.product.id),
+          );
+    } else {
+      context.read<CartBloc>().add(AddCartProduct(id: favProduct.product.id));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // к сожалению, без этого виджета кнопка корзины никак не смещается вниз
+    final isInCart = favProduct.isInCart;
+
     return IntrinsicHeight(
       child: Row(
         children: [
           InkWell(
             onTap: () => _openProduct(context),
             child: RoundedImageWidget(
-              imageUrl: product.image,
+              imageUrl: favProduct.product.image,
               widthSize: 100,
             ),
           ),
           const SizedBox(width: 20),
-          ProductInfoColumn(product: product),
+          ProductInfoColumn(product: favProduct.product),
           const Spacer(),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,25 +63,15 @@ class FavoriteProductWidget extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              BlocBuilder<CartBloc, CartState>(
-                builder: (context, state) {
-                  bool isInCart = false;
-                  if (state is CartLoaded) {
-                    final foundedProduct = state.cartProducts
-                        .where((cp) => cp.product.id == product.id);
-                    isInCart = foundedProduct.isEmpty ? false : true;
-                  }
-                  return CustomSquareButton(
-                    onPressed: () => _changeCartStatus(context),
-                    backgroundColor:
-                        isInCart ? AppColors.iconGreyColor : AppColors.black3,
-                    iconColor: isInCart ? AppColors.primary : AppColors.white,
-                    sideLength: 34,
-                    iconName: 'shopping_bag',
-                    iconLength: 20,
-                    borderRadius: 10,
-                  );
-                },
+              CustomSquareButton(
+                onPressed: () => _changeCartStatus(context),
+                backgroundColor:
+                    isInCart ? AppColors.iconGreyColor : AppColors.black3,
+                iconColor: isInCart ? AppColors.primary : AppColors.white,
+                sideLength: 34,
+                iconName: 'shopping_bag',
+                iconLength: 20,
+                borderRadius: 10,
               ),
             ],
           ),

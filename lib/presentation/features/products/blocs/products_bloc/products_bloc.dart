@@ -9,12 +9,13 @@ part 'products_event.dart';
 part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  ProductsBloc({required this.productsRepository})
-      : super(const ProductsLoading()) {
+  ProductsBloc({required AbstractProductsRepository productsRepository})
+      : _productsRepository = productsRepository,
+        super(const ProductsLoading()) {
     on<FetchProducts>(_fetchProducts);
   }
 
-  final AbstractProductsRepository productsRepository;
+  final AbstractProductsRepository _productsRepository;
 
   final _cachedProducts =
       AsyncCache<List<ProductPreview>>(const Duration(seconds: 1));
@@ -33,9 +34,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       } else {
         category = event.category!;
       }
-      await Future.delayed(const Duration(seconds: 3));
       final products = await _cachedProducts.fetch(
-        () => productsRepository.getProducts(category.name),
+        () => _productsRepository.getProducts(category: category.name),
       );
       emit(ProductsLoaded(products: products, category: category));
     } catch (message) {

@@ -13,7 +13,7 @@ final class ProductCardLoading extends ProductCardState {
 
 final class ProductCardLoaded extends ProductCardState {
   const ProductCardLoaded({
-    required this.color,
+    this.color = AppColors.colorSelect1,
     required this.product,
     required this.isFavorite,
     required this.isInCart,

@@ -33,7 +33,6 @@ class ProductRating extends StatelessWidget {
 
 class _ReviewsValue extends StatelessWidget {
   const _ReviewsValue({
-    super.key,
     required this.reviews,
   });
 

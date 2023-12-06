@@ -13,17 +13,14 @@ class CartProductWidget extends StatelessWidget {
     required this.cartProduct,
   });
 
-  final CartProduct cartProduct;
+  final CartProductPv cartProduct;
 
-  void _openProduct(BuildContext context) {
-    context.push(Routes.productCard, extra: cartProduct.product);
-  }
+  void _openProduct(BuildContext context) =>
+      context.push(Routes.productCard, extra: cartProduct.product.id);
 
-  void _removeProduct(BuildContext context) {
-    context
-        .read<CartBloc>()
-        .add(ChangeCartStatus(product: cartProduct.product));
-  }
+  void _removeProduct(BuildContext context) => context
+      .read<CartBloc>()
+      .add(RemoveCartProduct(id: cartProduct.product.id));
 
   @override
   Widget build(BuildContext context) {

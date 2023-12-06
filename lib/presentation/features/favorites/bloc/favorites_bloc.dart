@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
@@ -8,60 +10,106 @@ part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({
-    required this.repository,
-  }) : super(const FavoritesLoading()) {
-    on<FetchFavorites>(_fetchProducts);
-    on<AddAllToCart>(_addAllToCart);
-    on<AddProduct>(_addProduct);
-    on<RemoveProduct>(_removeProduct);
+    required AbstractFavoritesRepository favoritesRepository,
+    required AbstractCartRepository cartRepository,
+  })  : _favoritesRepository = favoritesRepository,
+        _cartRepository = cartRepository,
+        super(const FavoritesLoading()) {
+    on<AddAllFavoritesToCart>(_addAllToCart);
+    on<AddFavoriteProduct>(_addProduct);
+    on<RemoveFavoriteProduct>(_removeProduct);
+    on<_UpdateFromFavStream>(_updateFromFavStream);
+    on<_UpdateFromCartStream>(_updateFromCartStream);
+
+    // подписываюсь на стрим favorites
+    _favProductsSub = _favoritesRepository.streamProducts().listen(
+          (favProducts) => add(_UpdateFromFavStream(favPoducts: favProducts)),
+        );
+
+    // подписываюсь на стрим cart
+    _cartProductsSub = _cartRepository.streamProducts().listen(
+          (cartProducts) =>
+              add(_UpdateFromCartStream(cartProducts: cartProducts)),
+        );
   }
 
-  final AbstractFavoritesRepository repository;
+  final AbstractFavoritesRepository _favoritesRepository;
+  final AbstractCartRepository _cartRepository;
+  late final StreamSubscription _favProductsSub;
+  late final StreamSubscription _cartProductsSub;
 
-  Future<void> _fetchProducts(
-    FetchFavorites event,
+  // объединяю данные с 2-х стримов в единый state
+  List<FavoriteProduct> _combineData(
+    Iterable<ProductPreview> favProducts,
+    Iterable<CartProductPv> cartProducts,
+  ) {
+    final cartExtractedProducts = cartProducts.map((cp) => cp.product);
+    final updatedData = favProducts.map((favPrd) {
+      final isInCart = cartExtractedProducts.contains(favPrd);
+      return FavoriteProduct(product: favPrd, isInCart: isInCart);
+    }).toList();
+    return updatedData;
+  }
+
+  // обновляю при изменении значение favorites
+  void _updateFromFavStream(
+    _UpdateFromFavStream event,
     Emitter<FavoritesState> emit,
-  ) async {
-    emit(const FavoritesLoading());
-    final products = await repository.getProducts();
-    emit(FavoritesLoaded(products: products));
+  ) {
+    Iterable<CartProductPv> stateToCartProducts = [];
+    if (state is FavoritesLoaded) {
+      stateToCartProducts = (state as FavoritesLoaded)
+          .products
+          .where((favPrd) => favPrd.isInCart)
+          .map((favPrd) => CartProductPv(product: favPrd.product));
+    }
+    final combinedData = _combineData(event.favPoducts, stateToCartProducts);
+    emit(FavoritesLoaded(products: combinedData));
   }
+
+  // обновляю при изменении значение cart
+  void _updateFromCartStream(
+    _UpdateFromCartStream event,
+    Emitter<FavoritesState> emit,
+  ) {
+    if (state is FavoritesLoaded) {
+      final stateToProductsPv = (state as FavoritesLoaded).products.map(
+            (favPrd) => favPrd.product,
+          );
+      final combinedData = _combineData(stateToProductsPv, event.cartProducts);
+      emit(FavoritesLoaded(products: combinedData));
+    }
+  }
+  //
 
   Future<void> _addProduct(
-    AddProduct event,
+    AddFavoriteProduct event,
     Emitter<FavoritesState> emit,
   ) async {
-    if (state is FavoritesLoaded) {
-      await repository.add(id: event.product.id);
-      final productsCopy =
-          List<ProductPreview>.from((state as FavoritesLoaded).products);
-      productsCopy.add(event.product);
-      emit(FavoritesLoaded(products: productsCopy));
-    }
+    await _favoritesRepository.add(id: event.id);
   }
 
   Future<void> _removeProduct(
-    RemoveProduct event,
+    RemoveFavoriteProduct event,
     Emitter<FavoritesState> emit,
   ) async {
-    // TODO
-    if (state is FavoritesLoaded) {
-      final productsCopy =
-          List<ProductPreview>.from((state as FavoritesLoaded).products);
-      productsCopy.remove(event.product);
-
-      emit(FavoritesLoaded(products: productsCopy));
-      await repository.remove(id: event.product.id);
-    }
+    await _favoritesRepository.remove(id: event.id);
   }
 
   Future<void> _addAllToCart(
-    AddAllToCart event,
+    AddAllFavoritesToCart event,
     Emitter<FavoritesState> emit,
   ) async {
     if (state is FavoritesLoaded) {
-      await repository.addAllToCart();
-      emit((state as FavoritesLoaded).copyWith());
+      await _favoritesRepository.addAllToCart();
     }
+  }
+
+  // отменяю подписку
+  @override
+  Future<void> close() {
+    _favProductsSub.cancel();
+    _cartProductsSub.cancel();
+    return super.close();
   }
 }

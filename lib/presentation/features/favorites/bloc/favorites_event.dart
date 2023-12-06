@@ -7,32 +7,48 @@ sealed class FavoritesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class FetchFavorites extends FavoritesEvent {
-  const FetchFavorites();
-}
+// для обновления state от стрима favorites
+final class _UpdateFromFavStream extends FavoritesEvent {
+  const _UpdateFromFavStream({required this.favPoducts});
 
-final class AddProduct extends FavoritesEvent {
-  const AddProduct({
-    required this.product,
-  });
-
-  final ProductPreview product;
+  final List<ProductPreview> favPoducts;
 
   @override
-  List<Object?> get props => [product];
+  List<Object?> get props => [favPoducts];
 }
 
-final class RemoveProduct extends FavoritesEvent {
-  const RemoveProduct({
-    required this.product,
-  });
+// для обновления state от стрима cart
+final class _UpdateFromCartStream extends FavoritesEvent {
+  const _UpdateFromCartStream({required this.cartProducts});
 
-  final ProductPreview product;
+  final List<CartProductPv> cartProducts;
 
   @override
-  List<Object?> get props => [product];
+  List<Object?> get props => [cartProducts];
 }
 
-final class AddAllToCart extends FavoritesEvent {
-  const AddAllToCart();
+final class AddFavoriteProduct extends FavoritesEvent {
+  const AddFavoriteProduct({
+    required this.id,
+  });
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+final class RemoveFavoriteProduct extends FavoritesEvent {
+  const RemoveFavoriteProduct({
+    required this.id,
+  });
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+final class AddAllFavoritesToCart extends FavoritesEvent {
+  const AddAllFavoritesToCart();
 }

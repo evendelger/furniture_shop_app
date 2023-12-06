@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
+import 'package:furniture_shop_app/data/firebase/firebase.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
 
 class CartRepository implements AbstractCartRepository {
-  const CartRepository({
+  CartRepository({
     required this.authClient,
     required this.firestoreClient,
     required this.dioClient,
@@ -24,25 +25,20 @@ class CartRepository implements AbstractCartRepository {
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      throw errorMessage;
     }
   }
 
   @override
-  Future<void> changeValue({required String id, required bool increase}) async {
+  Future<bool> changeValue({required String id, required bool increase}) async {
     try {
-      firestoreClient.changeInCartValue(
+      final isChanged = firestoreClient.changeInCartValue(
         userId: authClient.getUserId,
         productId: id,
         increase: increase,
       );
+      return isChanged;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
-      throw errorMessage;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
       throw errorMessage;
     }
   }
@@ -61,9 +57,6 @@ class CartRepository implements AbstractCartRepository {
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      throw errorMessage;
     }
   }
 
@@ -77,27 +70,45 @@ class CartRepository implements AbstractCartRepository {
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      throw errorMessage;
     }
   }
 
   @override
-  Stream<List<CartProduct>> streamProducts() =>
+  Stream<List<CartProductPv>> streamProducts() =>
       firestoreClient.streamCartItems(userId: authClient.getUserId).asyncMap(
         (cartItems) async {
-          if (cartItems.isEmpty) return <CartProduct>[];
           final products = await dioClient.getProductsByIds(
             cartItems.map((i) => i.id),
           );
-          return List<CartProduct>.generate(
+          return List<CartProductPv>.generate(
             products.length,
-            (i) => CartProduct(
+            (i) => CartProductPv(
               product: products[i],
               inCartValue: cartItems[i].value,
             ),
           );
         },
       );
+
+  @override
+  Future<CartProductFl> getCartProduct({required String id}) async {
+    try {
+      final cartItem = await firestoreClient.getCartItem(
+        userId: authClient.getUserId,
+        productId: id,
+      );
+
+      final cartProduct = await dioClient.getFullProductById(id: id);
+      return CartProductFl(
+        product: cartProduct,
+        inCartValue: cartItem == null ? 0 : cartItem.value,
+      );
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
+    }
+  }
 }

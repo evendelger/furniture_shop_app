@@ -9,7 +9,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({required this.authRepository}) : super(const AuthLoading()) {
+  AuthBloc({required AbstractAuthRepository authRepository})
+      : _authRepository = authRepository,
+        super(const AuthLoading()) {
     on<AuthChangeType>(_changeType);
     on<AuthLogIn>(_login);
     on<Register>(_authRegister);
@@ -20,13 +22,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     add(const _AuthFetchStatus());
   }
 
-  final AbstractAuthRepository authRepository;
+  final AbstractAuthRepository _authRepository;
 
   Future<void> _fetchStatus(
     _AuthFetchStatus event,
     Emitter<AuthState> emit,
   ) async {
-    final user = await authRepository.getUserStream().first;
+    final user = _authRepository.getCurrentUser;
     if (user.isAuthorized) {
       emit(AuthSuccess(userModel: user));
     } else {
@@ -52,10 +54,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
-      await authRepository.signIn(userModel);
+      await _authRepository.signIn(userModel);
       await Future.delayed(const Duration(seconds: 3));
 
-      final loggedInUser = await authRepository.getUserStream().first;
+      final loggedInUser = _authRepository.getCurrentUser;
       emit(AuthSuccess(userModel: loggedInUser));
     } catch (e) {
       emit(AuthFailure(message: e.toString()));
@@ -75,7 +77,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
 
-      final userCredential = await authRepository.signUp(userModel);
+      final userCredential = await _authRepository.signUp(userModel);
       await Future.delayed(const Duration(seconds: 3));
 
       final registeredModel = UserModel.fromUserCredential(userCredential);
@@ -92,7 +94,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final authType = (state as AuthInitial).authType;
     emit(const AuthLoading());
     try {
-      final userCredential = await authRepository.signInAnonymously();
+      final userCredential = await _authRepository.signInAnonymously();
       final userModel = UserModel.fromUserCredential(userCredential)
           .copyWith(displayName: 'anon');
       await Future.delayed(const Duration(seconds: 3));
@@ -109,7 +111,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final stateBeforeLogOut = state;
     try {
-      await authRepository.signOut();
+      await _authRepository.signOut();
       emit(const AuthInitial());
     } catch (e) {
       emit(AuthFailure(message: e.toString()));

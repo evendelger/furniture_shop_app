@@ -5,3 +5,5 @@ export 'cart_body_widget.dart';
 export 'check_out_button.dart';
 export 'total_price_widget.dart';
 export 'cart_products.dart';
+export 'shimmer_bottom_widget.dart';
+export 'loaded_bottom_widget.dart';

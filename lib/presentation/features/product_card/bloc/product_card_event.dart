@@ -11,6 +11,10 @@ final class ChangeFavoriteStatus extends ProductCardEvent {
   const ChangeFavoriteStatus();
 }
 
+final class ChangeCartStatus extends ProductCardEvent {
+  const ChangeCartStatus();
+}
+
 final class OpenProductCard extends ProductCardEvent {
   const OpenProductCard({
     required this.id,
@@ -35,11 +39,11 @@ final class ChangeColor extends ProductCardEvent {
 
 final class ChangeCount extends ProductCardEvent {
   const ChangeCount({
-    required this.isAdd,
+    required this.increment,
   });
 
-  final bool isAdd;
+  final bool increment;
 
   @override
-  List<Object?> get props => [isAdd];
+  List<Object?> get props => [increment];
 }

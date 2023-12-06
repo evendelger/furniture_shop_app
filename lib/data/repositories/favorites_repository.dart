@@ -1,10 +1,9 @@
-import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_firestore/firestore_client.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:furniture_shop_app/data/firebase/firebase.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
-import 'package:furniture_shop_app/locator.dart';
-import 'package:talker/talker.dart';
 
 class FavoritesRepository implements AbstractFavoritesRepository {
   const FavoritesRepository({
@@ -20,25 +19,31 @@ class FavoritesRepository implements AbstractFavoritesRepository {
   @override
   Future<void> add({required String id}) async {
     try {
-      firestoreClient.addToFavorites(
+      await firestoreClient.addToFavorites(
         userId: authClient.getUserId,
         productId: id,
       );
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 
   @override
   Future<void> addAllToCart() async {
     try {
-      firestoreClient.addAllToCart(
+      await firestoreClient.addAllToCart(
         userId: authClient.getUserId,
       );
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 
@@ -53,22 +58,28 @@ class FavoritesRepository implements AbstractFavoritesRepository {
         return true;
       }
       return false;
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 
   @override
   Future<void> remove({required String id}) async {
     try {
-      firestoreClient.removeFromFavorites(
+      await firestoreClient.removeFromFavorites(
         userId: authClient.getUserId,
         productId: id,
       );
-    } catch (e) {
-      locator<Talker>().error(e);
-      rethrow;
+    } on FirebaseException catch (e) {
+      final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
+      throw errorMessage;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
     }
   }
 

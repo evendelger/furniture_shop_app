@@ -1,61 +1,65 @@
 import 'package:flutter/widgets.dart';
-import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
-
-const _padding = 52.0;
 
 class ProductInfo extends StatelessWidget {
   const ProductInfo({
     super.key,
-    required this.product,
+    required this.state,
   });
 
-  final Product product;
+  final ProductCardLoaded state;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              ProductImage(imageUrl: product.image),
-              const Positioned(
-                left: _padding - 20,
-                top: _padding,
-                child: PopButton(),
+              SizedBox(
+                // из-за того, что изображения не одинакого размера, опытом вывел эту величину
+                height: size.height / 1.68,
+                child: ProductImage(imageUrl: state.product.image),
               ),
               const Positioned(
-                left: _padding - 32,
-                top: _padding * 3,
-                child: ColorSelectWidget(),
+                left: UiConstants.imagePadding - 20,
+                top: UiConstants.imagePadding,
+                child: PopButton(),
+              ),
+              Positioned(
+                left: UiConstants.imagePadding - 32,
+                top: UiConstants.imagePadding * 3,
+                child: ColorSelectWidget(selectedColor: state.color),
               ),
             ],
           ),
-          ProductTitle(title: product.title),
+          ProductTitle(title: state.product.title),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 25).copyWith(top: 10),
+            padding: UiConstants.padding,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ProductPrice(price: product.price),
-                ProductCount(product: product),
+                ProductPrice(price: state.product.price),
+                if (state.isInCart)
+                  ProductCount(
+                    id: state.product.id,
+                    inCartProduct: state.inCartValue!,
+                  ),
               ],
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 25).copyWith(top: 10),
+            padding: UiConstants.padding,
             child: ProductRating(
-              rating: product.rating,
-              reviews: product.reviews,
+              rating: state.product.rating,
+              reviews: state.product.reviews,
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 25).copyWith(top: 10),
+            padding: UiConstants.padding,
             child: const ProductDescription(),
           ),
           const SizedBox(height: 100),

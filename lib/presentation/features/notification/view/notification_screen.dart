@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/notification/notification.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -11,10 +9,6 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  void testFunc() {
-    context.read<FavoritesBloc>().add(const FetchFavorites());
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -22,7 +16,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         const NotificationAppBar(),
         SliverToBoxAdapter(
           child: ElevatedButton(
-            onPressed: testFunc,
+            onPressed: () {},
             child: const Text('Test'),
           ),
         ),

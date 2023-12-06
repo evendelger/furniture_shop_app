@@ -7,6 +7,5 @@ abstract class AbstractFavoritesRepository {
   Future<void> remove({required String id});
   Future<void> addAllToCart();
   Future<bool> isFavorite({required String id});
-  //Future<List<ProductPreview>> getProducts();
   Stream<List<ProductPreview>> streamProducts();
 }

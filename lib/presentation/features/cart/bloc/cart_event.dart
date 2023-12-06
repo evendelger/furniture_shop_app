@@ -7,12 +7,15 @@ sealed class CartEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class FetchCart extends CartEvent {
-  const FetchCart();
+// для обновления state от стрима
+final class _UpdateState extends CartEvent {
+  const _UpdateState({required this.products});
+
+  final List<CartProductPv> products;
 }
 
-final class ChangeValue extends CartEvent {
-  const ChangeValue({
+final class ChangeCartValue extends CartEvent {
+  const ChangeCartValue({
     required this.id,
     required this.increase,
   });
@@ -24,39 +27,24 @@ final class ChangeValue extends CartEvent {
   List<Object?> get props => [id, increase];
 }
 
-final class ChangeCartStatus extends CartEvent {
-  const ChangeCartStatus({
-    required this.product,
-    this.countToAdd,
+final class AddCartProduct extends CartEvent {
+  const AddCartProduct({
+    required this.id,
   });
 
-  final ProductPreview product;
-  final int? countToAdd;
+  final String id;
 
   @override
-  List<Object?> get props => [product, countToAdd];
+  List<Object?> get props => [id];
 }
 
-final class _AddProduct extends CartEvent {
-  const _AddProduct({
-    required this.product,
-    this.countToAdd,
+final class RemoveCartProduct extends CartEvent {
+  const RemoveCartProduct({
+    required this.id,
   });
 
-  final ProductPreview product;
-  final int? countToAdd;
+  final String id;
 
   @override
-  List<Object?> get props => [product, countToAdd];
-}
-
-final class _RemoveProduct extends CartEvent {
-  const _RemoveProduct({
-    required this.product,
-  });
-
-  final ProductPreview product;
-
-  @override
-  List<Object?> get props => [product];
+  List<Object?> get props => [id];
 }

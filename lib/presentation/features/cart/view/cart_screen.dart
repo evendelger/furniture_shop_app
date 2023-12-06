@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 
 class CartScreen extends StatelessWidget {
@@ -19,9 +20,16 @@ class CartScreen extends StatelessWidget {
               ],
             ),
           ),
-          const TotalPriceWidget(),
-          const SizedBox(height: 20),
-          const CheckOutButton(),
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              switch (state) {
+                case CartLoading():
+                  return const ShimmerBottomWidget();
+                case CartLoaded():
+                  return const LoadedBottomWidget();
+              }
+            },
+          )
         ],
       ),
     );

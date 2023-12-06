@@ -4,16 +4,14 @@ import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 
 class AddAllWidget extends StatelessWidget {
-  const AddAllWidget({
-    super.key,
-  });
+  const AddAllWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FavoritesBloc, FavoritesState>(
       builder: (context, state) {
         if (state is FavoritesLoaded) {
-          final favProducts = state.products;
+          final favProducts = state.products.map((favPrd) => favPrd.product);
           return BlocBuilder<CartBloc, CartState>(
             buildWhen: (p, c) {
               if (p is CartLoaded && c is CartLoaded) {
@@ -24,7 +22,8 @@ class AddAllWidget extends StatelessWidget {
             builder: (context, state) {
               if (state is CartLoaded) {
                 final cartProducts = state.cartProducts.map((cp) => cp.product);
-                if (favProducts == cartProducts) {
+                // TODO
+                if (favProducts != cartProducts) {
                   return const AddAllButton();
                 }
               }

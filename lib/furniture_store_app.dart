@@ -18,15 +18,13 @@ class FurnitureStoreApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProductsBloc(
             productsRepository: locator<AbstractProductsRepository>(),
-          )..add(FetchProducts(category: Categories.list[0])),
-        ),
-        BlocProvider(
-          create: (context) => CategoriesBloc(),
+          )..add(FetchProducts(category: Categories.list.first)),
         ),
         BlocProvider(
           create: (context) => FavoritesBloc(
-            repository: locator<AbstractFavoritesRepository>(),
-          )..add(const FetchFavorites()),
+            favoritesRepository: locator<AbstractFavoritesRepository>(),
+            cartRepository: locator<AbstractCartRepository>(),
+          ),
         ),
         BlocProvider(
           create: (context) => CartBloc(

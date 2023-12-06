@@ -3,14 +3,21 @@ import 'package:furniture_shop_app/domain/models/user_model.dart';
 import 'package:talker/talker.dart';
 
 class AuthClient {
-  AuthClient();
+  AuthClient() {
+    // слушаю изменения в аутентификакии и записываю их в переменную
+    _auth.authStateChanges().map((user) => UserModel.fromFbModel(user)).listen(
+      (userModel) {
+        _currentUser = userModel;
+      },
+    );
+  }
 
   final _auth = FirebaseAuth.instance;
+  late final UserModel _currentUser;
 
-  String get getUserId => _auth.currentUser!.uid;
-
-  Stream<UserModel> retrieveCurrentUser() =>
-      _auth.authStateChanges().map((user) => UserModel.fromFbModel(user));
+  UserModel get getCurrentUser => _currentUser;
+  // получаю id из последнего event'а
+  String get getUserId => _currentUser.uid!;
 
   Future<UserCredential> signUp({
     required String email,

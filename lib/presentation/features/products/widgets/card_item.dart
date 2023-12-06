@@ -7,20 +7,19 @@ import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:talker/talker.dart';
 
 class ProductCardItem extends StatelessWidget {
   const ProductCardItem({super.key, required this.product});
 
   final ProductPreview product;
 
+  void _openProductCard(BuildContext context) =>
+      context.push(Routes.productCard, extra: product.id);
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Talker().info('open ${product.title}');
-        context.push(Routes.productCard, extra: product);
-      },
+      onTap: () => _openProductCard(context),
       borderRadius: BorderRadius.circular(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +30,7 @@ class ProductCardItem extends StatelessWidget {
                 imageUrl: product.image,
                 widthSize: 200,
               ),
-              _CartIcon(product: product),
+              _CartIcon(id: product.id),
             ],
           ),
           const SizedBox(height: 10),
@@ -74,10 +73,10 @@ class _ItemTitle extends StatelessWidget {
 
 class _CartIcon extends StatelessWidget {
   const _CartIcon({
-    required this.product,
+    required this.id,
   });
 
-  final ProductPreview product;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -88,17 +87,16 @@ class _CartIcon extends StatelessWidget {
         builder: (context, state) {
           switch (state) {
             case CartLoading():
-              context.read<CartBloc>().add(const FetchCart());
               return const _ShimmerLoadingIcon();
             case CartLoaded():
               {
                 final foundedProduct = state.cartProducts.where(
-                  (cp) => cp.product.id == product.id,
+                  (cp) => cp.product.id == id,
                 );
                 final isInCart = foundedProduct.isEmpty ? false : true;
                 return _LoadedIcon(
                   isInCart: isInCart,
-                  product: product,
+                  id: id,
                 );
               }
           }
@@ -128,14 +126,15 @@ class _ShimmerLoadingIcon extends StatelessWidget {
 class _LoadedIcon extends StatelessWidget {
   const _LoadedIcon({
     required this.isInCart,
-    required this.product,
+    required this.id,
   });
 
   final bool isInCart;
-  final ProductPreview product;
+  final String id;
 
-  void _changeCartStatus(BuildContext context) =>
-      context.read<CartBloc>().add(ChangeCartStatus(product: product));
+  void _changeCartStatus(BuildContext context) => context.read<CartBloc>().add(
+        isInCart ? RemoveCartProduct(id: id) : AddCartProduct(id: id),
+      );
 
   @override
   Widget build(BuildContext context) {

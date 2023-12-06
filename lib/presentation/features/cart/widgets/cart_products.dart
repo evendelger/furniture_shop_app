@@ -9,7 +9,7 @@ class CartProducts extends StatelessWidget {
     required this.cartProducts,
   });
 
-  final List<CartProduct> cartProducts;
+  final List<CartProductPv> cartProducts;
 
   @override
   Widget build(BuildContext context) {

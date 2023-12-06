@@ -1,5 +1,6 @@
 import 'package:furniture_shop_app/domain/models/models.dart';
 
 abstract class AbstractProductsRepository {
-  Future<List<ProductPreview>> getProducts(String category);
+  Future<List<ProductPreview>> getProducts({required String category});
+  Future<Product> getProductById({required String id});
 }

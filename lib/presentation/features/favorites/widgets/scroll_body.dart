@@ -42,14 +42,14 @@ class FavoritesList extends StatelessWidget {
     required this.products,
   });
 
-  final List<ProductPreview> products;
+  final List<FavoriteProduct> products;
 
   @override
   Widget build(BuildContext context) {
     return SliverList.separated(
       itemCount: products.length,
       itemBuilder: (context, index) =>
-          FavoriteProductWidget(product: products[index])
+          FavoriteProductWidget(favProduct: products[index])
               .animate()
               .fadeIn(duration: 1000.ms),
       separatorBuilder: (_, __) => const Padding(

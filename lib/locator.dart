@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/data/firebase/firebase_auth/firebase_auth_client.dart';
+import 'package:furniture_shop_app/data/firebase/auth/auth_client.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
@@ -13,7 +13,7 @@ import 'package:talker/talker.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
 
-import 'data/firebase/firebase_firestore/firestore_client.dart';
+import 'data/firebase/firestore/firestore_client.dart';
 
 final locator = GetIt.instance;
 
@@ -28,25 +28,25 @@ abstract class Locator {
     _initTalker();
   }
 
+  static void _initApiClient() =>
+      locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
+
   static Future<void> _initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    locator.registerLazySingleton<AuthClient>(
-      () => AuthClient(),
+    locator.registerSingleton<AuthClient>(
+      AuthClient(),
     );
     locator.registerLazySingleton<FirestoreClient>(
-      () => FirestoreClient(),
+      () => FirestoreClient(locator<DioClient>()),
     );
   }
-
-  static void _initApiClient() =>
-      locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
 
   static void _initRepositories() {
     locator.registerSingleton<AbstractAuthRepository>(
       AuthRepository(
-        firebaseClient: locator<AuthClient>(),
+        authClient: locator<AuthClient>(),
         firestoreClient: locator<FirestoreClient>(),
       ),
     );

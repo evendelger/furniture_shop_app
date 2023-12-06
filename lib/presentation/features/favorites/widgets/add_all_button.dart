@@ -7,7 +7,7 @@ class AddAllButton extends StatelessWidget {
   const AddAllButton({super.key});
 
   void _addAll(BuildContext context) =>
-      context.read<FavoritesBloc>().add(const AddAllToCart());
+      context.read<FavoritesBloc>().add(const AddAllFavoritesToCart());
 
   @override
   Widget build(BuildContext context) {

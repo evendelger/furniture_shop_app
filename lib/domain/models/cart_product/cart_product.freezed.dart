@@ -14,26 +14,21 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-CartProduct _$CartProductFromJson(Map<String, dynamic> json) {
-  return _CartProduct.fromJson(json);
-}
-
 /// @nodoc
-mixin _$CartProduct {
+mixin _$CartProductPv {
   ProductPreview get product => throw _privateConstructorUsedError;
   int get inCartValue => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CartProductCopyWith<CartProduct> get copyWith =>
+  $CartProductPvCopyWith<CartProductPv> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CartProductCopyWith<$Res> {
-  factory $CartProductCopyWith(
-          CartProduct value, $Res Function(CartProduct) then) =
-      _$CartProductCopyWithImpl<$Res, CartProduct>;
+abstract class $CartProductPvCopyWith<$Res> {
+  factory $CartProductPvCopyWith(
+          CartProductPv value, $Res Function(CartProductPv) then) =
+      _$CartProductPvCopyWithImpl<$Res, CartProductPv>;
   @useResult
   $Res call({ProductPreview product, int inCartValue});
 
@@ -41,9 +36,9 @@ abstract class $CartProductCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CartProductCopyWithImpl<$Res, $Val extends CartProduct>
-    implements $CartProductCopyWith<$Res> {
-  _$CartProductCopyWithImpl(this._value, this._then);
+class _$CartProductPvCopyWithImpl<$Res, $Val extends CartProductPv>
+    implements $CartProductPvCopyWith<$Res> {
+  _$CartProductPvCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -78,11 +73,11 @@ class _$CartProductCopyWithImpl<$Res, $Val extends CartProduct>
 }
 
 /// @nodoc
-abstract class _$$CartProductImplCopyWith<$Res>
-    implements $CartProductCopyWith<$Res> {
-  factory _$$CartProductImplCopyWith(
-          _$CartProductImpl value, $Res Function(_$CartProductImpl) then) =
-      __$$CartProductImplCopyWithImpl<$Res>;
+abstract class _$$CartProductPvImplCopyWith<$Res>
+    implements $CartProductPvCopyWith<$Res> {
+  factory _$$CartProductPvImplCopyWith(
+          _$CartProductPvImpl value, $Res Function(_$CartProductPvImpl) then) =
+      __$$CartProductPvImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({ProductPreview product, int inCartValue});
@@ -92,11 +87,11 @@ abstract class _$$CartProductImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CartProductImplCopyWithImpl<$Res>
-    extends _$CartProductCopyWithImpl<$Res, _$CartProductImpl>
-    implements _$$CartProductImplCopyWith<$Res> {
-  __$$CartProductImplCopyWithImpl(
-      _$CartProductImpl _value, $Res Function(_$CartProductImpl) _then)
+class __$$CartProductPvImplCopyWithImpl<$Res>
+    extends _$CartProductPvCopyWithImpl<$Res, _$CartProductPvImpl>
+    implements _$$CartProductPvImplCopyWith<$Res> {
+  __$$CartProductPvImplCopyWithImpl(
+      _$CartProductPvImpl _value, $Res Function(_$CartProductPvImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -105,7 +100,7 @@ class __$$CartProductImplCopyWithImpl<$Res>
     Object? product = null,
     Object? inCartValue = null,
   }) {
-    return _then(_$CartProductImpl(
+    return _then(_$CartProductPvImpl(
       product: null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
@@ -119,12 +114,9 @@ class __$$CartProductImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$CartProductImpl implements _CartProduct {
-  const _$CartProductImpl({required this.product, this.inCartValue = 1});
 
-  factory _$CartProductImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CartProductImplFromJson(json);
+class _$CartProductPvImpl implements _CartProductPv {
+  const _$CartProductPvImpl({required this.product, this.inCartValue = 1});
 
   @override
   final ProductPreview product;
@@ -134,44 +126,33 @@ class _$CartProductImpl implements _CartProduct {
 
   @override
   String toString() {
-    return 'CartProduct(product: $product, inCartValue: $inCartValue)';
+    return 'CartProductPv(product: $product, inCartValue: $inCartValue)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CartProductImpl &&
+            other is _$CartProductPvImpl &&
             (identical(other.product, product) || other.product == product) &&
             (identical(other.inCartValue, inCartValue) ||
                 other.inCartValue == inCartValue));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, product, inCartValue);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CartProductImplCopyWith<_$CartProductImpl> get copyWith =>
-      __$$CartProductImplCopyWithImpl<_$CartProductImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CartProductImplToJson(
-      this,
-    );
-  }
+  _$$CartProductPvImplCopyWith<_$CartProductPvImpl> get copyWith =>
+      __$$CartProductPvImplCopyWithImpl<_$CartProductPvImpl>(this, _$identity);
 }
 
-abstract class _CartProduct implements CartProduct {
-  const factory _CartProduct(
+abstract class _CartProductPv implements CartProductPv {
+  const factory _CartProductPv(
       {required final ProductPreview product,
-      final int inCartValue}) = _$CartProductImpl;
-
-  factory _CartProduct.fromJson(Map<String, dynamic> json) =
-      _$CartProductImpl.fromJson;
+      final int inCartValue}) = _$CartProductPvImpl;
 
   @override
   ProductPreview get product;
@@ -179,6 +160,156 @@ abstract class _CartProduct implements CartProduct {
   int get inCartValue;
   @override
   @JsonKey(ignore: true)
-  _$$CartProductImplCopyWith<_$CartProductImpl> get copyWith =>
+  _$$CartProductPvImplCopyWith<_$CartProductPvImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$CartProductFl {
+  Product get product => throw _privateConstructorUsedError;
+  int get inCartValue => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $CartProductFlCopyWith<CartProductFl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CartProductFlCopyWith<$Res> {
+  factory $CartProductFlCopyWith(
+          CartProductFl value, $Res Function(CartProductFl) then) =
+      _$CartProductFlCopyWithImpl<$Res, CartProductFl>;
+  @useResult
+  $Res call({Product product, int inCartValue});
+
+  $ProductCopyWith<$Res> get product;
+}
+
+/// @nodoc
+class _$CartProductFlCopyWithImpl<$Res, $Val extends CartProductFl>
+    implements $CartProductFlCopyWith<$Res> {
+  _$CartProductFlCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? product = null,
+    Object? inCartValue = null,
+  }) {
+    return _then(_value.copyWith(
+      product: null == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as Product,
+      inCartValue: null == inCartValue
+          ? _value.inCartValue
+          : inCartValue // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ProductCopyWith<$Res> get product {
+    return $ProductCopyWith<$Res>(_value.product, (value) {
+      return _then(_value.copyWith(product: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$CartProductFlImplCopyWith<$Res>
+    implements $CartProductFlCopyWith<$Res> {
+  factory _$$CartProductFlImplCopyWith(
+          _$CartProductFlImpl value, $Res Function(_$CartProductFlImpl) then) =
+      __$$CartProductFlImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Product product, int inCartValue});
+
+  @override
+  $ProductCopyWith<$Res> get product;
+}
+
+/// @nodoc
+class __$$CartProductFlImplCopyWithImpl<$Res>
+    extends _$CartProductFlCopyWithImpl<$Res, _$CartProductFlImpl>
+    implements _$$CartProductFlImplCopyWith<$Res> {
+  __$$CartProductFlImplCopyWithImpl(
+      _$CartProductFlImpl _value, $Res Function(_$CartProductFlImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? product = null,
+    Object? inCartValue = null,
+  }) {
+    return _then(_$CartProductFlImpl(
+      product: null == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as Product,
+      inCartValue: null == inCartValue
+          ? _value.inCartValue
+          : inCartValue // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CartProductFlImpl implements _CartProductFl {
+  const _$CartProductFlImpl({required this.product, this.inCartValue = 1});
+
+  @override
+  final Product product;
+  @override
+  @JsonKey()
+  final int inCartValue;
+
+  @override
+  String toString() {
+    return 'CartProductFl(product: $product, inCartValue: $inCartValue)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CartProductFlImpl &&
+            (identical(other.product, product) || other.product == product) &&
+            (identical(other.inCartValue, inCartValue) ||
+                other.inCartValue == inCartValue));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, product, inCartValue);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CartProductFlImplCopyWith<_$CartProductFlImpl> get copyWith =>
+      __$$CartProductFlImplCopyWithImpl<_$CartProductFlImpl>(this, _$identity);
+}
+
+abstract class _CartProductFl implements CartProductFl {
+  const factory _CartProductFl(
+      {required final Product product,
+      final int inCartValue}) = _$CartProductFlImpl;
+
+  @override
+  Product get product;
+  @override
+  int get inCartValue;
+  @override
+  @JsonKey(ignore: true)
+  _$$CartProductFlImplCopyWith<_$CartProductFlImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -9,7 +9,7 @@ class ProductCountRow extends StatelessWidget {
     required this.cartProduct,
   });
 
-  final CartProduct cartProduct;
+  final CartProductPv cartProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,7 @@ class ProductCountRow extends StatelessWidget {
         ChangeCountButton(
           icon: Icons.add,
           increase: true,
-          blocType: BlocType.cart,
-          cartProduct: cartProduct,
+          id: cartProduct.product.id,
         ),
         const SizedBox(width: 15),
         Text(
@@ -33,21 +32,9 @@ class ProductCountRow extends StatelessWidget {
         ChangeCountButton(
           icon: Icons.remove,
           increase: false,
-          blocType: BlocType.cart,
-          cartProduct: cartProduct,
+          id: cartProduct.product.id,
         ),
       ],
     );
   }
 }
-
-
-// if (state is CartLoaded) {
-        //   return FutureBuilder<bool>(
-        //     future: CartUsecases.getStatus(cartProduct.product),
-        //     initialData: false,
-        //     builder: (context, snapshot) {
-        //       if(snapshot.hasData) return _CountWidget(count: snapshot.data,);
-        //     },
-        //   );
-        // }

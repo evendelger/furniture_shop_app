@@ -1,42 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
-import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-
-enum BlocType {
-  productCard,
-  cart,
-}
 
 class ChangeCountButton extends StatelessWidget {
   const ChangeCountButton({
     super.key,
     required this.icon,
     required this.increase,
-    required this.blocType,
-    this.cartProduct,
+    required this.id,
   });
 
   final IconData icon;
   final bool increase;
-  final BlocType blocType;
-  final CartProduct? cartProduct;
+  final String id;
 
-  void _changeCount(BuildContext context) {
-    switch (blocType) {
-      case BlocType.productCard:
-        context.read<ProductCardBloc>().add(ChangeCount(isAdd: increase));
-        break;
-      case BlocType.cart:
-        context.read<CartBloc>().add(ChangeValue(
-              id: cartProduct!.product.id,
-              increase: increase,
-            ));
-        break;
-    }
-  }
+  void _changeCount(BuildContext context) => context.read<CartBloc>().add(
+        ChangeCartValue(id: id, increase: increase),
+      );
 
   @override
   Widget build(BuildContext context) {

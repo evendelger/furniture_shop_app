@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
@@ -27,7 +25,7 @@ class DioClient {
         Endpoints.products,
         queryParameters: queryParameters,
       );
-      final productsListJson = jsonDecode(response.data)['products'] as List;
+      final productsListJson = response.data['products'] as List;
       final products = productsListJson
           .map((product) => ProductPreview.fromJson(product))
           .toList();
@@ -37,18 +35,35 @@ class DioClient {
     }
   }
 
-  Future<Product> getProductById(String id) async {
+  Future<dynamic> _getProductById({
+    required String id,
+    required bool isPreview,
+  }) async {
     try {
-      final queryParameters = {"id": id};
+      final queryParameters = {
+        "id": id,
+        "preview": isPreview,
+      };
       final response =
           await _dio.get(Endpoints.product, queryParameters: queryParameters);
       // получаю List объектов, а не сингл объект, из-за специфики fastgen'а
-      final productJson = jsonDecode(response.data)['product'] as List;
-      final product = Product.fromJson(productJson[0]);
-      return product;
+      final productJson = response.data['product'] as List;
+      return productJson;
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<Product> getFullProductById({required String id}) async {
+    final productJson = await _getProductById(id: id, isPreview: false);
+    final product = Product.fromJson(productJson[0]);
+    return product;
+  }
+
+  Future<ProductPreview> getProductPreviewById({required String id}) async {
+    final productJson = await _getProductById(id: id, isPreview: true);
+    final product = ProductPreview.fromJson(productJson[0]);
+    return product;
   }
 
   Future<List<ProductPreview>> getProductsByIds(Iterable<String> ids) async {
@@ -57,7 +72,7 @@ class DioClient {
           await _dio.get(Endpoints.productsByIds, queryParameters: {
         "ids": ids.join(','),
       });
-      final productListJson = jsonDecode(response.data)['products'] as List;
+      final productListJson = response.data['products'] as List;
       final products = productListJson
           .map((prdJson) => ProductPreview.fromJson(prdJson))
           .toList();

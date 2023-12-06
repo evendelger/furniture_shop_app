@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
+import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerProductsList extends StatelessWidget {
@@ -55,31 +56,6 @@ class _SingleListItem extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class RoundedContainer extends StatelessWidget {
-  const RoundedContainer({
-    super.key,
-    this.width,
-    this.height,
-    required this.borderRadius,
-  });
-
-  final double? width;
-  final double? height;
-  final double borderRadius;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
-        color: AppColors.shimmerBackground,
-      ),
     );
   }
 }

@@ -4,7 +4,12 @@ import 'package:furniture_shop_app/presentation/features/product_card/product_ca
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class ColorSelectWidget extends StatelessWidget {
-  const ColorSelectWidget({super.key});
+  const ColorSelectWidget({
+    super.key,
+    required this.selectedColor,
+  });
+
+  final Color selectedColor;
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +27,22 @@ class ColorSelectWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: BlocBuilder<ProductCardBloc, ProductCardState>(
-        buildWhen: (p, c) => p.color != c.color,
-        builder: (context, state) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _SingleColorWidget(
-                color: AppColors.colorSelect1,
-                isSelected: state.color == AppColors.colorSelect1,
-              ),
-              _SingleColorWidget(
-                color: AppColors.colorSelect2,
-                isSelected: state.color == AppColors.colorSelect2,
-              ),
-              _SingleColorWidget(
-                color: AppColors.colorSelect3,
-                isSelected: state.color == AppColors.colorSelect3,
-              ),
-            ],
-          );
-        },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _SingleColorWidget(
+            color: AppColors.colorSelect1,
+            isSelected: selectedColor == AppColors.colorSelect1,
+          ),
+          _SingleColorWidget(
+            color: AppColors.colorSelect2,
+            isSelected: selectedColor == AppColors.colorSelect2,
+          ),
+          _SingleColorWidget(
+            color: AppColors.colorSelect3,
+            isSelected: selectedColor == AppColors.colorSelect3,
+          ),
+        ],
       ),
     );
   }

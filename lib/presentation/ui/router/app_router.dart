@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
 import 'package:furniture_shop_app/presentation/features/boarding/boarding.dart';
@@ -88,7 +87,7 @@ class AppRouter {
         parentNavigatorKey: _rootNavigatorKey,
         path: Routes.productCard,
         pageBuilder: (context, state) => CustomFadeTransition(
-          child: ProductCardScreen(product: state.extra as Product),
+          child: ProductCardScreen(id: state.extra as String),
         ),
       ),
     ],

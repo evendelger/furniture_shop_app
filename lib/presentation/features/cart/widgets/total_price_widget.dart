@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
-import 'package:shimmer/shimmer.dart';
 
 class TotalPriceWidget extends StatelessWidget {
   const TotalPriceWidget({super.key});
@@ -17,36 +16,31 @@ class TotalPriceWidget extends StatelessWidget {
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        bool enabled = true;
+        bool enableShimmer = true;
         double totalPrice = 0;
         if (state is CartLoading) {
-          enabled = true;
+          enableShimmer = true;
         } else if (state is CartLoaded) {
-          enabled = false;
+          enableShimmer = false;
           totalPrice = state.cartProducts
               .fold(0.0, (pv, cp) => cp.product.price * cp.inCartValue + pv);
         }
 
-        return Shimmer.fromColors(
-          baseColor: AppColors.shimmerBase,
-          highlightColor: AppColors.shimmerHighlight,
-          enabled: enabled,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: enabled ? 20 : 40)
-                .copyWith(top: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (enabled)
-                  const Expanded(
-                      child: RoundedContainer(
-                    borderRadius: 10,
-                    height: 25,
-                  ))
-                else
-                  ..._priceWidgets(textStyle, totalPrice),
-              ],
-            ),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: enableShimmer ? 20 : 40)
+              .copyWith(top: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (enableShimmer)
+                const Expanded(
+                    child: RoundedContainer(
+                  borderRadius: 10,
+                  height: 25,
+                ))
+              else
+                ..._priceWidgets(textStyle, totalPrice),
+            ],
           ),
         );
       },

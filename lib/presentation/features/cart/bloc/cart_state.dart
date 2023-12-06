@@ -16,10 +16,10 @@ final class CartLoaded extends CartState {
     required this.cartProducts,
   });
 
-  final List<CartProduct> cartProducts;
+  final List<CartProductPv> cartProducts;
 
   CartLoaded copyWith({
-    List<CartProduct>? cartProducts,
+    List<CartProductPv>? cartProducts,
   }) {
     return CartLoaded(
       cartProducts: cartProducts ?? this.cartProducts,

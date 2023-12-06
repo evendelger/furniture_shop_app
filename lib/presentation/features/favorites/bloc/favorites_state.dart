@@ -16,10 +16,10 @@ final class FavoritesLoaded extends FavoritesState {
     required this.products,
   });
 
-  final List<ProductPreview> products;
+  final List<FavoriteProduct> products;
 
   FavoritesLoaded copyWith({
-    List<ProductPreview>? products,
+    List<FavoriteProduct>? products,
   }) {
     return FavoritesLoaded(
       products: products ?? this.products,
