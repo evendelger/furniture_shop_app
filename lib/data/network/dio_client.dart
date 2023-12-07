@@ -76,7 +76,11 @@ class DioClient {
       final products = productListJson
           .map((prdJson) => ProductPreview.fromJson(prdJson))
           .toList();
-      return products;
+      // увы, из-за ограниченности бэка данные приходят не в том порядке, поэтому
+      // приходится их сортировать
+      final sortedProducts =
+          ids.map((id) => products.firstWhere((p) => p.id == id)).toList();
+      return sortedProducts;
     } catch (e) {
       rethrow;
     }

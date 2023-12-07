@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
@@ -15,26 +16,67 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<ChangeCartValue>(_changeValue);
     on<AddCartProduct>(_addProduct);
     on<RemoveCartProduct>(_removeProduct);
-    on<_UpdateState>(_updateState);
+    on<_UpdateRawState>(_updateRawState);
+    on<UpdateFullState>(_updateFullState);
 
     // подписываюсь на стрим cart
-    _cartProductsSub = _cartRepository.streamProducts().listen(
-          (cartProducts) => add(_UpdateState(products: cartProducts)),
-          //onError: (_) => {},
-        );
+    _cartProductsSub = _cartRepository.cartStream.listen(
+      (cartItems) => add(_UpdateRawState(cartItems: cartItems)),
+    );
   }
 
   final AbstractCartRepository _cartRepository;
   late final StreamSubscription _cartProductsSub;
 
-  void _updateState(_UpdateState event, Emitter<CartState> emit) =>
-      emit(CartLoaded(cartProducts: event.products));
+  void _updateRawState(_UpdateRawState event, Emitter<CartState> emit) {
+    if (state is CartLoadedFull) {
+      final stateProducts = (state as CartLoadedFull).cartProducts;
+      final newState = <CartProductPv>[];
+      if (stateProducts.length < event.cartItems.length) {
+        add(const UpdateFullState());
+        return;
+      }
+
+      for (int i = 0; i < event.cartItems.length; i++) {
+        final cartItem = event.cartItems[i];
+        final cartProduct = stateProducts.firstWhereOrNull(
+          (sp) => sp.product.id == cartItem.id,
+        );
+        if (cartProduct != null) {
+          if (cartProduct.inCartValue == cartItem.value) {
+            newState.add(cartProduct);
+          } else {
+            newState.add(CartProductPv(
+              product: cartProduct.product,
+              inCartValue: cartItem.value!,
+            ));
+          }
+        }
+      }
+      emit(CartLoadedFull(cartProducts: newState));
+    } else {
+      emit(CartLoadedRaw(cartItems: event.cartItems));
+    }
+  }
+
+  Future<void> _updateFullState(
+    UpdateFullState event,
+    Emitter<CartState> emit,
+  ) async {
+    final cartItems = state is CartLoadedRaw
+        ? (state as CartLoadedRaw).cartItems
+        : _cartRepository.lastStreamEvent;
+    if (cartItems == null) return;
+
+    final cartProducts = await _cartRepository.convertRawItems(cartItems);
+    emit(CartLoadedFull(cartProducts: cartProducts));
+  }
 
   Future<void> _changeValue(
     ChangeCartValue event,
     Emitter<CartState> emit,
   ) async {
-    if (state is CartLoaded) {
+    if (state is CartLoadedFull) {
       await _cartRepository.changeValue(
         id: event.id,
         increase: event.increase,
@@ -46,7 +88,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     AddCartProduct event,
     Emitter<CartState> emit,
   ) async {
-    if (state is CartLoaded) {
+    if (state is CartLoadedFull) {
       await _cartRepository.add(id: event.id);
     }
   }
@@ -55,7 +97,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     RemoveCartProduct event,
     Emitter<CartState> emit,
   ) async {
-    if (state is CartLoaded) {
+    if (state is CartLoadedFull) {
       await _cartRepository.remove(id: event.id);
     }
   }

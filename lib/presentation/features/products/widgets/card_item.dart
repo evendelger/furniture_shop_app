@@ -6,18 +6,22 @@ import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProductCardItem extends StatelessWidget {
-  const ProductCardItem({super.key, required this.product});
+  const ProductCardItem({
+    super.key,
+    required this.productItem,
+  });
 
-  final ProductPreview product;
+  final ProductsItem productItem;
 
   void _openProductCard(BuildContext context) =>
-      context.push(Routes.productCard, extra: product.id);
+      context.push(Routes.productCard, extra: productItem.product.id);
 
   @override
   Widget build(BuildContext context) {
+    final product = productItem.product;
+
     return InkWell(
       onTap: () => _openProductCard(context),
       borderRadius: BorderRadius.circular(10),
@@ -30,7 +34,10 @@ class ProductCardItem extends StatelessWidget {
                 imageUrl: product.image,
                 widthSize: 200,
               ),
-              _CartIcon(id: product.id),
+              _LoadedIcon(
+                id: product.id,
+                isInCart: productItem.isInCart,
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -71,58 +78,6 @@ class _ItemTitle extends StatelessWidget {
   }
 }
 
-class _CartIcon extends StatelessWidget {
-  const _CartIcon({
-    required this.id,
-  });
-
-  final String id;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 10,
-      bottom: 0,
-      child: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          switch (state) {
-            case CartLoading():
-              return const _ShimmerLoadingIcon();
-            case CartLoaded():
-              {
-                final foundedProduct = state.cartProducts.where(
-                  (cp) => cp.product.id == id,
-                );
-                final isInCart = foundedProduct.isEmpty ? false : true;
-                return _LoadedIcon(
-                  isInCart: isInCart,
-                  id: id,
-                );
-              }
-          }
-        },
-      ),
-    );
-  }
-}
-
-class _ShimmerLoadingIcon extends StatelessWidget {
-  const _ShimmerLoadingIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: AppColors.shimmerBase,
-      highlightColor: AppColors.shimmerHighlight,
-      child: Container(
-        width: 30,
-        height: 30,
-        color: AppColors.shimmerBackground,
-      ),
-    );
-  }
-}
-
 class _LoadedIcon extends StatelessWidget {
   const _LoadedIcon({
     required this.isInCart,
@@ -138,15 +93,19 @@ class _LoadedIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomSquareButton(
-      backgroundColor:
-          isInCart ? AppColors.whiteWithOpacity : AppColors.greyWithOpacity,
-      iconColor: isInCart ? AppColors.primary : AppColors.white,
-      sideLength: 30,
-      iconName: 'shopping_bag',
-      iconLength: 20,
-      borderRadius: 6,
-      onPressed: () => _changeCartStatus(context),
+    return Positioned(
+      right: 10,
+      bottom: 0,
+      child: CustomSquareButton(
+        backgroundColor:
+            isInCart ? AppColors.whiteWithOpacity : AppColors.greyWithOpacity,
+        iconColor: isInCart ? AppColors.primary : AppColors.white,
+        sideLength: 30,
+        iconName: 'shopping_bag',
+        iconLength: 20,
+        borderRadius: 6,
+        onPressed: () => _changeCartStatus(context),
+      ),
     );
   }
 }

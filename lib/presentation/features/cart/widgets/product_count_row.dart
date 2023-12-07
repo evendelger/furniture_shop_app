@@ -19,6 +19,7 @@ class ProductCountRow extends StatelessWidget {
           icon: Icons.add,
           increase: true,
           id: cartProduct.product.id,
+          blocType: BlocType.cart,
         ),
         const SizedBox(width: 15),
         Text(
@@ -33,6 +34,7 @@ class ProductCountRow extends StatelessWidget {
           icon: Icons.remove,
           increase: false,
           id: cartProduct.product.id,
+          blocType: BlocType.cart,
         ),
       ],
     );

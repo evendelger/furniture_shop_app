@@ -6,22 +6,46 @@ import 'package:furniture_shop_app/data/firebase/firebase.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/locator.dart';
+import 'package:talker/talker.dart';
 
 class CartRepository implements AbstractCartRepository {
   CartRepository({
     required this.authClient,
     required this.firestoreClient,
     required this.dioClient,
-  });
+  }) {
+    locator<Talker>().debug('INITIALIZED CART REPO');
+    _cartStreamController = StreamController<List<CartItem>>.broadcast()
+      ..addStream(_streamProducts());
+
+    // добавляю подписку на последний event, чтобы использовать его в favorites bloc'е
+    _lastEventSub =
+        _cartStreamController.stream.listen((event) => _lastEvent = event);
+  }
 
   final AuthClient authClient;
   final FirestoreClient firestoreClient;
   final DioClient dioClient;
 
+  // создаю контроллер здесь, поскольку при создании StreamSubscription в блоках
+  // стримы посылают snapshot'ы по 2 раза за 1 действие, а решения к этому ПРОСТО НЕТ
+  late final StreamController<List<CartItem>> _cartStreamController;
+  late final StreamSubscription<List<CartItem>> _lastEventSub;
+
+  @override
+  Stream<List<CartItem>> get cartStream => _cartStreamController.stream;
+
+  List<CartItem>? _lastEvent;
+
+  @override
+  List<CartItem>? get lastStreamEvent => _lastEvent;
+
   @override
   Future<void> add({required String id}) async {
     try {
-      firestoreClient.addToCart(userId: authClient.getUserId, productId: id);
+      await firestoreClient.addToCart(
+          userId: authClient.getUserId, productId: id);
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
@@ -31,7 +55,7 @@ class CartRepository implements AbstractCartRepository {
   @override
   Future<bool> changeValue({required String id, required bool increase}) async {
     try {
-      final isChanged = firestoreClient.changeInCartValue(
+      final isChanged = await firestoreClient.changeInCartValue(
         userId: authClient.getUserId,
         productId: id,
         increase: increase,
@@ -63,7 +87,7 @@ class CartRepository implements AbstractCartRepository {
   @override
   Future<void> remove({required String id}) async {
     try {
-      firestoreClient.removeFromCart(
+      await firestoreClient.removeFromCart(
         userId: authClient.getUserId,
         productId: id,
       );
@@ -74,21 +98,22 @@ class CartRepository implements AbstractCartRepository {
   }
 
   @override
-  Stream<List<CartProductPv>> streamProducts() =>
-      firestoreClient.streamCartItems(userId: authClient.getUserId).asyncMap(
-        (cartItems) async {
-          final products = await dioClient.getProductsByIds(
-            cartItems.map((i) => i.id),
-          );
-          return List<CartProductPv>.generate(
-            products.length,
-            (i) => CartProductPv(
-              product: products[i],
-              inCartValue: cartItems[i].value,
-            ),
-          );
-        },
-      );
+  Future<List<CartProductPv>> convertRawItems(List<CartItem> cartItems) async {
+    if (cartItems.isEmpty) return <CartProductPv>[];
+    final products = await dioClient.getProductsByIds(
+      cartItems.map((i) => i.id),
+    );
+    return List<CartProductPv>.generate(
+      products.length,
+      (i) => CartProductPv(
+        product: products[i],
+        inCartValue: cartItems[i].value!,
+      ),
+    );
+  }
+
+  Stream<List<CartItem>> _streamProducts() =>
+      firestoreClient.streamCartItems(userId: authClient.getUserId);
 
   @override
   Future<CartProductFl> getCartProduct({required String id}) async {
@@ -101,7 +126,7 @@ class CartRepository implements AbstractCartRepository {
       final cartProduct = await dioClient.getFullProductById(id: id);
       return CartProductFl(
         product: cartProduct,
-        inCartValue: cartItem == null ? 0 : cartItem.value,
+        inCartValue: cartItem == null ? 0 : cartItem.value!,
       );
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
@@ -110,5 +135,11 @@ class CartRepository implements AbstractCartRepository {
       final errorMessage = DioExceptions.fromDioError(e).message;
       throw errorMessage;
     }
+  }
+
+  @override
+  void dispose() {
+    _lastEventSub.cancel();
+    _cartStreamController.close();
   }
 }

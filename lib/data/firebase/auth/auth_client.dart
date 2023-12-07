@@ -5,7 +5,7 @@ import 'package:talker/talker.dart';
 class AuthClient {
   AuthClient() {
     // слушаю изменения в аутентификакии и записываю их в переменную
-    _auth.authStateChanges().map((user) => UserModel.fromFbModel(user)).listen(
+    _auth.userChanges().map((user) => UserModel.fromFbModel(user)).listen(
       (userModel) {
         _currentUser = userModel;
       },
@@ -13,11 +13,11 @@ class AuthClient {
   }
 
   final _auth = FirebaseAuth.instance;
-  late final UserModel _currentUser;
+  UserModel? _currentUser;
 
-  UserModel get getCurrentUser => _currentUser;
-  // получаю id из последнего event'а
-  String get getUserId => _currentUser.uid!;
+  UserModel get getCurrentUser =>
+      _currentUser ?? UserModel.fromFbModel(_auth.currentUser);
+  String get getUserId => getCurrentUser.uid!;
 
   Future<UserCredential> signUp({
     required String email,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
 import 'package:furniture_shop_app/presentation/features/boarding/boarding.dart';
@@ -54,9 +55,13 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.favorites,
-                builder: (context, state) => const FavoritesScreen(),
-              ),
+                  path: Routes.favorites,
+                  builder: (context, state) {
+                    context
+                        .read<FavoritesBloc>()
+                        .add(const FetchFavoritesState());
+                    return const FavoritesScreen();
+                  }),
             ],
           ),
           StatefulShellBranch(
@@ -78,11 +83,13 @@ class AppRouter {
         ],
       ),
       GoRoute(
-        parentNavigatorKey: _rootNavigatorKey,
-        path: Routes.cart,
-        pageBuilder: (context, state) =>
-            RightSlideTransition(child: const CartScreen()),
-      ),
+          parentNavigatorKey: _rootNavigatorKey,
+          path: Routes.cart,
+          pageBuilder: (context, state) {
+            // преобразовываю данные при открытии корзины
+            context.read<CartBloc>().add(const UpdateFullState());
+            return RightSlideTransition(child: const CartScreen());
+          }),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: Routes.productCard,

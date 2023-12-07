@@ -18,12 +18,15 @@ class TotalPriceWidget extends StatelessWidget {
       builder: (context, state) {
         bool enableShimmer = true;
         double totalPrice = 0;
-        if (state is CartLoading) {
-          enableShimmer = true;
-        } else if (state is CartLoaded) {
-          enableShimmer = false;
-          totalPrice = state.cartProducts
-              .fold(0.0, (pv, cp) => cp.product.price * cp.inCartValue + pv);
+        switch (state) {
+          case CartLoading():
+            enableShimmer = true;
+          case CartLoadedRaw():
+            enableShimmer = true;
+          case CartLoadedFull():
+            enableShimmer = false;
+            totalPrice = state.cartProducts
+                .fold(0.0, (pv, cp) => cp.product.price * cp.inCartValue + pv);
         }
 
         return Padding(

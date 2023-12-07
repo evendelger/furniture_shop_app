@@ -14,13 +14,13 @@ class AddAllWidget extends StatelessWidget {
           final favProducts = state.products.map((favPrd) => favPrd.product);
           return BlocBuilder<CartBloc, CartState>(
             buildWhen: (p, c) {
-              if (p is CartLoaded && c is CartLoaded) {
+              if (p is CartLoadedFull && c is CartLoadedFull) {
                 return p.cartProducts.length != c.cartProducts.length;
               }
               return false;
             },
             builder: (context, state) {
-              if (state is CartLoaded) {
+              if (state is CartLoadedFull) {
                 final cartProducts = state.cartProducts.map((cp) => cp.product);
                 // TODO
                 if (favProducts != cartProducts) {

@@ -21,11 +21,19 @@ class CartScreen extends StatelessWidget {
             ),
           ),
           BlocBuilder<CartBloc, CartState>(
+            buildWhen: (p, c) {
+              if (p is CartLoadedFull && c is CartLoadedRaw) {
+                return false;
+              }
+              return true;
+            },
             builder: (context, state) {
               switch (state) {
+                case CartLoadedRaw():
+                  return const ShimmerBottomWidget();
                 case CartLoading():
                   return const ShimmerBottomWidget();
-                case CartLoaded():
+                case CartLoadedFull():
                   return const LoadedBottomWidget();
               }
             },

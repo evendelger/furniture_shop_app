@@ -8,10 +8,18 @@ sealed class CartEvent extends Equatable {
 }
 
 // для обновления state от стрима
-final class _UpdateState extends CartEvent {
-  const _UpdateState({required this.products});
+final class _UpdateRawState extends CartEvent {
+  const _UpdateRawState({required this.cartItems});
 
-  final List<CartProductPv> products;
+  final List<CartItem> cartItems;
+
+  @override
+  List<Object?> get props => [cartItems];
+}
+
+// для конвертации raw state в full state
+final class UpdateFullState extends CartEvent {
+  const UpdateFullState();
 }
 
 final class ChangeCartValue extends CartEvent {

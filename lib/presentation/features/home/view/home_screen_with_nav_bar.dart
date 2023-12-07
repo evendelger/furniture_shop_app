@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/locator.dart';
+import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
+import 'package:furniture_shop_app/presentation/features/products/products.dart';
 
 class HomeScreenNavBar extends StatelessWidget {
   const HomeScreenNavBar({
@@ -34,18 +39,34 @@ class HomeScreenNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.092, // TODO
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashColor: Colors.transparent,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductsBloc(
+            productsRepository: locator<AbstractProductsRepository>(),
+            cartRepository: locator<AbstractCartRepository>(),
+          )..add(const FetchProducts()),
+        ),
+        BlocProvider(
+          create: (context) => FavoritesBloc(
+            favoritesRepository: locator<AbstractFavoritesRepository>(),
+            cartRepository: locator<AbstractCartRepository>(),
           ),
-          child: BottomNavigationBar(
-            currentIndex: navigationShell.currentIndex,
-            onTap: (index) => _openPage(index, context),
-            items: _navBarItems,
+        ),
+      ],
+      child: Scaffold(
+        body: navigationShell,
+        bottomNavigationBar: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.092, // TODO
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              splashColor: Colors.transparent,
+            ),
+            child: BottomNavigationBar(
+              currentIndex: navigationShell.currentIndex,
+              onTap: (index) => _openPage(index, context),
+              items: _navBarItems,
+            ),
           ),
         ),
       ),

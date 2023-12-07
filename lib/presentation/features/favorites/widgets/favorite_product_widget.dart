@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
@@ -25,17 +24,18 @@ class FavoriteProductWidget extends StatelessWidget {
 
   void _changeCartStatus(BuildContext context) {
     if (favProduct.isInCart) {
-      context.read<CartBloc>().add(
-            RemoveCartProduct(id: favProduct.product.id),
+      context.read<FavoritesBloc>().add(
+            ChangeFavoriteCartStatus(favProduct: favProduct),
           );
     } else {
-      context.read<CartBloc>().add(AddCartProduct(id: favProduct.product.id));
+      context
+          .read<FavoritesBloc>()
+          .add(ChangeFavoriteCartStatus(favProduct: favProduct));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // к сожалению, без этого виджета кнопка корзины никак не смещается вниз
     final isInCart = favProduct.isInCart;
 
     return IntrinsicHeight(

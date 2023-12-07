@@ -6,11 +6,11 @@ part 'cart_item.g.dart';
 class CartItem {
   const CartItem({
     required this.id,
-    required this.value,
+    this.value = 1,
   });
 
   final String id;
-  final int value;
+  final int? value;
 
   factory CartItem.fromJson(Map<String, dynamic> json) =>
       _$CartItemFromJson(json);

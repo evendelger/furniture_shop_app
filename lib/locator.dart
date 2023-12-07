@@ -21,15 +21,12 @@ abstract class Locator {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await _initFirebase();
+    _initTalker();
     _initApiClient();
     _initRepositories();
     _initBlocs();
     _initBlocObserver();
-    _initTalker();
   }
-
-  static void _initApiClient() =>
-      locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
 
   static Future<void> _initFirebase() async {
     await Firebase.initializeApp(
@@ -39,39 +36,44 @@ abstract class Locator {
       AuthClient(),
     );
     locator.registerLazySingleton<FirestoreClient>(
-      () => FirestoreClient(locator<DioClient>()),
+      () => FirestoreClient(),
     );
   }
 
+  static void _initApiClient() =>
+      locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
+
   static void _initRepositories() {
-    locator.registerSingleton<AbstractAuthRepository>(
-      AuthRepository(
+    locator.registerLazySingleton<AbstractAuthRepository>(
+      () => AuthRepository(
         authClient: locator<AuthClient>(),
         firestoreClient: locator<FirestoreClient>(),
       ),
     );
 
-    locator.registerSingleton<AbstractProductsRepository>(
-      ProductsRepository(dioClient: locator<DioClient>()),
+    locator.registerLazySingleton<AbstractProductsRepository>(
+      () => ProductsRepository(dioClient: locator<DioClient>()),
     );
 
-    locator.registerSingleton<AbstractFavoritesRepository>(
-      FavoritesRepository(
+    locator.registerLazySingleton<AbstractFavoritesRepository>(
+      () => FavoritesRepository(
           authClient: locator<AuthClient>(),
           firestoreClient: locator<FirestoreClient>(),
           dioClient: locator<DioClient>()),
+      dispose: (_) => locator<FavoritesRepository>().dispose(),
     );
 
-    locator.registerSingleton<AbstractCartRepository>(
-      CartRepository(
+    locator.registerLazySingleton<AbstractCartRepository>(
+      () => CartRepository(
         authClient: locator<AuthClient>(),
         firestoreClient: locator<FirestoreClient>(),
         dioClient: locator<DioClient>(),
       ),
+      dispose: (_) => locator<AbstractCartRepository>().dispose(),
     );
   }
 
-  static void _initBlocs() async {
+  static void _initBlocs() {
     locator.registerLazySingleton<AuthBloc>(
       () => AuthBloc(authRepository: locator<AbstractAuthRepository>()),
     );
@@ -81,7 +83,7 @@ abstract class Locator {
 
   static void _initBlocObserver() => Bloc.observer = TalkerBlocObserver(
         settings: const TalkerBlocLoggerSettings(
-          printChanges: true,
-        ),
+            // printChanges: true,
+            ),
       );
 }

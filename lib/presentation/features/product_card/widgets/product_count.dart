@@ -20,6 +20,7 @@ class ProductCount extends StatelessWidget {
           icon: Icons.add,
           increase: true,
           id: id,
+          blocType: BlocType.productCard,
         ),
         const SizedBox(width: 15),
         Text(
@@ -34,6 +35,7 @@ class ProductCount extends StatelessWidget {
           icon: Icons.remove,
           increase: false,
           id: id,
+          blocType: BlocType.productCard,
         ),
       ],
     );

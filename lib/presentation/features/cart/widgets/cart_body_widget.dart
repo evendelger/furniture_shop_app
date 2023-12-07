@@ -11,13 +11,19 @@ class CartBodyWidget extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       sliver: BlocBuilder<CartBloc, CartState>(
+        buildWhen: (p, c) {
+          if (p is CartLoadedFull && c is CartLoadedRaw) {
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
           switch (state) {
+            case CartLoadedRaw():
+              return const SliverFillRemaining(child: ShimmerProductsList());
             case CartLoading():
-              return const SliverFillRemaining(
-                child: ShimmerProductsList(),
-              );
-            case CartLoaded():
+              return const SliverFillRemaining(child: ShimmerProductsList());
+            case CartLoadedFull():
               return CartProducts(cartProducts: state.cartProducts);
           }
         },

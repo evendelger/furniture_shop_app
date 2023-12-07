@@ -23,7 +23,7 @@ final class ProductsFailed extends ProductsState {
 final class ProductsLoaded extends ProductsState {
   const ProductsLoaded({required this.category, required this.products});
 
-  final List<ProductPreview> products;
+  final List<ProductsItem> products;
   final Category category;
 
   @override

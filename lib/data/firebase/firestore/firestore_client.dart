@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:collection/collection.dart';
 
 class FirestoreClient {
-  FirestoreClient(this.dioClient);
-
-  final DioClient dioClient;
+  FirestoreClient();
 
   final _firestore = FirebaseFirestore.instance;
 
@@ -161,21 +158,21 @@ class FirestoreClient {
     try {
       final cartItems = await _getRawCartItems(userId);
 
-      // добавил костыль, чтобы не использовать стрим..
-      var isChanged = true;
+      // добавил костыль, чтобы не использовать весь стрим ради 1 метода
+      var isChanged = false;
       final changedItems = cartItems.map((item) {
         if (item['id'] == productId) {
           final value = item['value'] as int;
 
           // ignore: unused_local_variable
-          int newValue;
+          int newValue = value;
           if (!(increase && value == 99 || !increase && value == 1)) {
             newValue = increase ? value + 1 : value - 1;
-            isChanged = false;
+            isChanged = true;
           }
           return {
             'id': productId,
-            'value': (item['value'] as int) + (increase ? 1 : -1),
+            'value': newValue,
           };
         }
         return item;

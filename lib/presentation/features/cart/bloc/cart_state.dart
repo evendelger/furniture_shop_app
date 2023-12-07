@@ -11,20 +11,23 @@ final class CartLoading extends CartState {
   const CartLoading();
 }
 
-final class CartLoaded extends CartState {
-  const CartLoaded({
+final class CartLoadedRaw extends CartState {
+  const CartLoadedRaw({
+    required this.cartItems,
+  });
+
+  final List<CartItem> cartItems;
+
+  @override
+  List<Object?> get props => [cartItems];
+}
+
+final class CartLoadedFull extends CartState {
+  const CartLoadedFull({
     required this.cartProducts,
   });
 
   final List<CartProductPv> cartProducts;
-
-  CartLoaded copyWith({
-    List<CartProductPv>? cartProducts,
-  }) {
-    return CartLoaded(
-      cartProducts: cartProducts ?? this.cartProducts,
-    );
-  }
 
   @override
   List<Object?> get props => [cartProducts];

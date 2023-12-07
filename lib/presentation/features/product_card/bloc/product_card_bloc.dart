@@ -84,7 +84,7 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
     if (state is ProductCardLoaded) {
       final stateCopy = (state as ProductCardLoaded);
       if (stateCopy.isInCart) {
-        // КОСТЫЛЬ, ЧТОБЫ НЕ ИСПОЛЬЗОВАТЬ СТРИМ РАДИ EVENT'А
+        // КОСТЫЛЬ, ЧТОБЫ НЕ ТАЩИТЬ СТРИМ РАДИ 1 EVENT'А
         final isChanged = await _cartRepository.changeValue(
           id: stateCopy.product.id,
           increase: event.increment,

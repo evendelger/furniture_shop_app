@@ -51,7 +51,7 @@ class FavoritesList extends StatelessWidget {
       itemBuilder: (context, index) =>
           FavoriteProductWidget(favProduct: products[index])
               .animate()
-              .fadeIn(duration: 1000.ms),
+              .fadeIn(duration: 750.ms, begin: 0.3),
       separatorBuilder: (_, __) => const Padding(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Divider(),
