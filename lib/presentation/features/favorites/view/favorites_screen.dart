@@ -6,14 +6,12 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          ScrollBody(),
-          AddAllWidget(),
-        ],
-      ),
+    return const Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        ScrollBody(),
+        AddAllWidget(),
+      ],
     );
   }
 }

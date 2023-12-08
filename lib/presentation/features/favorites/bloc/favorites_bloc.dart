@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 
 part 'favorites_event.dart';
 part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({
-    required AbstractFavoritesRepository favoritesRepository,
-    required AbstractCartRepository cartRepository,
+    required IFavoritesRepository favoritesRepository,
+    required ICartRepository cartRepository,
   })  : _favoritesRepository = favoritesRepository,
         _cartRepository = cartRepository,
         super(const FavoritesLoading()) {
@@ -34,8 +34,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     );
   }
 
-  final AbstractFavoritesRepository _favoritesRepository;
-  final AbstractCartRepository _cartRepository;
+  final IFavoritesRepository _favoritesRepository;
+  final ICartRepository _cartRepository;
 
   late final StreamSubscription _favProductsSub;
   late final StreamSubscription _cartProductsSub;

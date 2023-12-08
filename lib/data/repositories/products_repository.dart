@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 
-class ProductsRepository implements AbstractProductsRepository {
+class ProductsRepository implements IProductsRepository {
   const ProductsRepository({required this.dioClient});
 
   final DioClient dioClient;

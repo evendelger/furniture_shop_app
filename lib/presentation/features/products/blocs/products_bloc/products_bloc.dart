@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repositories/abstract_cart_repository.dart';
-import 'package:furniture_shop_app/domain/repositories/abstract_products_repository.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_cart_repository.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_products_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 
@@ -13,8 +13,8 @@ part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   ProductsBloc(
-      {required AbstractProductsRepository productsRepository,
-      required AbstractCartRepository cartRepository})
+      {required IProductsRepository productsRepository,
+      required ICartRepository cartRepository})
       : _productsRepository = productsRepository,
         _cartRepository = cartRepository,
         super(const ProductsLoading()) {
@@ -26,8 +26,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     );
   }
 
-  final AbstractProductsRepository _productsRepository;
-  final AbstractCartRepository _cartRepository;
+  final IProductsRepository _productsRepository;
+  final ICartRepository _cartRepository;
 
   late final StreamSubscription _cartProductsSub;
 

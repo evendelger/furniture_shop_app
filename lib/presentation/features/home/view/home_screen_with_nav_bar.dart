@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
@@ -43,18 +44,19 @@ class HomeScreenNavBar extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ProductsBloc(
-            productsRepository: locator<AbstractProductsRepository>(),
-            cartRepository: locator<AbstractCartRepository>(),
+            productsRepository: locator<IProductsRepository>(),
+            cartRepository: locator<ICartRepository>(),
           )..add(const FetchProducts()),
         ),
         BlocProvider(
           create: (context) => FavoritesBloc(
-            favoritesRepository: locator<AbstractFavoritesRepository>(),
-            cartRepository: locator<AbstractCartRepository>(),
+            favoritesRepository: locator<IFavoritesRepository>(),
+            cartRepository: locator<ICartRepository>(),
           ),
         ),
       ],
       child: Scaffold(
+        appBar: selectAppBar(),
         body: navigationShell,
         bottomNavigationBar: SizedBox(
           height: MediaQuery.of(context).size.height * 0.092, // TODO
@@ -79,4 +81,13 @@ class HomeScreenNavBar extends StatelessWidget {
       initialLocation: index == navigationShell.currentIndex,
     );
   }
+
+  // анализатор не дает указать PreferedSizeWidget, поэтому использую это
+  dynamic selectAppBar() => switch (navigationShell.currentIndex) {
+        0 => null,
+        1 => const FavoritesAppBar(),
+        2 => const NotificationAppBar(),
+        3 => const ProfileAppBar(),
+        _ => null,
+      };
 }

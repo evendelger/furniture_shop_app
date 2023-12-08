@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/data/firebase/auth/auth_client.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 import 'package:furniture_shop_app/firebase_options.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:get_it/get_it.dart';
@@ -44,18 +44,18 @@ abstract class Locator {
       locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
 
   static void _initRepositories() {
-    locator.registerLazySingleton<AbstractAuthRepository>(
+    locator.registerLazySingleton<IAuthRepository>(
       () => AuthRepository(
         authClient: locator<AuthClient>(),
         firestoreClient: locator<FirestoreClient>(),
       ),
     );
 
-    locator.registerLazySingleton<AbstractProductsRepository>(
+    locator.registerLazySingleton<IProductsRepository>(
       () => ProductsRepository(dioClient: locator<DioClient>()),
     );
 
-    locator.registerLazySingleton<AbstractFavoritesRepository>(
+    locator.registerLazySingleton<IFavoritesRepository>(
       () => FavoritesRepository(
           authClient: locator<AuthClient>(),
           firestoreClient: locator<FirestoreClient>(),
@@ -63,19 +63,20 @@ abstract class Locator {
       dispose: (_) => locator<FavoritesRepository>().dispose(),
     );
 
-    locator.registerLazySingleton<AbstractCartRepository>(
+    locator.registerLazySingleton<ICartRepository>(
       () => CartRepository(
         authClient: locator<AuthClient>(),
         firestoreClient: locator<FirestoreClient>(),
         dioClient: locator<DioClient>(),
       ),
-      dispose: (_) => locator<AbstractCartRepository>().dispose(),
+      dispose: (_) => locator<ICartRepository>().dispose(),
     );
   }
 
   static void _initBlocs() {
     locator.registerLazySingleton<AuthBloc>(
-      () => AuthBloc(authRepository: locator<AbstractAuthRepository>()),
+      () => AuthBloc(authRepository: locator<IAuthRepository>())
+        ..add(const AuthFetchStatus()),
     );
   }
 

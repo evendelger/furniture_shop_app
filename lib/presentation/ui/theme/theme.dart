@@ -5,10 +5,14 @@ part 'app_colors.dart';
 
 final myTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.white,
-  appBarTheme: const AppBarTheme(
+  appBarTheme: AppBarTheme(
     backgroundColor: AppColors.white,
     centerTitle: true,
-    scrolledUnderElevation: 0,
+    toolbarHeight: 40,
+    titleTextStyle: AppFonts.mrwBold.copyWith(
+      fontSize: 16,
+      color: AppColors.primary,
+    ),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: AppColors.white,

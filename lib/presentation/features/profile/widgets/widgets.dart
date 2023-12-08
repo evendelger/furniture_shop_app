@@ -1,1 +1,1 @@
-export 'profile_app_bar.dart';
+export 'user_profile_widget.dart';

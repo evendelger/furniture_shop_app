@@ -1,6 +1,6 @@
 import 'package:furniture_shop_app/domain/models/models.dart';
 
-abstract class AbstractCartRepository {
+abstract interface class ICartRepository {
   // беру каждый раз uid, поскольку пользователь может перелогиниться, а id
   // останется прежним поскольку AuthClient - синглтон
   Future<bool> changeValue({required String id, required bool increase});

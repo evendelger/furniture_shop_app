@@ -4,7 +4,7 @@ import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
-class ProfileAppBar extends StatelessWidget {
+class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ProfileAppBar({super.key});
 
   // TODO
@@ -12,11 +12,11 @@ class ProfileAppBar extends StatelessWidget {
       locator<AuthBloc>().add(const AuthLogOut());
 
   @override
+  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight);
+
+  @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      toolbarHeight: 40,
-      stretch: true,
-      pinned: true,
+    return AppBar(
       leading: IconButton(
         onPressed: () {},
         icon: SvgPicture.asset(

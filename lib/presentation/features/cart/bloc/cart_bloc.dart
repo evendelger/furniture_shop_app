@@ -4,13 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc({required AbstractCartRepository cartRepository})
+  CartBloc({required ICartRepository cartRepository})
       : _cartRepository = cartRepository,
         super(const CartLoading()) {
     on<ChangeCartValue>(_changeValue);
@@ -25,7 +25,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
-  final AbstractCartRepository _cartRepository;
+  final ICartRepository _cartRepository;
   late final StreamSubscription _cartProductsSub;
 
   void _updateRawState(_UpdateRawState event, Emitter<CartState> emit) {

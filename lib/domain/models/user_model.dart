@@ -5,14 +5,14 @@ class UserModel {
     this.uid,
     this.displayName,
     this.email,
-    this.password,
+    this.photoURL,
     this.isAnonymous,
   });
 
   String? uid;
   String? email;
-  String? password;
   String? displayName;
+  String? photoURL;
   bool? isAnonymous;
 
   bool get isAuthorized => uid != null && uid != 'empty';
@@ -28,6 +28,7 @@ class UserModel {
       uid: user.uid,
       displayName: user.displayName ?? 'Guest',
       email: user.email,
+      photoURL: user.photoURL,
       isAnonymous: user.isAnonymous,
     );
   }
@@ -35,15 +36,15 @@ class UserModel {
   UserModel copyWith({
     String? uid,
     String? email,
-    String? password,
     String? displayName,
+    String? photoURL,
     bool? isAnonymous,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
-      password: password ?? this.password,
       displayName: displayName ?? this.displayName,
+      photoURL: photoURL ?? this.photoURL,
       isAnonymous: isAnonymous ?? this.isAnonymous,
     );
   }
@@ -53,6 +54,7 @@ class UserModel {
     return '''
     uid: $uid,
     displayName: $displayName,
+    photoURL: $photoURL,
     email: $email,
     ''';
   }

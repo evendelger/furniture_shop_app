@@ -4,30 +4,24 @@ import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
-class FavoritesAppBar extends StatelessWidget {
+class FavoritesAppBar extends StatelessWidget implements PreferredSizeWidget {
   const FavoritesAppBar({super.key});
 
   void _goToCart(BuildContext context) => context.push(Routes.cart);
 
   @override
+  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight);
+
+  @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      toolbarHeight: 40,
-      stretch: true,
-      pinned: true,
+    return AppBar(
+      title: const Text('Favorites'),
       leading: IconButton(
         onPressed: () {},
         icon: SvgPicture.asset(
           'assets/icons/search.svg',
           color: AppColors.grey,
           fit: BoxFit.scaleDown,
-        ),
-      ),
-      title: Text(
-        'Favorites',
-        style: AppFonts.mrwBold.copyWith(
-          fontSize: 16,
-          color: AppColors.primary,
         ),
       ),
       actions: [

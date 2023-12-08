@@ -8,3 +8,6 @@ export 'change_count_button.dart';
 export 'shimmer_products_list.dart';
 export 'shimmer_products_grid.dart';
 export 'rounded_container.dart';
+export 'favorites_app_bar.dart';
+export 'notification_app_bar.dart';
+export 'profile_app_bar.dart';

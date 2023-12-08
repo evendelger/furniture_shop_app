@@ -10,28 +10,18 @@ class ScrollBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const SliverPadding(
-          padding: EdgeInsets.only(top: 20),
-          sliver: FavoritesAppBar(),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          sliver: BlocBuilder<FavoritesBloc, FavoritesState>(
-            builder: (context, state) {
-              switch (state) {
-                case FavoritesLoading():
-                  return const SliverToBoxAdapter(
-                    child: ShimmerProductsList(),
-                  );
-                case FavoritesLoaded():
-                  return FavoritesList(products: state.products);
-              }
-            },
-          ),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: BlocBuilder<FavoritesBloc, FavoritesState>(
+        builder: (context, state) {
+          switch (state) {
+            case FavoritesLoading():
+              return const ShimmerProductsList();
+            case FavoritesLoaded():
+              return FavoritesList(products: state.products);
+          }
+        },
+      ),
     );
   }
 }
@@ -46,7 +36,7 @@ class FavoritesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList.separated(
+    return ListView.separated(
       itemCount: products.length,
       itemBuilder: (context, index) =>
           FavoriteProductWidget(favProduct: products[index])

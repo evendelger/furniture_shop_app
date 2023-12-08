@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 part 'product_card_event.dart';
@@ -10,8 +10,8 @@ part 'product_card_state.dart';
 
 class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   ProductCardBloc({
-    required AbstractFavoritesRepository favoritesRepository,
-    required AbstractCartRepository cartRepository,
+    required IFavoritesRepository favoritesRepository,
+    required ICartRepository cartRepository,
   })  : _favoritesRepository = favoritesRepository,
         _cartRepository = cartRepository,
         super(const ProductCardLoading()) {
@@ -22,8 +22,8 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
     on<ChangeCartStatus>(_changeCartStatus);
   }
 
-  final AbstractFavoritesRepository _favoritesRepository;
-  final AbstractCartRepository _cartRepository;
+  final IFavoritesRepository _favoritesRepository;
+  final ICartRepository _cartRepository;
 
   Future<void> _changeFavoriteStatus(
     ChangeFavoriteStatus event,

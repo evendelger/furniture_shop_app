@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 
@@ -16,7 +16,7 @@ class FurnitureStoreApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => CartBloc(
-            cartRepository: locator<AbstractCartRepository>(),
+            cartRepository: locator<ICartRepository>(),
           ),
         ),
       ],

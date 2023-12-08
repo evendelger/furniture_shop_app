@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/locator.dart';
 
@@ -17,8 +17,8 @@ class ProductCardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProductCardBloc(
-        favoritesRepository: locator<AbstractFavoritesRepository>(),
-        cartRepository: locator<AbstractCartRepository>(),
+        favoritesRepository: locator<IFavoritesRepository>(),
+        cartRepository: locator<ICartRepository>(),
       )..add(OpenProductCard(id: id)),
       child: Scaffold(
         extendBodyBehindAppBar: true,

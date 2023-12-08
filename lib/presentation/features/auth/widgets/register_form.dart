@@ -94,7 +94,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             const SizedBox(height: 50),
             _signUpButton(),
-            const SizedBox(height: 19), // TODO
+            const SizedBox(height: 19),
             _signInButton(),
           ],
         ),

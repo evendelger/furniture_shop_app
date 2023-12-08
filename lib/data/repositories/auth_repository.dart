@@ -3,10 +3,10 @@ import 'package:furniture_shop_app/data/firebase/auth/auth_client.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_exceptions.dart';
 import 'package:furniture_shop_app/data/firebase/firestore/firestore_client.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
 import 'package:talker/talker.dart';
 
-class AuthRepository implements AbstractAuthRepository {
+class AuthRepository implements IAuthRepository {
   const AuthRepository({
     required this.firestoreClient,
     required this.authClient,
@@ -26,15 +26,15 @@ class AuthRepository implements AbstractAuthRepository {
   }
 
   @override
-  Future<UserCredential> signUp(UserModel user) async {
+  Future<UserCredential> signUp({
+    required UserRegisterModel userRegModel,
+  }) async {
     try {
       final userCredential = await authClient.signUp(
-        email: user.email!,
-        password: user.password!,
+        email: userRegModel.email,
+        password: userRegModel.password,
       );
-      if (user.displayName != null) {
-        await userCredential.user?.updateDisplayName(user.displayName);
-      }
+      await userCredential.user?.updateDisplayName(userRegModel.displayName);
       firestoreClient.createCollections(userId: userCredential.user!.uid);
       return userCredential;
     } on FirebaseException catch (e) {
@@ -44,11 +44,13 @@ class AuthRepository implements AbstractAuthRepository {
   }
 
   @override
-  Future<UserCredential> signIn(UserModel user) async {
+  Future<UserCredential> signIn({
+    required UserLogInModel userLogInModel,
+  }) async {
     try {
       final userCredential = await authClient.signIn(
-        email: user.email!,
-        password: user.password!,
+        email: userLogInModel.email,
+        password: userLogInModel.password,
       );
       return userCredential;
     } on FirebaseException catch (e) {
@@ -61,7 +63,7 @@ class AuthRepository implements AbstractAuthRepository {
   Future<void> signOut() async => await authClient.signOut();
 
   @override
-  Future<void> resetPassword(UserModel user) async {
+  Future<void> resetPassword({required UserModel user}) async {
     try {
       await authClient.resetPassword(email: user.email!);
     } on FirebaseException catch (e) {

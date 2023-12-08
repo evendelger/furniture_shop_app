@@ -6,13 +6,13 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.only(top: 20),
-          sliver: ProfileAppBar(),
-        )
-      ],
+    return const SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        children: [
+          UserProfileWidget(),
+        ],
+      ),
     );
   }
 }

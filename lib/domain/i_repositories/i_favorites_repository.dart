@@ -1,6 +1,6 @@
 import 'package:furniture_shop_app/domain/models/models.dart';
 
-abstract class AbstractFavoritesRepository {
+abstract interface class IFavoritesRepository {
   // беру каждый раз uid, поскольку пользователь может перелогиниться, а id
   // останется прежним поскольку AuthClient - синглтон
   Future<void> add({required String id});
