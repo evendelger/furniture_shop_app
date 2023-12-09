@@ -88,7 +88,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       );
       emit(ProductsLoaded(products: products, category: category));
     } catch (message) {
-      emit(ProductsFailed(message: message.toString()));
+      emit(ProductsFailed(errorMessage: message.toString()));
     }
   }
 

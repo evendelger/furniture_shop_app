@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:furniture_shop_app/data/firebase/firebase.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:talker/talker.dart';
 

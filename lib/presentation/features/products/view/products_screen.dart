@@ -56,7 +56,7 @@ class ProductsScreen extends StatelessWidget {
                             return SliverFillRemaining(
                               hasScrollBody: false,
                               child: ErrorMessageWidget(
-                                message: state.message,
+                                message: state.errorMessage,
                               ),
                             );
                           case ProductsLoaded():

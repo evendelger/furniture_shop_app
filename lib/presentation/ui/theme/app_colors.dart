@@ -20,6 +20,7 @@ abstract class AppColors {
   static const black3 = Color(0xFF606060);
 
   static const iconGreyColor = Color(0xFFE0E0E0);
+  static const avatarBackground = Color.fromRGBO(172, 172, 172, 0.747);
 
   static const colorSelect1 = Color(0xFFF5F5F5);
   static const colorSelect2 = Color(0xFFB4916C);

@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/data/firebase/auth/auth_client.dart';
+import 'package:furniture_shop_app/data/firebase/firebase.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
-import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/firebase_options.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
 import 'package:get_it/get_it.dart';
@@ -13,7 +13,7 @@ import 'package:talker/talker.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
 
-import 'data/firebase/firestore/firestore_client.dart';
+import 'data/permission_client/permission_client.dart';
 
 final locator = GetIt.instance;
 
@@ -22,7 +22,7 @@ abstract class Locator {
     WidgetsFlutterBinding.ensureInitialized();
     await _initFirebase();
     _initTalker();
-    _initApiClient();
+    _initClients();
     _initRepositories();
     _initBlocs();
     _initBlocObserver();
@@ -36,12 +36,21 @@ abstract class Locator {
       AuthClient(),
     );
     locator.registerLazySingleton<FirestoreClient>(
-      () => FirestoreClient(),
+      () => const FirestoreClient(),
+    );
+    locator.registerLazySingleton<StorageClient>(
+      () => const StorageClient(),
     );
   }
 
-  static void _initApiClient() =>
-      locator.registerLazySingleton<DioClient>(() => DioClient(dio: Dio()));
+  static void _initClients() {
+    locator.registerLazySingleton<DioClient>(
+      () => DioClient(dio: Dio()),
+    );
+    locator.registerLazySingleton<PermissionClient>(
+      () => const PermissionClient(),
+    );
+  }
 
   static void _initRepositories() {
     locator.registerLazySingleton<IAuthRepository>(
@@ -70,6 +79,14 @@ abstract class Locator {
         dioClient: locator<DioClient>(),
       ),
       dispose: (_) => locator<ICartRepository>().dispose(),
+    );
+
+    locator.registerLazySingleton<IProfileRepository>(
+      () => ProfileRepository(
+        permissionClient: locator<PermissionClient>(),
+        storageClient: locator<StorageClient>(),
+        authClient: locator<AuthClient>(),
+      ),
     );
   }
 

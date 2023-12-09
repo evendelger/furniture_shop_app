@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 
 part 'favorites_event.dart';
 part 'favorites_state.dart';

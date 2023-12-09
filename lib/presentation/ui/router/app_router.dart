@@ -23,7 +23,7 @@ class AppRouter {
   static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    initialLocation: Routes.loading,
+    initialLocation: Routes.notification,
     routes: [
       GoRoute(
         path: Routes.loading,

@@ -4,7 +4,7 @@ sealed class AuthEvent extends Equatable {
   const AuthEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class AuthFetchStatus extends AuthEvent {
@@ -29,7 +29,7 @@ final class AuthLogIn extends AuthEvent {
   final String password;
 
   @override
-  List<Object> get props => [email, password];
+  List<Object?> get props => [email, password];
 }
 
 final class AuthLogInAnonymously extends AuthEvent {
@@ -48,7 +48,7 @@ final class Register extends AuthEvent {
   final String password;
 
   @override
-  List<Object> get props => [name, email, password];
+  List<Object?> get props => [name, email, password];
 }
 
 // TODO

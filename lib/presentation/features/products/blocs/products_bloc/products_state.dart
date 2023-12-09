@@ -12,12 +12,12 @@ final class ProductsLoading extends ProductsState {
 }
 
 final class ProductsFailed extends ProductsState {
-  const ProductsFailed({required this.message});
+  const ProductsFailed({required this.errorMessage});
 
-  final String message;
+  final String errorMessage;
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [errorMessage];
 }
 
 final class ProductsLoaded extends ProductsState {

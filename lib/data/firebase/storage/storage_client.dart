@@ -1,9 +1,42 @@
+import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:furniture_shop_app/locator.dart';
+import 'package:talker/talker.dart';
 
 class StorageClient {
-  StorageClient();
+  const StorageClient();
 
-  final _storage = FirebaseStorage.instance;
+  static final _storage = FirebaseStorage.instance;
 
-  dynamic get _profileImagesRef => _storage.ref().child('profile_pictures');
+  Reference get _profileImagesRef => _storage.ref().child('profile_pictures');
+
+  String _imageStorageName(String uid) => '/${uid}_pic';
+
+  Future<String?> getImageUrl({required String uid}) async {
+    try {
+      final imageRef = _profileImagesRef.child(_imageStorageName(uid));
+      final imageUrl = await imageRef.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      locator<Talker>().error(e);
+      return null;
+    }
+  }
+
+  Future<String> uploadImageAndGetUrl({
+    required String uid,
+    required File imageFile,
+  }) async {
+    try {
+      final imageRef = _profileImagesRef.child(_imageStorageName(uid));
+      final uploadTask = await imageRef.putFile(
+        imageFile,
+        SettableMetadata(contentType: 'image/png'),
+      );
+      return await uploadTask.ref.getDownloadURL();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

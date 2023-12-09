@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/data/network/network.dart';
-import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 
 class ProductsRepository implements IProductsRepository {
   const ProductsRepository({required this.dioClient});

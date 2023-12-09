@@ -3,9 +3,9 @@ import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:collection/collection.dart';
 
 class FirestoreClient {
-  FirestoreClient();
+  const FirestoreClient();
 
-  final _firestore = FirebaseFirestore.instance;
+  static final _firestore = FirebaseFirestore.instance;
 
   CollectionReference get _cartRef => _firestore.collection('Cart');
 

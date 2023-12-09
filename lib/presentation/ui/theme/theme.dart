@@ -4,8 +4,14 @@ part 'app_fonts.dart';
 part 'app_colors.dart';
 
 final myTheme = ThemeData(
+  // TODO
+  // colorScheme: ColorScheme.fromSeed(
+  //   seedColor: AppColors.primary,
+  //   onPrimaryContainer: AppColors.white,
+  // ),
   scaffoldBackgroundColor: AppColors.white,
   appBarTheme: AppBarTheme(
+    scrolledUnderElevation: 0,
     backgroundColor: AppColors.white,
     centerTitle: true,
     toolbarHeight: 40,

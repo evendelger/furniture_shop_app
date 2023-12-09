@@ -7,3 +7,4 @@ export 'product_preview/product_preview.dart';
 export 'favorite_product/favorite_product.dart';
 export 'products_item/products_item.dart';
 export 'user_sign_models.dart';
+export 'profile_model/profile_model.dart';

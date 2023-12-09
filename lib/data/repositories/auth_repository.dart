@@ -3,7 +3,7 @@ import 'package:furniture_shop_app/data/firebase/auth/auth_client.dart';
 import 'package:furniture_shop_app/data/firebase/firebase_exceptions.dart';
 import 'package:furniture_shop_app/data/firebase/firestore/firestore_client.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:talker/talker.dart';
 
 class AuthRepository implements IAuthRepository {

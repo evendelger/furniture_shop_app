@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/domain/i_repositories/repositories.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -59,7 +59,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final loggedInUser = _authRepository.getCurrentUser;
       emit(AuthSuccess(userModel: loggedInUser));
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(errorMessage: e.toString()));
       emit(AuthInitial(authType: authType));
     }
   }
@@ -79,12 +79,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final userCredential = await _authRepository.signUp(
         userRegModel: userRegModel,
       );
-      await Future.delayed(const Duration(seconds: 3));
 
       final registeredModel = UserModel.fromUserCredential(userCredential);
       emit(AuthSuccess(userModel: registeredModel));
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(errorMessage: e.toString()));
     }
   }
 
@@ -98,10 +97,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final userCredential = await _authRepository.signInAnonymously();
       final userModel = UserModel.fromUserCredential(userCredential)
           .copyWith(displayName: 'anon');
-      await Future.delayed(const Duration(seconds: 3));
       emit(AuthSuccess(userModel: userModel));
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(errorMessage: e.toString()));
       emit(AuthInitial(authType: authType));
     }
   }
@@ -115,7 +113,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authRepository.signOut();
       emit(const AuthInitial());
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(errorMessage: e.toString()));
       emit(stateBeforeLogOut);
     }
   }

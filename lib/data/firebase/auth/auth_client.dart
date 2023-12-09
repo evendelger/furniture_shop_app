@@ -15,7 +15,7 @@ class AuthClient {
     );
   }
 
-  final _auth = FirebaseAuth.instance;
+  static final _auth = FirebaseAuth.instance;
 
   late UserModel _currentUser;
 
@@ -23,7 +23,14 @@ class AuthClient {
 
   String get getUserId => _currentUser.uid!;
 
+  String get getUserName => _currentUser.displayName!;
+
+  String get getUserEmail => _currentUser.email!;
+
   String? get getUserImage => _currentUser.photoURL;
+
+  Future<void> updatePhotoURL(String photoUrl) async =>
+      _auth.currentUser!.updatePhotoURL(photoUrl);
 
   Future<UserCredential> signUp({
     required String email,

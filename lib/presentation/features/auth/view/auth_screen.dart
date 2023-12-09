@@ -34,7 +34,7 @@ class AuthScreen extends StatelessWidget {
               if (context.loaderOverlay.visible) {
                 context.loaderOverlay.hide();
               }
-              _showErrorBar(context, state.message);
+              _showErrorBar(context, state.errorMessage);
             } else if (state is AuthSuccess) {
               if (context.loaderOverlay.visible) {
                 context.loaderOverlay.hide();
