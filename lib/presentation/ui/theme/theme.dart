@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/consttants.dart';
 
 part 'app_fonts.dart';
 part 'app_colors.dart';
 
 final myTheme = ThemeData(
-  // TODO
-  // colorScheme: ColorScheme.fromSeed(
-  //   seedColor: AppColors.primary,
-  //   onPrimaryContainer: AppColors.white,
-  // ),
   scaffoldBackgroundColor: AppColors.white,
   appBarTheme: AppBarTheme(
-    scrolledUnderElevation: 0,
     backgroundColor: AppColors.white,
     centerTitle: true,
-    toolbarHeight: 40,
+    toolbarHeight: appBarHeight,
     titleTextStyle: AppFonts.mrwBold.copyWith(
       fontSize: 16,
       color: AppColors.primary,

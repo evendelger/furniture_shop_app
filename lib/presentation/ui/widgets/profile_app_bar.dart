@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/consttants.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,7 +13,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       locator<AuthBloc>().add(const AuthLogOut());
 
   @override
-  Size get preferredSize => const Size.fromHeight(kTextTabBarHeight);
+  Size get preferredSize => const Size.fromHeight(appBarHeight);
 
   @override
   Widget build(BuildContext context) {

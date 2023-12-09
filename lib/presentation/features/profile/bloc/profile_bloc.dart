@@ -74,9 +74,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(ProfileLoaded(profileModel: newModel));
       }
     } on PermissionException catch (e) {
-      emit(ProfileLoaded(
-          profileModel: (state as ProfileLoaded).profileModel,
-          errorMessage: e.message));
+      emit((state as ProfileLoaded).copyWith(errorMessage: e.message));
     } catch (e) {
       emit((state as ProfileLoaded).copyWith(errorMessage: e.toString()));
     }

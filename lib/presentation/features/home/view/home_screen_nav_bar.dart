@@ -83,7 +83,7 @@ class HomeScreenNavBar extends StatelessWidget {
   }
 
   // анализатор не дает указать PreferedSizeWidget, поэтому использую это
-  dynamic selectAppBar() => switch (navigationShell.currentIndex) {
+  selectAppBar() => switch (navigationShell.currentIndex) {
         0 => null,
         1 => const FavoritesAppBar(),
         2 => const NotificationAppBar(),

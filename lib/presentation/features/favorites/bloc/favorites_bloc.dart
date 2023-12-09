@@ -43,7 +43,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   void _fetchFavoritesState(
     FetchFavoritesState event,
     Emitter<FavoritesState> emit,
-  ) {
+  ) async {
     if (state is FavoritesLoading) {
       final cartLastEvent = _cartRepository.lastStreamEvent;
       final favLastEvent = _favoritesRepository.lastStreamEvent;

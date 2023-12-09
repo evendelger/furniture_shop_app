@@ -11,7 +11,7 @@ class ScrollBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
       child: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           switch (state) {

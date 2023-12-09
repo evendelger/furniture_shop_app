@@ -8,14 +8,14 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CartAppBar(),
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height - 160,
+            height: MediaQuery.of(context).size.height - 263,
             child: const CustomScrollView(
               shrinkWrap: true,
               slivers: [
-                CartAppBar(),
                 CartBodyWidget(),
               ],
             ),

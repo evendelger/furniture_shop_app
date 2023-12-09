@@ -13,9 +13,10 @@ class ProfileScreen extends StatelessWidget {
       create: (context) => ProfileBloc(
         profileRepository: locator<IProfileRepository>(),
       )..add(const FetchProfile()),
-      child: const SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
+      child: SingleChildScrollView(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 10),
+        child: const Column(
           children: [
             UserProfileWidget(),
           ],

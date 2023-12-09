@@ -7,7 +7,6 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Stack(
-      alignment: Alignment.bottomCenter,
       children: [
         ScrollBody(),
         AddAllWidget(),

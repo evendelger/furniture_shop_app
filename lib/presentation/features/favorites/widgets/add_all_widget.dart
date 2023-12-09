@@ -8,24 +8,27 @@ class AddAllWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FavoritesBloc, FavoritesState>(
-      builder: (context, state) {
-        switch (state) {
-          case FavoritesLoading():
-            return const SizedBox.shrink();
-          case FavoritesLoaded():
-            {
-              if (state.products.isNotEmpty) {
-                return const AddAllButton().animate().fadeIn(
-                      curve: Curves.easeOut,
-                      duration: 500.ms,
-                    );
-              } else {
-                return const SizedBox.shrink();
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: BlocBuilder<FavoritesBloc, FavoritesState>(
+        builder: (context, state) {
+          switch (state) {
+            case FavoritesLoading():
+              return const SizedBox.shrink();
+            case FavoritesLoaded():
+              {
+                if (state.products.isNotEmpty) {
+                  return const AddAllButton().animate().fadeIn(
+                        curve: Curves.easeOut,
+                        duration: 500.ms,
+                      );
+                } else {
+                  return const SizedBox.shrink();
+                }
               }
-            }
-        }
-      },
+          }
+        },
+      ),
     );
   }
 }
