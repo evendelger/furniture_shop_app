@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:furniture_shop_app/presentation/ui/router/router.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-import 'package:go_router/go_router.dart';
 
 class GetStartedButton extends StatefulWidget {
   const GetStartedButton({super.key});
@@ -14,7 +13,7 @@ class GetStartedButton extends StatefulWidget {
 }
 
 class _GetStartedButtonState extends State<GetStartedButton> {
-  final _delay = 1500.ms;
+  final _delay = 1250.ms;
   var _isVisible = false;
 
   @override
@@ -26,8 +25,6 @@ class _GetStartedButtonState extends State<GetStartedButton> {
       });
     });
   }
-
-  void _goToLogin(BuildContext context) => context.goNamed(RouteNames.auth);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +41,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () => _goToLogin(context),
+          onPressed: () => RouterFunc.goToLogin(context),
           style: ButtonStyle(
             backgroundColor: const MaterialStatePropertyAll(AppColors.primary),
             fixedSize: const MaterialStatePropertyAll(Size(159, 54)),

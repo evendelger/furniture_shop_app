@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 // отнимаем по 11 у padding'ов вокруг TextButton, потому что они имеют внутренний
@@ -84,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: TextButton(
-        onPressed: () => changeFormType(context),
+        onPressed: () => AuthBlocFunc.changeFormType(context),
         child: Text(
           'SIGN UP',
           style: AppFonts.nsSemiBold.copyWith(
@@ -100,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: TextButton(
-        onPressed: () => locator<AuthBloc>().add(const AuthLogInAnonymously()),
+        onPressed: AuthBlocFunc.logInAnon,
         child: Text(
           'Log in Anonymously',
           style: AppFonts.nsSemiBold.copyWith(
@@ -166,10 +166,7 @@ class _LoginFormState extends State<LoginForm> {
   void _validateLoginForm(BuildContext context) {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      locator<AuthBloc>().add(AuthLogIn(
-        email: _emailController.text,
-        password: _passwordController.text,
-      ));
+      AuthBlocFunc.logIn(_emailController.text, _passwordController.text);
     }
   }
 }

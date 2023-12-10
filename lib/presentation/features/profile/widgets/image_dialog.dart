@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class ImageDialog extends StatelessWidget {
@@ -31,15 +30,13 @@ class ImageDialog extends StatelessWidget {
               _ListTileItem(
                 icon: Icons.photo_library_rounded,
                 title: 'Select from gallery',
-                onTap: () =>
-                    context.read<ProfileBloc>().add(const SelectGalleryImage()),
+                onTap: () => ProfileBlocFunc.selectGalleryImage(context),
               ),
               const SizedBox(height: 10),
               _ListTileItem(
                 icon: Icons.photo_camera_rounded,
                 title: 'Take a picture',
-                onTap: () =>
-                    context.read<ProfileBloc>().add(const SelectCameraImage()),
+                onTap: () => ProfileBlocFunc.selectCameraImage(context),
               ),
               const SizedBox(height: 10),
               Text(

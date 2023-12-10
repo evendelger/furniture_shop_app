@@ -14,28 +14,6 @@ class PermissionClient {
 
   static final _deviceInfoPlugin = DeviceInfoPlugin();
 
-  Future<CustomPermissionStatus> getGalleryStatus() async {
-    PermissionStatus galleryStatus;
-
-    if (Platform.isAndroid) {
-      final androidInfo = await _deviceInfoPlugin.androidInfo;
-      if (androidInfo.version.sdkInt <= 32) {
-        galleryStatus = await Permission.storage.status;
-      } else {
-        galleryStatus = await Permission.photos.status;
-      }
-    } else {
-      galleryStatus = await Permission.photos.status;
-    }
-
-    return _toCustomStatus(galleryStatus);
-  }
-
-  Future<CustomPermissionStatus> getCameraStatus() async {
-    final cameraStatus = await Permission.camera.status;
-    return _toCustomStatus(cameraStatus);
-  }
-
   Future<CustomPermissionStatus> requestGalleryPermission() async {
     PermissionStatus status;
 

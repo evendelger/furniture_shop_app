@@ -15,7 +15,7 @@ class FirestoreClient {
 
   Future<List> _getRawCartItems(String userId) async {
     final cartItemsJson = await _cartRef.doc(userId).get();
-    return (cartItemsJson.data() as Map)['items']; //
+    return (cartItemsJson.data() as Map)['items'];
   }
 
   Future<List<String>> _getRawFavoriteItems(userId) async {

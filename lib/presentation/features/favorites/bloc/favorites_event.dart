@@ -7,12 +7,12 @@ sealed class FavoritesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class FetchFavoritesState extends FavoritesEvent {
-  const FetchFavoritesState();
+final class FavoritesFetchState extends FavoritesEvent {
+  const FavoritesFetchState();
 }
 
-final class ChangeFavoriteCartStatus extends FavoritesEvent {
-  const ChangeFavoriteCartStatus({required this.favProduct});
+final class FavoritesChangeCartStatus extends FavoritesEvent {
+  const FavoritesChangeCartStatus({required this.favProduct});
 
   final FavoriteProduct favProduct;
 
@@ -21,8 +21,8 @@ final class ChangeFavoriteCartStatus extends FavoritesEvent {
 }
 
 // для обновления state от стрима favorites
-final class _UpdateFromFavStream extends FavoritesEvent {
-  const _UpdateFromFavStream({required this.favPoducts});
+final class _FavoritesUpdateFromFavStream extends FavoritesEvent {
+  const _FavoritesUpdateFromFavStream({required this.favPoducts});
 
   final ProductPvList favPoducts;
 
@@ -31,8 +31,8 @@ final class _UpdateFromFavStream extends FavoritesEvent {
 }
 
 // для обновления state от стрима cart
-final class _UpdateFromCartStream extends FavoritesEvent {
-  const _UpdateFromCartStream({required this.cartItems});
+final class _FavoritesUpdateFromCartStream extends FavoritesEvent {
+  const _FavoritesUpdateFromCartStream({required this.cartItems});
 
   final List<CartItem> cartItems;
 
@@ -40,8 +40,8 @@ final class _UpdateFromCartStream extends FavoritesEvent {
   List<Object?> get props => [cartItems];
 }
 
-final class AddFavoriteProduct extends FavoritesEvent {
-  const AddFavoriteProduct({
+final class FavoritesAddProduct extends FavoritesEvent {
+  const FavoritesAddProduct({
     required this.id,
   });
 
@@ -51,8 +51,8 @@ final class AddFavoriteProduct extends FavoritesEvent {
   List<Object?> get props => [id];
 }
 
-final class RemoveFavoriteProduct extends FavoritesEvent {
-  const RemoveFavoriteProduct({
+final class FavoritesRemoveProduct extends FavoritesEvent {
+  const FavoritesRemoveProduct({
     required this.id,
   });
 
@@ -62,6 +62,6 @@ final class RemoveFavoriteProduct extends FavoritesEvent {
   List<Object?> get props => [id];
 }
 
-final class AddAllFavoritesToCart extends FavoritesEvent {
-  const AddAllFavoritesToCart();
+final class FavoritesAddAllToCart extends FavoritesEvent {
+  const FavoritesAddAllToCart();
 }

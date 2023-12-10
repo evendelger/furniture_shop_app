@@ -19,7 +19,7 @@ class ProductCardScreen extends StatelessWidget {
       create: (context) => ProductCardBloc(
         favoritesRepository: locator<IFavoritesRepository>(),
         cartRepository: locator<ICartRepository>(),
-      )..add(OpenProductCard(id: id)),
+      )..add(ProductCardOpen(id: id)),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         body: BlocBuilder<ProductCardBloc, ProductCardState>(

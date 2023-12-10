@@ -5,7 +5,7 @@ import 'package:talker/talker.dart';
 class AuthClient {
   AuthClient() {
     // бывает, что не получается получить event с userChanges(), поэтому сначала
-    // беру currentUser, чтобы не получить ошибки TODO
+    // беру currentUser, чтобы не получить ошибки при инициализации
     _currentUser = UserModel.fromFbModel(_auth.currentUser);
     // слушаю изменения в аутентификакии и записываю их в переменную
     _auth.userChanges().map((user) => UserModel.fromFbModel(user)).listen(
@@ -74,6 +74,7 @@ class AuthClient {
     }
   }
 
+  // TODO
   Future<void> resetPassword({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);

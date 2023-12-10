@@ -47,7 +47,7 @@ class ProductsAppBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: IconButton(
-            onPressed: () => Functions.goToCart(context),
+            onPressed: () => RouterFunc.goToCart(context),
             icon: SvgPicture.asset(
               'assets/icons/shopping_cart.svg',
               width: 26,

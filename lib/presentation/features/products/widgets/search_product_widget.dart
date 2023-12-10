@@ -89,8 +89,7 @@ class _SearchProductWidgetState extends State<SearchProductWidget> {
   }
 
   void _searchByName(BuildContext context) {
-    Functions.popBack(context);
-    final provider = context.read<ProductsScreenType>();
+    RouterFunc.popBack(context);
     final searchQuery = _nameController.text;
     final productsBloc = context.read<ProductsBloc>();
     final productsFromCategory = productsBloc.state is ProductsLoaded
@@ -105,11 +104,9 @@ class _SearchProductWidgetState extends State<SearchProductWidget> {
           .toList();
     }
 
-    provider.setSearchQuery(searchQuery);
-    provider.changeToSearch();
-    context
-        .read<ProductsSearchBloc>()
-        .add(ProductsSearchByQuery(query: searchQuery, cartItems: cartItems));
+    PrScreenProviderFunc.setSearchQuery(context, searchQuery);
+    PrScreenProviderFunc.changeToSearch(context);
+    PrSearchBlocFunc.searchWithQuery(context, searchQuery, cartItems);
   }
 
   OutlineInputBorder _createBorder(Color color, bool isBold) =>

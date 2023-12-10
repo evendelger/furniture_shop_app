@@ -15,18 +15,18 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   })  : _favoritesRepository = favoritesRepository,
         _cartRepository = cartRepository,
         super(const ProductCardLoading()) {
-    on<ChangeFavoriteStatus>(_changeFavoriteStatus);
-    on<OpenProductCard>(_changeProduct);
-    on<ChangeColor>(_changeColor);
-    on<ChangeCount>(_changeCount);
-    on<ChangeCartStatus>(_changeCartStatus);
+    on<ProductCardChangeFavoriteStatus>(_changeFavoriteStatus);
+    on<ProductCardOpen>(_changeProduct);
+    on<ProductCardChangeColor>(_changeColor);
+    on<ProductCardChangeCount>(_changeCount);
+    on<ProductCardChangeCartStatus>(_changeCartStatus);
   }
 
   final IFavoritesRepository _favoritesRepository;
   final ICartRepository _cartRepository;
 
   Future<void> _changeFavoriteStatus(
-    ChangeFavoriteStatus event,
+    ProductCardChangeFavoriteStatus event,
     Emitter<ProductCardState> emit,
   ) async {
     if (state is ProductCardLoaded) {
@@ -41,7 +41,7 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   }
 
   Future<void> _changeCartStatus(
-    ChangeCartStatus event,
+    ProductCardChangeCartStatus event,
     Emitter<ProductCardState> emit,
   ) async {
     if (state is ProductCardLoaded) {
@@ -56,7 +56,7 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   }
 
   Future<void> _changeProduct(
-    OpenProductCard event,
+    ProductCardOpen event,
     Emitter<ProductCardState> emit,
   ) async {
     final isFavorite = await _favoritesRepository.isFavorite(id: event.id);
@@ -70,7 +70,8 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
     ));
   }
 
-  void _changeColor(ChangeColor event, Emitter<ProductCardState> emit) {
+  void _changeColor(
+      ProductCardChangeColor event, Emitter<ProductCardState> emit) {
     if (state is ProductCardLoaded) {
       final stateCopy = (state as ProductCardLoaded);
       emit(stateCopy.copyWith(color: event.color));
@@ -78,7 +79,7 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   }
 
   Future<void> _changeCount(
-    ChangeCount event,
+    ProductCardChangeCount event,
     Emitter<ProductCardState> emit,
   ) async {
     if (state is ProductCardLoaded) {

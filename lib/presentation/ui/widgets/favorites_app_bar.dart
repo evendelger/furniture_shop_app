@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
-import 'package:furniture_shop_app/presentation/ui/router/router.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-import 'package:go_router/go_router.dart';
 
 class FavoritesAppBar extends StatelessWidget implements PreferredSizeWidget {
   const FavoritesAppBar({super.key});
-
-  void _goToCart(BuildContext context) => context.push(Routes.cart);
 
   @override
   Size get preferredSize => const Size.fromHeight(Constants.appBarHeight);
@@ -29,7 +26,7 @@ class FavoritesAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: IconButton(
-            onPressed: () => _goToCart(context),
+            onPressed: () => RouterFunc.goToCart(context),
             icon: SvgPicture.asset(
               'assets/icons/shopping_cart.svg',
               width: 26,

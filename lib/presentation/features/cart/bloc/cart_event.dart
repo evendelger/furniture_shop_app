@@ -8,8 +8,8 @@ sealed class CartEvent extends Equatable {
 }
 
 // для обновления state от стрима
-final class _UpdateRawState extends CartEvent {
-  const _UpdateRawState({required this.cartItems});
+final class _CartUpdateRawState extends CartEvent {
+  const _CartUpdateRawState({required this.cartItems});
 
   final List<CartItem> cartItems;
 
@@ -18,12 +18,12 @@ final class _UpdateRawState extends CartEvent {
 }
 
 // для конвертации raw state в full state
-final class UpdateFullState extends CartEvent {
-  const UpdateFullState();
+final class CartUpdateFullState extends CartEvent {
+  const CartUpdateFullState();
 }
 
-final class ChangeCartValue extends CartEvent {
-  const ChangeCartValue({
+final class CartChangeValue extends CartEvent {
+  const CartChangeValue({
     required this.id,
     required this.increase,
   });
@@ -35,8 +35,8 @@ final class ChangeCartValue extends CartEvent {
   List<Object?> get props => [id, increase];
 }
 
-final class AddCartProduct extends CartEvent {
-  const AddCartProduct({
+final class CartAddProduct extends CartEvent {
+  const CartAddProduct({
     required this.id,
   });
 
@@ -46,8 +46,8 @@ final class AddCartProduct extends CartEvent {
   List<Object?> get props => [id];
 }
 
-final class RemoveCartProduct extends CartEvent {
-  const RemoveCartProduct({
+final class CartRemoveProduct extends CartEvent {
+  const CartRemoveProduct({
     required this.id,
   });
 

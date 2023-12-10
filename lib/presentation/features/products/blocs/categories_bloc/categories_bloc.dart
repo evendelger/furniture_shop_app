@@ -7,11 +7,11 @@ part 'categories_event.dart';
 part 'categories_state.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
-  CategoriesBloc() : super(InitialCategories()) {
-    on<SelectCategory>(_selectCategory);
+  CategoriesBloc() : super(CategoriesInitial()) {
+    on<CategoriesSelect>(_selectCategory);
   }
 
-  void _selectCategory(SelectCategory event, Emitter<CategoriesState> emit) {
+  void _selectCategory(CategoriesSelect event, Emitter<CategoriesState> emit) {
     if (state.selected != event.selectedCategory) {
       emit(state.copyWith(selected: event.selectedCategory));
     }

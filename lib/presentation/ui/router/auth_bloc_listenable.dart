@@ -12,7 +12,6 @@ class AuthBlocListenable extends ChangeNotifier {
           notifyListeners();
         }
       });
-    ;
   }
 
   late final AuthBloc bloc;

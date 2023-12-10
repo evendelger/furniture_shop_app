@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
 import 'package:furniture_shop_app/presentation/features/boarding/boarding.dart';
@@ -11,12 +10,14 @@ import 'package:furniture_shop_app/presentation/features/loading/loading.dart';
 import 'package:furniture_shop_app/presentation/features/notification/notification.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/router/router.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
-  static final _rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'root');
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'root',
+  );
 
   static GoRouter get router => _router;
 
@@ -57,9 +58,7 @@ class AppRouter {
               GoRoute(
                   path: Routes.favorites,
                   builder: (context, state) {
-                    context
-                        .read<FavoritesBloc>()
-                        .add(const FetchFavoritesState());
+                    FavBlocFunc.fetch(context);
                     return const FavoritesScreen();
                   }),
             ],
@@ -87,7 +86,7 @@ class AppRouter {
           path: Routes.cart,
           pageBuilder: (context, state) {
             // преобразовываю данные при открытии корзины
-            context.read<CartBloc>().add(const UpdateFullState());
+            CartBlocFunc.updateState(context);
             return RightSlideTransition(child: const CartScreen());
           }),
       GoRoute(

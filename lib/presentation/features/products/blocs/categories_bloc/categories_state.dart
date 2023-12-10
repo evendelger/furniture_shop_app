@@ -23,8 +23,8 @@ class CategoriesState extends Equatable {
   }
 }
 
-final class InitialCategories extends CategoriesState {
-  InitialCategories()
+final class CategoriesInitial extends CategoriesState {
+  CategoriesInitial()
       : super(
           selected: Categories.list.first,
           categories: Categories.list,

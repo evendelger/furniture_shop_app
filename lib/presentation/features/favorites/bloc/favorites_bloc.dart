@@ -15,22 +15,23 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   })  : _favoritesRepository = favoritesRepository,
         _cartRepository = cartRepository,
         super(const FavoritesLoading()) {
-    on<AddAllFavoritesToCart>(_addAllToCart);
-    on<AddFavoriteProduct>(_addProduct);
-    on<RemoveFavoriteProduct>(_removeProduct);
-    on<FetchFavoritesState>(_fetchFavoritesState);
-    on<ChangeFavoriteCartStatus>(_changeFavoriteCartStatus);
-    on<_UpdateFromFavStream>(_updateFromFavStream);
-    on<_UpdateFromCartStream>(_updateFromCartStream);
+    on<FavoritesAddAllToCart>(_addAllToCart);
+    on<FavoritesAddProduct>(_addProduct);
+    on<FavoritesRemoveProduct>(_removeProduct);
+    on<FavoritesFetchState>(_fetchFavoritesState);
+    on<FavoritesChangeCartStatus>(_changeFavoriteCartStatus);
+    on<_FavoritesUpdateFromFavStream>(_updateFromFavStream);
+    on<_FavoritesUpdateFromCartStream>(_updateFromCartStream);
 
     // подписываюсь на стрим favorites
     _favProductsSub = _favoritesRepository.favoritesStream.listen(
-      (favProducts) => add(_UpdateFromFavStream(favPoducts: favProducts)),
+      (favProducts) =>
+          add(_FavoritesUpdateFromFavStream(favPoducts: favProducts)),
     );
 
     // подписываюсь на стрим cart
     _cartProductsSub = _cartRepository.cartStream.listen(
-      (cartItems) => add(_UpdateFromCartStream(cartItems: cartItems)),
+      (cartItems) => add(_FavoritesUpdateFromCartStream(cartItems: cartItems)),
     );
   }
 
@@ -41,7 +42,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   late final StreamSubscription _cartProductsSub;
 
   void _fetchFavoritesState(
-    FetchFavoritesState event,
+    FavoritesFetchState event,
     Emitter<FavoritesState> emit,
   ) async {
     if (state is FavoritesLoading) {
@@ -70,7 +71,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   // обновляю при изменении значение favorites
   void _updateFromFavStream(
-    _UpdateFromFavStream event,
+    _FavoritesUpdateFromFavStream event,
     Emitter<FavoritesState> emit,
   ) {
     Iterable<CartItem> stateToCartProducts;
@@ -91,7 +92,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   // обновляю при изменении значение cart
   void _updateFromCartStream(
-    _UpdateFromCartStream event,
+    _FavoritesUpdateFromCartStream event,
     Emitter<FavoritesState> emit,
   ) {
     Iterable<ProductPreview> stateToProductsPv = [];
@@ -104,19 +105,19 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     emit(FavoritesLoaded(products: combinedData));
   }
 
-  void _addProduct(AddFavoriteProduct event, Emitter<FavoritesState> emit) =>
+  void _addProduct(FavoritesAddProduct event, Emitter<FavoritesState> emit) =>
       _favoritesRepository.add(id: event.id);
 
   void _removeProduct(
-          RemoveFavoriteProduct event, Emitter<FavoritesState> emit) =>
+          FavoritesRemoveProduct event, Emitter<FavoritesState> emit) =>
       _favoritesRepository.remove(id: event.id);
 
   void _addAllToCart(
-          AddAllFavoritesToCart event, Emitter<FavoritesState> emit) =>
+          FavoritesAddAllToCart event, Emitter<FavoritesState> emit) =>
       _favoritesRepository.addAllToCart();
 
   void _changeFavoriteCartStatus(
-    ChangeFavoriteCartStatus event,
+    FavoritesChangeCartStatus event,
     Emitter<FavoritesState> emit,
   ) {
     if (state is FavoritesLoaded) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class ColorSelectWidget extends StatelessWidget {
@@ -57,9 +56,6 @@ class _SingleColorWidget extends StatelessWidget {
   final Color color;
   final bool isSelected;
 
-  void _selectColor(BuildContext context) =>
-      context.read<ProductCardBloc>().add(ChangeColor(color: color));
-
   @override
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(50);
@@ -68,7 +64,7 @@ class _SingleColorWidget extends StatelessWidget {
       borderRadius: borderRadius,
       child: ClipOval(
         child: InkWell(
-          onTap: () => _selectColor(context),
+          onTap: () => PrCardBlocFunc.changeColor(context, color),
           borderRadius: borderRadius,
           child: Container(
             width: 34,

@@ -7,8 +7,8 @@ sealed class CategoriesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class SelectCategory extends CategoriesEvent {
-  const SelectCategory({required this.selectedCategory});
+final class CategoriesSelect extends CategoriesEvent {
+  const CategoriesSelect({required this.selectedCategory});
 
   final Category selectedCategory;
 

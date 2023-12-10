@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -105,11 +105,11 @@ class _RegisterFormState extends State<RegisterForm> {
   void _validateRegisterForm() {
     if (_registerFormKey.currentState!.validate()) {
       _registerFormKey.currentState!.save();
-      locator<AuthBloc>().add(Register(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-      ));
+      AuthBlocFunc.register(
+        _nameController.text,
+        _emailController.text,
+        _passwordController.text,
+      );
     }
   }
 
@@ -163,7 +163,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           ),
           TextButton(
-            onPressed: () => changeFormType(context),
+            onPressed: () => AuthBlocFunc.changeFormType(context),
             child: Text(
               'SIGN IN',
               style: AppFonts.nsBold.copyWith(

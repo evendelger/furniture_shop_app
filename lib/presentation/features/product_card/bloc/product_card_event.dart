@@ -7,16 +7,16 @@ sealed class ProductCardEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class ChangeFavoriteStatus extends ProductCardEvent {
-  const ChangeFavoriteStatus();
+final class ProductCardChangeFavoriteStatus extends ProductCardEvent {
+  const ProductCardChangeFavoriteStatus();
 }
 
-final class ChangeCartStatus extends ProductCardEvent {
-  const ChangeCartStatus();
+final class ProductCardChangeCartStatus extends ProductCardEvent {
+  const ProductCardChangeCartStatus();
 }
 
-final class OpenProductCard extends ProductCardEvent {
-  const OpenProductCard({
+final class ProductCardOpen extends ProductCardEvent {
+  const ProductCardOpen({
     required this.id,
   });
 
@@ -26,8 +26,8 @@ final class OpenProductCard extends ProductCardEvent {
   List<Object?> get props => [id];
 }
 
-final class ChangeColor extends ProductCardEvent {
-  const ChangeColor({
+final class ProductCardChangeColor extends ProductCardEvent {
+  const ProductCardChangeColor({
     required this.color,
   });
 
@@ -37,8 +37,8 @@ final class ChangeColor extends ProductCardEvent {
   List<Object?> get props => [color];
 }
 
-final class ChangeCount extends ProductCardEvent {
-  const ChangeCount({
+final class ProductCardChangeCount extends ProductCardEvent {
+  const ProductCardChangeCount({
     required this.increment,
   });
 

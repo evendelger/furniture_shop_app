@@ -13,27 +13,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc({required ICartRepository cartRepository})
       : _cartRepository = cartRepository,
         super(const CartLoading()) {
-    on<ChangeCartValue>(_changeValue);
-    on<AddCartProduct>(_addProduct);
-    on<RemoveCartProduct>(_removeProduct);
-    on<_UpdateRawState>(_updateRawState);
-    on<UpdateFullState>(_updateFullState);
+    on<CartChangeValue>(_changeValue);
+    on<CartAddProduct>(_addProduct);
+    on<CartRemoveProduct>(_removeProduct);
+    on<_CartUpdateRawState>(_updateRawState);
+    on<CartUpdateFullState>(_updateFullState);
 
     // подписываюсь на стрим cart
     _cartProductsSub = _cartRepository.cartStream.listen(
-      (cartItems) => add(_UpdateRawState(cartItems: cartItems)),
+      (cartItems) => add(_CartUpdateRawState(cartItems: cartItems)),
     );
   }
 
   final ICartRepository _cartRepository;
   late final StreamSubscription _cartProductsSub;
 
-  void _updateRawState(_UpdateRawState event, Emitter<CartState> emit) {
+  void _updateRawState(_CartUpdateRawState event, Emitter<CartState> emit) {
     if (state is CartLoadedFull) {
       final stateProducts = (state as CartLoadedFull).cartProducts;
       final newState = <CartProductPv>[];
       if (stateProducts.length < event.cartItems.length) {
-        add(const UpdateFullState());
+        add(const CartUpdateFullState());
         return;
       }
 
@@ -60,7 +60,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   Future<void> _updateFullState(
-    UpdateFullState event,
+    CartUpdateFullState event,
     Emitter<CartState> emit,
   ) async {
     final cartItems = state is CartLoadedRaw
@@ -73,7 +73,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   Future<void> _changeValue(
-    ChangeCartValue event,
+    CartChangeValue event,
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoadedFull) {
@@ -85,7 +85,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   Future<void> _addProduct(
-    AddCartProduct event,
+    CartAddProduct event,
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoadedFull) {
@@ -94,7 +94,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   Future<void> _removeProduct(
-    RemoveCartProduct event,
+    CartRemoveProduct event,
     Emitter<CartState> emit,
   ) async {
     if (state is CartLoadedFull) {

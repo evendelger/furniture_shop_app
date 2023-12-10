@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class AddAllButton extends StatelessWidget {
   const AddAllButton({super.key});
-
-  void _addAll(BuildContext context) =>
-      context.read<FavoritesBloc>().add(const AddAllFavoritesToCart());
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +20,7 @@ class AddAllButton extends StatelessWidget {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () => _addAll(context),
+          onPressed: () => FavBlocFunc.addAll(context),
           style: ButtonStyle(
             backgroundColor: const MaterialStatePropertyAll(AppColors.primary),
             minimumSize: const MaterialStatePropertyAll(Size.fromHeight(50)),

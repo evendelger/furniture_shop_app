@@ -100,8 +100,6 @@ abstract class Locator {
   static void _initTalker() => locator.registerSingleton<Talker>(Talker());
 
   static void _initBlocObserver() => Bloc.observer = TalkerBlocObserver(
-        settings: const TalkerBlocLoggerSettings(
-            // printChanges: true,
-            ),
+        settings: const TalkerBlocLoggerSettings(),
       );
 }

@@ -27,7 +27,7 @@ class ProductsCategoriesList extends StatelessWidget {
                 padding: EdgeInsets.only(top: 20),
                 sliver: ProductsAppBar(),
               ),
-              SliverPersistentHeader(
+              const SliverPersistentHeader(
                 pinned: true,
                 delegate: CategoriesListDelegate(),
               ),

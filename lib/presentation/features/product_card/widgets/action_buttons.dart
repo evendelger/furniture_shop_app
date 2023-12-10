@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class ActionButtons extends StatelessWidget {
@@ -40,13 +40,10 @@ class _AddToFavoritesButton extends StatelessWidget {
   final String id;
   final bool isFavorite;
 
-  void _changeFavoriteStatus(BuildContext context) =>
-      context.read<ProductCardBloc>().add(const ChangeFavoriteStatus());
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => _changeFavoriteStatus(context),
+      onPressed: () => PrCardBlocFunc.changeFavStatus(context),
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(
             isFavorite ? AppColors.blueGray : AppColors.primary),
@@ -77,9 +74,6 @@ class _AddToCartButton extends StatelessWidget {
   final String id;
   final bool isInCart;
 
-  void _addToCart(BuildContext context) =>
-      context.read<ProductCardBloc>().add(const ChangeCartStatus());
-
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
@@ -94,7 +88,7 @@ class _AddToCartButton extends StatelessWidget {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () => _addToCart(context),
+        onPressed: () => PrCardBlocFunc.changeCartStatus(context),
         style: ButtonStyle(
           backgroundColor: MaterialStatePropertyAll(
               isInCart ? AppColors.blueGray : AppColors.primary),

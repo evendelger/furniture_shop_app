@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:furniture_shop_app/presentation/features/products/products.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 enum ProductsRefreshType {
@@ -18,17 +17,6 @@ class ErrorMessageWidget extends StatelessWidget {
   final String message;
   final ProductsRefreshType productsRefreshType;
 
-  void _loadProducts(BuildContext context) {
-    switch (productsRefreshType) {
-      case ProductsRefreshType.caterory:
-        context.read<ProductsBloc>().add(const ProductsFetch());
-      case ProductsRefreshType.search:
-        final bloc = context.read<ProductsSearchBloc>();
-        final query = (bloc.state as ProductsSearchFailed).query;
-        bloc.add(ProductsSearchByQuery(query: query));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -42,7 +30,8 @@ class ErrorMessageWidget extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           TextButton(
-            onPressed: () => _loadProducts(context),
+            onPressed: () =>
+                BlocFunc.loadProducts(context, productsRefreshType),
             style: TextButton.styleFrom(
               backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(

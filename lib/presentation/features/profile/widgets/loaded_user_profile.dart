@@ -74,28 +74,3 @@ class LoadedUserProfile extends StatelessWidget {
         ),
       );
 }
-
-// class _CachedImageWidget extends StatelessWidget {
-//   const _CachedImageWidget({required this.photoUrl});
-
-//   final String photoUrl;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return CachedNetworkImage(
-//       imageUrl: photoUrl,
-//       imageBuilder: (context, imageProvider) {
-//         return DecoratedBox(
-//           decoration: BoxDecoration(
-//             image: DecorationImage(image: imageProvider),
-//           ),
-//         );
-//       },
-//       progressIndicatorBuilder: (context, url, progress) => Shimmer.fromColors(
-//         baseColor: AppColors.shimmerBase,
-//         highlightColor: AppColors.shimmerHighlight,
-//         child: const SizedBox.expand(),
-//       ),
-//     );
-//   }
-// }

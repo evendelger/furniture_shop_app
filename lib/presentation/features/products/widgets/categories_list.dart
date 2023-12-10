@@ -8,6 +8,8 @@ import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
 
 class CategoriesListDelegate extends SliverPersistentHeaderDelegate {
+  const CategoriesListDelegate();
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -76,7 +78,7 @@ class _CategoryItem extends StatelessWidget {
           iconName: category.name,
           iconLength: 28,
           borderRadius: 12,
-          onPressed: () => Functions.selectCategory(context, category),
+          onPressed: () => CategBlocFunc.select(context, category),
         ),
         Text(
           toBeginningOfSentenceCase(category.name)!,

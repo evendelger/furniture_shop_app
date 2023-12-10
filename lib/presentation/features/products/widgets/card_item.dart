@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
-import 'package:furniture_shop_app/presentation/ui/router/router.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
-import 'package:go_router/go_router.dart';
 
 class ProductCardItem extends StatelessWidget {
   const ProductCardItem({
@@ -15,15 +12,12 @@ class ProductCardItem extends StatelessWidget {
 
   final ProductsItem productItem;
 
-  void _openProductCard(BuildContext context) =>
-      context.push(Routes.productCard, extra: productItem.product.id);
-
   @override
   Widget build(BuildContext context) {
     final product = productItem.product;
 
     return InkWell(
-      onTap: () => _openProductCard(context),
+      onTap: () => RouterFunc.openProduct(context, productItem.product.id),
       borderRadius: BorderRadius.circular(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,10 +81,6 @@ class _LoadedIcon extends StatelessWidget {
   final bool isInCart;
   final String id;
 
-  void _changeCartStatus(BuildContext context) => context.read<CartBloc>().add(
-        isInCart ? RemoveCartProduct(id: id) : AddCartProduct(id: id),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -104,7 +94,7 @@ class _LoadedIcon extends StatelessWidget {
         iconName: 'shopping_bag',
         iconLength: 20,
         borderRadius: 6,
-        onPressed: () => _changeCartStatus(context),
+        onPressed: () => CartBlocFunc.changeCartStatus(context, id, isInCart),
       ),
     );
   }

@@ -8,9 +8,6 @@ import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 class ProductsSearchAppBar extends StatelessWidget {
   const ProductsSearchAppBar({super.key});
 
-  void _returnToCategoriesList(BuildContext context) =>
-      context.read<ProductsScreenType>().changeToCategories();
-
   @override
   Widget build(BuildContext context) {
     final searchQuery = context.read<ProductsScreenType>().searchQuery;
@@ -24,7 +21,7 @@ class ProductsSearchAppBar extends StatelessWidget {
         child: SizedBox(),
       ),
       leading: IconButton(
-        onPressed: () => _returnToCategoriesList(context),
+        onPressed: () => PrScreenProviderFunc.returnToCateg(context),
         icon: const Icon(Icons.arrow_back_ios_new_rounded),
       ),
       title: Text(
@@ -38,7 +35,7 @@ class ProductsSearchAppBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: IconButton(
-            onPressed: () => Functions.goToCart(context),
+            onPressed: () => RouterFunc.goToCart(context),
             icon: SvgPicture.asset(
               'assets/icons/shopping_cart.svg',
               width: 26,
