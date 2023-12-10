@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:furniture_shop_app/presentation/ui/router/router.dart';
+import 'package:furniture_shop_app/presentation/features/products/products.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class ProductsAppBar extends StatelessWidget {
   const ProductsAppBar({super.key});
-
-  void _goToCart(BuildContext context) => context.push(Routes.cart);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class ProductsAppBar extends StatelessWidget {
       toolbarHeight: 40,
       stretch: true,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () => _showSearchBottomsheet(context),
         icon: SvgPicture.asset(
           'assets/icons/search.svg',
           color: AppColors.grey,
@@ -47,7 +47,7 @@ class ProductsAppBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 5),
           child: IconButton(
-            onPressed: () => _goToCart(context),
+            onPressed: () => Functions.goToCart(context),
             icon: SvgPicture.asset(
               'assets/icons/shopping_cart.svg',
               width: 26,
@@ -56,6 +56,36 @@ class ProductsAppBar extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showSearchBottomsheet(BuildContext context) {
+    return showModalBottomSheet(
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      context: context,
+      isScrollControlled: true,
+      builder: (newContext) {
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider<ProductsScreenType>.value(
+              value: context.read<ProductsScreenType>(),
+            ),
+            BlocProvider.value(
+              value: context.read<ProductsSearchBloc>(),
+            ),
+            BlocProvider.value(
+              value: context.read<ProductsBloc>(),
+            ),
+          ],
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(newContext).viewInsets.bottom,
+            ),
+            child: const SearchBottomSheet(),
+          ),
+        );
+      },
     );
   }
 }

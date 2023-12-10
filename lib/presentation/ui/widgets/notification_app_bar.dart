@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/consttants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class NotificationAppBar extends StatelessWidget
@@ -7,12 +7,12 @@ class NotificationAppBar extends StatelessWidget
   const NotificationAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(appBarHeight);
+  Size get preferredSize => const Size.fromHeight(Constants.appBarHeight);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: appBarHeight,
+      toolbarHeight: Constants.appBarHeight,
       title: Text(
         'Notification',
         style: AppFonts.mrwBold.copyWith(

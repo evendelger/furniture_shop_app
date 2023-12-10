@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/consttants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
 
 part 'app_fonts.dart';
 part 'app_colors.dart';
@@ -9,7 +9,7 @@ final myTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: AppColors.white,
     centerTitle: true,
-    toolbarHeight: appBarHeight,
+    toolbarHeight: Constants.appBarHeight,
     titleTextStyle: AppFonts.mrwBold.copyWith(
       fontSize: 16,
       color: AppColors.primary,

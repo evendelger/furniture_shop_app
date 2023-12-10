@@ -46,7 +46,7 @@ class HomeScreenNavBar extends StatelessWidget {
           create: (context) => ProductsBloc(
             productsRepository: locator<IProductsRepository>(),
             cartRepository: locator<ICartRepository>(),
-          )..add(const FetchProducts()),
+          )..add(const ProductsFetch()),
         ),
         BlocProvider(
           create: (context) => FavoritesBloc(

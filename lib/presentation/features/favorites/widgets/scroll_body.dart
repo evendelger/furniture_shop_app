@@ -11,14 +11,22 @@ class ScrollBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           switch (state) {
             case FavoritesLoading():
               return const ShimmerProductsList();
             case FavoritesLoaded():
-              return FavoritesList(products: state.products);
+              {
+                if (state.products.isEmpty) {
+                  return const Center(
+                    child: Text("You don't have any favorite products"),
+                  );
+                } else {
+                  return FavoritesList(products: state.products);
+                }
+              }
           }
         },
       ),
@@ -36,15 +44,18 @@ class FavoritesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: products.length,
-      itemBuilder: (context, index) =>
-          FavoriteProductWidget(favProduct: products[index])
-              .animate()
-              .fadeIn(duration: 750.ms, begin: 0.3),
-      separatorBuilder: (_, __) => const Padding(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        child: Divider(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: ListView.separated(
+        itemCount: products.length,
+        itemBuilder: (context, index) =>
+            FavoriteProductWidget(favProduct: products[index])
+                .animate()
+                .fadeIn(duration: 750.ms, begin: 0.3),
+        separatorBuilder: (_, __) => const Padding(
+          padding: EdgeInsets.symmetric(vertical: 5),
+          child: Divider(),
+        ),
       ),
     );
   }

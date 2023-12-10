@@ -55,8 +55,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
-      await _authRepository.signIn(userLogInModel: userLogInModel);
-      final loggedInUser = _authRepository.getCurrentUser;
+      final loggedInUser = await _authRepository.signIn(
+        userLogInModel: userLogInModel,
+      );
       emit(AuthSuccess(userModel: loggedInUser));
     } catch (e) {
       emit(AuthFailure(errorMessage: e.toString()));
@@ -76,11 +77,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
 
-      final userCredential = await _authRepository.signUp(
+      final registeredModel = await _authRepository.signUp(
         userRegModel: userRegModel,
       );
-
-      final registeredModel = UserModel.fromUserCredential(userCredential);
       emit(AuthSuccess(userModel: registeredModel));
     } catch (e) {
       emit(AuthFailure(errorMessage: e.toString()));

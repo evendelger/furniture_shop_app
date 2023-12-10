@@ -1,76 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
+import 'package:furniture_shop_app/locator.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
-import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
-import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
+import 'package:provider/provider.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CategoriesBloc(),
-      child: Builder(
-        builder: (context) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              final category = context.read<CategoriesBloc>().state.selected;
-              context
-                  .read<ProductsBloc>()
-                  .add(FetchProducts(category: category));
-            },
-            color: AppColors.primary,
-            edgeOffset: 180,
-            displacement: 10,
-            child: CustomScrollView(
-              cacheExtent: 3500,
-              slivers: [
-                const SliverPadding(
-                  padding: EdgeInsets.only(top: 20),
-                  sliver: ProductsAppBar(),
-                ),
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: CategoriesListDelegate(),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  sliver: BlocListener<CategoriesBloc, CategoriesState>(
-                    listener: (context, state) {
-                      context
-                          .read<ProductsBloc>()
-                          .add(FetchProducts(category: state.selected));
-                    },
-                    child: BlocBuilder<ProductsBloc, ProductsState>(
-                      builder: (context, state) {
-                        switch (state) {
-                          case ProductsLoading():
-                            return const SliverToBoxAdapter(
-                              child: ShimmerProductsGrid(),
-                            );
-                          case ProductsFailed():
-                            return SliverFillRemaining(
-                              hasScrollBody: false,
-                              child: ErrorMessageWidget(
-                                message: state.errorMessage,
-                              ),
-                            );
-                          case ProductsLoaded():
-                            return ProductsGrid(products: state.products);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CategoriesBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ProductsSearchBloc(
+            productsRepository: locator<IProductsRepository>(),
+            cartRepository: locator<ICartRepository>(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductsScreenType(),
+        ),
+      ],
+      builder: (context, child) {
+        final screenType = context.watch<ProductsScreenType>().screenType;
+        switch (screenType) {
+          case ScreenType.productsCategories:
+            return const ProductsCategoriesList()
+                .animate(effects: Constants.fadeInTransition);
+          case ScreenType.productsSearch:
+            return const ProductsSearchList()
+                .animate(effects: Constants.fadeInTransition);
+        }
+      },
     );
   }
 }

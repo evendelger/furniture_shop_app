@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:furniture_shop_app/data/firebase/firebase.dart';
-import 'package:furniture_shop_app/data/network/network.dart';
+import 'package:furniture_shop_app/data/api/api.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/locator.dart';
@@ -100,13 +100,13 @@ class CartRepository implements ICartRepository {
   @override
   Future<List<CartProductPv>> convertRawItems(List<CartItem> cartItems) async {
     if (cartItems.isEmpty) return <CartProductPv>[];
-    final products = await dioClient.getProductsByIds(
-      cartItems.map((i) => i.id),
+    final productsPv = await dioClient.getProductsByIds(
+      ids: cartItems.map((i) => i.id),
     );
     return List<CartProductPv>.generate(
-      products.length,
+      productsPv.products.length,
       (i) => CartProductPv(
-        product: products[i],
+        product: productsPv.products[i],
         inCartValue: cartItems[i].value!,
       ),
     );

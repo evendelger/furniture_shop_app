@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/data/network/network.dart';
+import 'package:furniture_shop_app/data/api/api.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 class DioClient {
@@ -16,7 +16,9 @@ class DioClient {
 
   late final Dio _dio;
 
-  Future<List<ProductPreview>> getProductsByCategory(String category) async {
+  Future<ProductPvList> getProductsByCategory({
+    required String category,
+  }) async {
     try {
       final queryParameters = {
         "category": category,
@@ -25,17 +27,14 @@ class DioClient {
         Endpoints.products,
         queryParameters: queryParameters,
       );
-      final productsListJson = response.data['products'] as List;
-      final products = productsListJson
-          .map((product) => ProductPreview.fromJson(product))
-          .toList();
+      final products = ProductPvList.fromJson(response.data);
       return products;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<dynamic> _getProductById({
+  Future<List> _getProductById({
     required String id,
     required bool isPreview,
   }) async {
@@ -44,8 +43,10 @@ class DioClient {
         "id": id,
         "preview": isPreview,
       };
-      final response =
-          await _dio.get(Endpoints.product, queryParameters: queryParameters);
+      final response = await _dio.get(
+        Endpoints.product,
+        queryParameters: queryParameters,
+      );
       // получаю List объектов, а не сингл объект, из-за специфики fastgen'а
       final productJson = response.data['product'] as List;
       return productJson;
@@ -66,21 +67,43 @@ class DioClient {
     return product;
   }
 
-  Future<List<ProductPreview>> getProductsByIds(Iterable<String> ids) async {
+  Future<ProductPvList> getProductsByIds({
+    required Iterable<String> ids,
+  }) async {
     try {
       final response =
           await _dio.get(Endpoints.productsByIds, queryParameters: {
         "ids": ids.join(','),
       });
-      final productListJson = response.data['products'] as List;
-      final products = productListJson
-          .map((prdJson) => ProductPreview.fromJson(prdJson))
-          .toList();
+      final productsPv = ProductPvList.fromJson(response.data);
+      final sortedProducts = ProductPvList(
+          products: ids
+              .map((id) => productsPv.products.firstWhere((p) => p.id == id))
+              .toList());
+      // final products = productListJson
+      //     .map((prdJson) => ProductPreview.fromJson(prdJson))
+      //     .toList();
       // увы, из-за ограниченности бэка данные приходят не в том порядке, поэтому
       // приходится их сортировать
-      final sortedProducts =
-          ids.map((id) => products.firstWhere((p) => p.id == id)).toList();
+      // final sortedProducts =
+      //     ids.map((id) => productsPv.firstWhere((p) => p.id == id)).toList();
       return sortedProducts;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ProductPvList> getProductsByName({
+    required String name,
+  }) async {
+    try {
+      final response = await _dio.get(Endpoints.search, queryParameters: {
+        "name": name,
+      });
+      final products = response.data['products'] == null
+          ? const ProductPvList(products: [])
+          : ProductPvList.fromJson(response.data);
+      return products;
     } catch (e) {
       rethrow;
     }

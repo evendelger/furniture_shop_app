@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:furniture_shop_app/data/firebase/firebase.dart';
-import 'package:furniture_shop_app/data/network/network.dart';
+import 'package:furniture_shop_app/data/api/api.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/locator.dart';
@@ -16,9 +16,8 @@ class FavoritesRepository implements IFavoritesRepository {
     required this.dioClient,
   }) {
     locator<Talker>().debug('INITIALIZED FAV REPO');
-    _favoritesStreamController =
-        StreamController<List<ProductPreview>>.broadcast()
-          ..addStream(_streamProducts());
+    _favoritesStreamController = StreamController<ProductPvList>.broadcast()
+      ..addStream(_streamProducts());
 
     _lastEventSub =
         _favoritesStreamController.stream.listen((event) => _lastEvent = event);
@@ -28,16 +27,16 @@ class FavoritesRepository implements IFavoritesRepository {
   final FirestoreClient firestoreClient;
   final DioClient dioClient;
 
-  late final StreamController<List<ProductPreview>> _favoritesStreamController;
-  late final StreamSubscription<List<ProductPreview>> _lastEventSub;
+  late final StreamController<ProductPvList> _favoritesStreamController;
+  late final StreamSubscription<ProductPvList> _lastEventSub;
 
-  List<ProductPreview>? _lastEvent;
-
-  @override
-  List<ProductPreview>? get lastStreamEvent => _lastEvent;
+  ProductPvList? _lastEvent;
 
   @override
-  Stream<List<ProductPreview>> get favoritesStream =>
+  ProductPvList? get lastStreamEvent => _lastEvent;
+
+  @override
+  Stream<ProductPvList> get favoritesStream =>
       _favoritesStreamController.stream;
 
   @override
@@ -98,11 +97,12 @@ class FavoritesRepository implements IFavoritesRepository {
     }
   }
 
-  Stream<List<ProductPreview>> _streamProducts() => firestoreClient
+  Stream<ProductPvList> _streamProducts() => firestoreClient
           .streamFavoriteItems(userId: authClient.getUserId)
           .asyncMap((listOfIds) async {
-        if (listOfIds.isEmpty) return <ProductPreview>[];
-        final favoriteProducts = await dioClient.getProductsByIds(listOfIds);
+        if (listOfIds.isEmpty) return const ProductPvList(products: []);
+        final favoriteProducts =
+            await dioClient.getProductsByIds(ids: listOfIds);
         return favoriteProducts;
       });
 

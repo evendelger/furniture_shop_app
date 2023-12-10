@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/data/firebase/firebase.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
-import 'package:furniture_shop_app/data/network/network.dart';
+import 'package:furniture_shop_app/data/api/api.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/firebase_options.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
@@ -13,7 +13,7 @@ import 'package:talker/talker.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
 
-import 'data/permission_client/permission_client.dart';
+import 'data/permissions/permission_client.dart';
 
 final locator = GetIt.instance;
 

@@ -50,7 +50,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
       if (cartLastEvent == null || favLastEvent == null) return;
 
-      final combinedData = _combineData(favLastEvent, cartLastEvent);
+      final combinedData = _combineData(favLastEvent.products, cartLastEvent);
       emit(FavoritesLoaded(products: combinedData));
     }
   }
@@ -82,7 +82,10 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     } else {
       stateToCartProducts = _cartRepository.lastStreamEvent ?? [];
     }
-    final combinedData = _combineData(event.favPoducts, stateToCartProducts);
+    final combinedData = _combineData(
+      event.favPoducts.products,
+      stateToCartProducts,
+    );
     emit(FavoritesLoaded(products: combinedData));
   }
 

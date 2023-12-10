@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_cart_repository.dart';
@@ -18,11 +17,11 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       : _productsRepository = productsRepository,
         _cartRepository = cartRepository,
         super(const ProductsLoading()) {
-    on<FetchProducts>(_fetchProducts);
-    on<_UpdateFromCartState>(_updateFromCartState);
+    on<ProductsFetch>(_fetchProducts);
+    on<_ProductsUpdateFromCart>(_updateFromCartState);
 
     _cartProductsSub = _cartRepository.cartStream.listen(
-      (cartItems) => add(_UpdateFromCartState(cartItems: cartItems)),
+      (cartItems) => add(_ProductsUpdateFromCart(cartItems: cartItems)),
     );
   }
 
@@ -31,11 +30,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 
   late final StreamSubscription _cartProductsSub;
 
-  final _cachedProducts =
-      AsyncCache<List<ProductsItem>>(const Duration(seconds: 1));
-
   void _updateFromCartState(
-    _UpdateFromCartState event,
+    _ProductsUpdateFromCart event,
     Emitter<ProductsState> emit,
   ) {
     if (state is ProductsLoaded) {
@@ -52,40 +48,43 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         products: productItems,
       ));
     } else {
-      add(FetchProducts(cartItems: event.cartItems));
+      add(ProductsFetch(cartItems: event.cartItems));
     }
   }
 
   Future<void> _fetchProducts(
-    FetchProducts event,
+    ProductsFetch event,
     Emitter<ProductsState> emit,
   ) async {
     try {
       emit(const ProductsLoading());
       final cartItems = (event.cartItems ?? _cartRepository.lastStreamEvent)
           ?.map((e) => e.id);
-      if (cartItems == null) return;
+      if (cartItems == null) {
+        emit(ProductsFailed(
+          errorMessage: 'An unknown error occurred, please try again later.',
+          category: event.category,
+        ));
+        return;
+      }
 
       var category = Categories.list.first;
       if (event.category == null) {
         if (state is ProductsLoaded) {
           category = (state as ProductsLoaded).category;
+        } else if (state is ProductsFailed) {
+          category = (state as ProductsFailed).category ?? event.category!;
         }
       } else {
         category = event.category!;
       }
-      final products = await _cachedProducts.fetch(
-        () async {
-          final products = await _productsRepository.getProducts(
-            category: category.name,
-          );
-          final productsItems = products.map((p) {
-            final isInCart = cartItems.contains(p.id);
-            return ProductsItem(product: p, isInCart: isInCart);
-          }).toList();
-          return productsItems;
-        },
+      final productsPV = await _productsRepository.getProducts(
+        category: category.name,
       );
+      final products = productsPV.products.map((p) {
+        final isInCart = cartItems.contains(p.id);
+        return ProductsItem(product: p, isInCart: isInCart);
+      }).toList();
       emit(ProductsLoaded(products: products, category: category));
     } catch (message) {
       emit(ProductsFailed(errorMessage: message.toString()));

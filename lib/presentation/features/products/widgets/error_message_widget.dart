@@ -3,16 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
+enum ProductsRefreshType {
+  caterory,
+  search,
+}
+
 class ErrorMessageWidget extends StatelessWidget {
   const ErrorMessageWidget({
     super.key,
     required this.message,
+    required this.productsRefreshType,
   });
 
   final String message;
+  final ProductsRefreshType productsRefreshType;
 
-  void _loadProducts(BuildContext context) =>
-      context.read<ProductsBloc>().add(const FetchProducts());
+  void _loadProducts(BuildContext context) {
+    switch (productsRefreshType) {
+      case ProductsRefreshType.caterory:
+        context.read<ProductsBloc>().add(const ProductsFetch());
+      case ProductsRefreshType.search:
+        final bloc = context.read<ProductsSearchBloc>();
+        final query = (bloc.state as ProductsSearchFailed).query;
+        bloc.add(ProductsSearchByQuery(query: query));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

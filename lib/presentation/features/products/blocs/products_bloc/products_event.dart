@@ -7,8 +7,8 @@ sealed class ProductsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class _UpdateFromCartState extends ProductsEvent {
-  const _UpdateFromCartState({required this.cartItems});
+final class _ProductsUpdateFromCart extends ProductsEvent {
+  const _ProductsUpdateFromCart({required this.cartItems});
 
   final List<CartItem> cartItems;
 
@@ -16,8 +16,8 @@ final class _UpdateFromCartState extends ProductsEvent {
   List<Object?> get props => [cartItems];
 }
 
-final class FetchProducts extends ProductsEvent {
-  const FetchProducts({this.category, this.cartItems});
+final class ProductsFetch extends ProductsEvent {
+  const ProductsFetch({this.category, this.cartItems});
 
   final Category? category;
   final List<CartItem>? cartItems;

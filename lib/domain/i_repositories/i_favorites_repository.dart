@@ -7,7 +7,7 @@ abstract interface class IFavoritesRepository {
   Future<void> remove({required String id});
   Future<void> addAllToCart();
   Future<bool> isFavorite({required String id});
-  Stream<List<ProductPreview>> get favoritesStream;
-  List<ProductPreview>? get lastStreamEvent;
+  Stream<ProductPvList> get favoritesStream;
+  ProductPvList? get lastStreamEvent;
   void dispose();
 }

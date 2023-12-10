@@ -15,6 +15,7 @@ class ShimmerProductsGrid extends StatelessWidget {
       // поэтому приходится использовать GridView и также изменять gridDelegate :(
       child: GridView.builder(
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
@@ -35,12 +36,12 @@ class _SingleGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
           child: RoundedContainer(
             width: 200,
-            //height: 175,
             borderRadius: 10,
           ),
         ),

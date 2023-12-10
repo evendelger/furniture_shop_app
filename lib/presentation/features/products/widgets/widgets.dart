@@ -1,5 +1,10 @@
-export 'products_app_bar.dart';
+export 'products_list_app_bar.dart';
 export 'categories_list.dart';
 export 'card_item.dart';
 export 'error_message_widget.dart';
 export 'products_grid.dart';
+export 'search_bottom_sheet.dart';
+export 'search_product_widget.dart';
+export 'products_categories_list.dart';
+export 'products_search_list.dart';
+export 'products_search_app_bar.dart';

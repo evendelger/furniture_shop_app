@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/consttants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,7 +7,7 @@ class CartAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CartAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(appBarHeight);
+  Size get preferredSize => const Size.fromHeight(Constants.appBarHeight);
 
   void _popBack(BuildContext context) => context.pop();
 

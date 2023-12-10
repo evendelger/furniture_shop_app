@@ -26,7 +26,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<UserCredential> signUp({
+  Future<UserModel> signUp({
     required UserRegisterModel userRegModel,
   }) async {
     try {
@@ -36,7 +36,10 @@ class AuthRepository implements IAuthRepository {
       );
       await userCredential.user?.updateDisplayName(userRegModel.displayName);
       firestoreClient.createCollections(userId: userCredential.user!.uid);
-      return userCredential;
+
+      final newUserCredential = authClient.getCurrentUser;
+
+      return newUserCredential;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
@@ -44,15 +47,16 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<UserCredential> signIn({
+  Future<UserModel> signIn({
     required UserLogInModel userLogInModel,
   }) async {
     try {
-      final userCredential = await authClient.signIn(
+      await authClient.signIn(
         email: userLogInModel.email,
         password: userLogInModel.password,
       );
-      return userCredential;
+      final userModel = authClient.getCurrentUser;
+      return userModel;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;

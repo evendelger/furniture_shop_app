@@ -24,7 +24,7 @@ final class ChangeFavoriteCartStatus extends FavoritesEvent {
 final class _UpdateFromFavStream extends FavoritesEvent {
   const _UpdateFromFavStream({required this.favPoducts});
 
-  final List<ProductPreview> favPoducts;
+  final ProductPvList favPoducts;
 
   @override
   List<Object?> get props => [favPoducts];
