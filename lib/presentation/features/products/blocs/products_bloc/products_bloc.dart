@@ -17,8 +17,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       : _productsRepository = productsRepository,
         _cartRepository = cartRepository,
         super(const ProductsLoading()) {
-    on<ProductsFetch>(_fetchProducts);
-    on<_ProductsUpdateFromCart>(_updateFromCartState);
+    on<ProductsFetch>(_fetch);
+    on<_ProductsUpdateFromCart>(_updateFromCart);
 
     _cartProductsSub = _cartRepository.cartStream.listen(
       (cartItems) => add(_ProductsUpdateFromCart(cartItems: cartItems)),
@@ -30,7 +30,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 
   late final StreamSubscription _cartProductsSub;
 
-  void _updateFromCartState(
+  void _updateFromCart(
     _ProductsUpdateFromCart event,
     Emitter<ProductsState> emit,
   ) {
@@ -52,7 +52,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     }
   }
 
-  Future<void> _fetchProducts(
+  Future<void> _fetch(
     ProductsFetch event,
     Emitter<ProductsState> emit,
   ) async {
@@ -61,10 +61,10 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       final cartItems = (event.cartItems ?? _cartRepository.lastStreamEvent)
           ?.map((e) => e.id);
       if (cartItems == null) {
-        emit(ProductsFailed(
-          errorMessage: 'An unknown error occurred, please try again later.',
-          category: event.category,
-        ));
+        // emit(ProductsFailed(
+        //   errorMessage: 'An unknown error occurred, please try again later.',
+        //   category: event.category,
+        // ));
         return;
       }
 

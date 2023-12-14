@@ -9,11 +9,13 @@ import 'package:furniture_shop_app/presentation/features/product_card/product_ca
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
 import 'package:furniture_shop_app/presentation/ui/router/routes_data.dart';
+import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 part 'bloc_functions.dart';
 part 'router_functions.dart';
 part 'provider_functions.dart';
+part 'pop_up_functions.dart';
 
 abstract class Functions {}

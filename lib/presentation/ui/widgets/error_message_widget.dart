@@ -5,6 +5,9 @@ import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 enum ProductsRefreshType {
   caterory,
   search,
+  card,
+  feature,
+  cart,
 }
 
 class ErrorMessageWidget extends StatelessWidget {
@@ -12,10 +15,12 @@ class ErrorMessageWidget extends StatelessWidget {
     super.key,
     required this.message,
     required this.productsRefreshType,
+    this.id,
   });
 
   final String message;
   final ProductsRefreshType productsRefreshType;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class ErrorMessageWidget extends StatelessWidget {
           const SizedBox(height: 30),
           TextButton(
             onPressed: () =>
-                BlocFunc.loadProducts(context, productsRefreshType),
+                BlocFunc.loadProducts(context, productsRefreshType, id: id),
             style: TextButton.styleFrom(
               backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(

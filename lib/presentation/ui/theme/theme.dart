@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/app_constants.dart';
 
 part 'app_fonts.dart';
 part 'app_colors.dart';
@@ -9,7 +9,8 @@ final myTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: AppColors.white,
     centerTitle: true,
-    toolbarHeight: Constants.appBarHeight,
+    scrolledUnderElevation: 0,
+    toolbarHeight: AppConstants.appBarHeight,
     titleTextStyle: AppFonts.mrwBold.copyWith(
       fontSize: 16,
       color: AppColors.primary,
@@ -31,7 +32,21 @@ final myTheme = ThemeData(
       size: 30,
     ),
   ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      elevation: 6,
+    ),
+  ),
   dividerTheme: const DividerThemeData(
     color: AppColors.blueGray,
+  ),
+  filledButtonTheme: FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      backgroundColor: AppColors.white,
+      shape: const RoundedRectangleBorder(),
+      foregroundColor: AppColors.grey,
+      elevation: 6,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+    ),
   ),
 );

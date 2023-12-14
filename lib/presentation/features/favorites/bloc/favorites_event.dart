@@ -8,7 +8,12 @@ sealed class FavoritesEvent extends Equatable {
 }
 
 final class FavoritesFetchState extends FavoritesEvent {
-  const FavoritesFetchState();
+  const FavoritesFetchState({required this.selfFetch});
+
+  final bool selfFetch;
+
+  @override
+  List<Object?> get props => [selfFetch];
 }
 
 final class FavoritesChangeCartStatus extends FavoritesEvent {

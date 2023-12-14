@@ -11,6 +11,15 @@ final class CartLoading extends CartState {
   const CartLoading();
 }
 
+final class CartFailed extends CartState {
+  const CartFailed({required this.errorMessage});
+
+  final String errorMessage;
+
+  @override
+  List<Object?> get props => [errorMessage];
+}
+
 final class CartLoadedRaw extends CartState {
   const CartLoadedRaw({
     required this.cartItems,

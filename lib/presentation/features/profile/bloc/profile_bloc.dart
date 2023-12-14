@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:furniture_shop_app/data/permissions/constants/permission_exceptions.dart';
+import 'package:furniture_shop_app/data/permission_client/constants/permission_exceptions.dart';
 import 'package:furniture_shop_app/data/repositories/repositories.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
@@ -13,16 +13,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     required IProfileRepository profileRepository,
   })  : _profileRepository = profileRepository,
         super(const ProfileLoading()) {
-    on<FetchProfile>(_fetchProfile);
-    on<SelectGalleryImage>(_selectGalleryImage);
-    on<SelectCameraImage>(_selectCameraImage);
-    on<_SelectImage>(_selectImage);
+    on<ProfileFetch>(_fetch);
+    on<ProfileSelectGalleryImage>(_selectGalleryImage);
+    on<ProfileSelectCameraImage>(_selectCameraImage);
+    on<_ProfileSelectImage>(_selectImage);
   }
 
   final IProfileRepository _profileRepository;
 
-  Future<void> _fetchProfile(
-    FetchProfile event,
+  Future<void> _fetch(
+    ProfileFetch event,
     Emitter<ProfileState> emit,
   ) async {
     emit(const ProfileLoading());
@@ -38,25 +38,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _selectGalleryImage(
-    SelectGalleryImage event,
+    ProfileSelectGalleryImage event,
     Emitter<ProfileState> emit,
   ) async {
     if (state is! ProfileLoading) {
-      add(const _SelectImage(selectImageSource: SelectImageSource.gallery));
+      add(const _ProfileSelectImage(
+          selectImageSource: SelectImageSource.gallery));
     }
   }
 
   Future<void> _selectCameraImage(
-    SelectCameraImage event,
+    ProfileSelectCameraImage event,
     Emitter<ProfileState> emit,
   ) async {
     if (state is! ProfileLoading) {
-      add(const _SelectImage(selectImageSource: SelectImageSource.camera));
+      add(const _ProfileSelectImage(
+          selectImageSource: SelectImageSource.camera));
     }
   }
 
   Future<void> _selectImage(
-    _SelectImage event,
+    _ProfileSelectImage event,
     Emitter<ProfileState> emit,
   ) async {
     try {

@@ -63,13 +63,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     CartUpdateFullState event,
     Emitter<CartState> emit,
   ) async {
-    final cartItems = state is CartLoadedRaw
-        ? (state as CartLoadedRaw).cartItems
-        : _cartRepository.lastStreamEvent;
-    if (cartItems == null) return;
+    try {
+      // TODO
+      emit(const CartLoading());
 
-    final cartProducts = await _cartRepository.convertRawItems(cartItems);
-    emit(CartLoadedFull(cartProducts: cartProducts));
+      final cartItems = state is CartLoadedRaw
+          ? (state as CartLoadedRaw).cartItems
+          : _cartRepository.lastStreamEvent;
+      if (cartItems == null) return;
+
+      final cartProducts = await _cartRepository.convertRawItems(cartItems);
+      emit(CartLoadedFull(cartProducts: cartProducts));
+    } catch (e) {
+      emit(CartFailed(errorMessage: e.toString()));
+    }
   }
 
   Future<void> _changeValue(

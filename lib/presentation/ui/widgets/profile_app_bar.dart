@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/app_constants.dart';
 import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ProfileAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(Constants.appBarHeight);
+  Size get preferredSize => const Size.fromHeight(AppConstants.appBarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         onPressed: () {},
         icon: SvgPicture.asset(
-          'assets/icons/search.svg',
+          SvgPaths.search,
           color: AppColors.grey,
           fit: BoxFit.scaleDown,
         ),
@@ -34,7 +35,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: IconButton(
             onPressed: () => AuthBlocFunc.logout(context),
             icon: SvgPicture.asset(
-              'assets/icons/exit.svg',
+              SvgPaths.exit,
               width: 26,
               height: 26,
               fit: BoxFit.scaleDown,

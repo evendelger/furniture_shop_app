@@ -1,4 +1,6 @@
-class UserLogInModel {
+abstract interface class UserAuthModel {}
+
+class UserLogInModel implements UserAuthModel {
   const UserLogInModel({
     required this.email,
     required this.password,
@@ -8,12 +10,14 @@ class UserLogInModel {
   final String password;
 }
 
-class UserRegisterModel extends UserLogInModel {
+class UserRegisterModel implements UserAuthModel {
   const UserRegisterModel({
     required this.displayName,
-    required super.email,
-    required super.password,
+    required this.email,
+    required this.password,
   });
 
+  final String email;
+  final String password;
   final String displayName;
 }

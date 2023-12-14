@@ -16,8 +16,8 @@ class ProductsSearchBloc
   })  : _productsRepository = productsRepository,
         _cartRepository = cartRepository,
         super(const ProductsSearchLoading()) {
-    on<ProductsSearchByQuery>(_productsSearchByQuery);
-    on<_ProductsSearchUpdateFromCart>(_updateFromCartState);
+    on<ProductsSearchByQuery>(_searchByQuery);
+    on<_ProductsSearchUpdateFromCart>(_updateFromCart);
     _cartProductsSub = _cartRepository.cartStream.listen(
       (cartItems) => add(_ProductsSearchUpdateFromCart(cartItems: cartItems)),
     );
@@ -28,7 +28,7 @@ class ProductsSearchBloc
 
   late final StreamSubscription _cartProductsSub;
 
-  void _updateFromCartState(
+  void _updateFromCart(
     _ProductsSearchUpdateFromCart event,
     Emitter<ProductsSearchState> emit,
   ) {
@@ -45,7 +45,7 @@ class ProductsSearchBloc
     }
   }
 
-  Future<void> _productsSearchByQuery(
+  Future<void> _searchByQuery(
     ProductsSearchByQuery event,
     Emitter<ProductsSearchState> emit,
   ) async {
@@ -64,7 +64,7 @@ class ProductsSearchBloc
       }
 
       final searchedProducts = await _productsRepository.getProductsByName(
-        name: event.query,
+        name: event.query.trim(),
       );
       final products = searchedProducts.products.map((p) {
         final isInCart = cartItems.contains(p.id);

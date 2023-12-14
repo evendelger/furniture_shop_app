@@ -18,15 +18,16 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     on<FavoritesAddAllToCart>(_addAllToCart);
     on<FavoritesAddProduct>(_addProduct);
     on<FavoritesRemoveProduct>(_removeProduct);
-    on<FavoritesFetchState>(_fetchFavoritesState);
-    on<FavoritesChangeCartStatus>(_changeFavoriteCartStatus);
+    on<FavoritesFetchState>(_fetchState);
+    on<FavoritesChangeCartStatus>(_changeCartStatus);
     on<_FavoritesUpdateFromFavStream>(_updateFromFavStream);
     on<_FavoritesUpdateFromCartStream>(_updateFromCartStream);
 
     // подписываюсь на стрим favorites
     _favProductsSub = _favoritesRepository.favoritesStream.listen(
-      (favProducts) =>
-          add(_FavoritesUpdateFromFavStream(favPoducts: favProducts)),
+      (favProducts) => add(_FavoritesUpdateFromFavStream(
+        favPoducts: favProducts,
+      )),
     );
 
     // подписываюсь на стрим cart
@@ -41,18 +42,33 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   late final StreamSubscription _favProductsSub;
   late final StreamSubscription _cartProductsSub;
 
-  void _fetchFavoritesState(
+  void _fetchState(
     FavoritesFetchState event,
     Emitter<FavoritesState> emit,
   ) async {
-    if (state is FavoritesLoading) {
+    if (state is FavoritesLoaded) return;
+
+    try {
+      if (state is FavoritesFailed && event.selfFetch) {
+        emit(const FavoritesLoading());
+      }
+
       final cartLastEvent = _cartRepository.lastStreamEvent;
       final favLastEvent = _favoritesRepository.lastStreamEvent;
 
-      if (cartLastEvent == null || favLastEvent == null) return;
+      // TODO
+      if (cartLastEvent == null || favLastEvent == null) {
+        // emit(const FavoritesFailed(
+        //   errorMessage:
+        //       'Cannot connect to the server, check your internet connection',
+        // ));
+        return;
+      }
 
       final combinedData = _combineData(favLastEvent.products, cartLastEvent);
       emit(FavoritesLoaded(products: combinedData));
+    } catch (e) {
+      emit(FavoritesFailed(errorMessage: e.toString()));
     }
   }
 
@@ -116,7 +132,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
           FavoritesAddAllToCart event, Emitter<FavoritesState> emit) =>
       _favoritesRepository.addAllToCart();
 
-  void _changeFavoriteCartStatus(
+  void _changeCartStatus(
     FavoritesChangeCartStatus event,
     Emitter<FavoritesState> emit,
   ) {

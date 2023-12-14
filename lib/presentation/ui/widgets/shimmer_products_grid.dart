@@ -21,7 +21,7 @@ class ShimmerProductsGrid extends StatelessWidget {
           maxCrossAxisExtent: 200,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
-          mainAxisExtent: 225,
+          mainAxisExtent: 255,
         ),
         itemCount: 4,
         itemBuilder: (_, __) => const _SingleGridItem(),

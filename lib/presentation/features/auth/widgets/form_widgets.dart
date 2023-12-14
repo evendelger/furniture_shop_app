@@ -46,7 +46,7 @@ String? validateEmail(String? value) {
   return null;
 }
 
-String? validatePassword(String? value) {
+String? validatePassword(String? value, bool isLogin) {
   final lengthRegExp = RegExp(r'.{6,}');
   final upperCaseRegExp = RegExp(r'(.*?[A-Z])');
   final lowerCaseRegExp = RegExp(r'(.*?[a-z])');
@@ -57,12 +57,17 @@ String? validatePassword(String? value) {
       return 'Please, enter password';
     } else if (!lengthRegExp.hasMatch(value)) {
       return 'Password must be 6 characters or longer';
-    } else if (!upperCaseRegExp.hasMatch(value)) {
-      return 'Password must contain an uppercase letter';
-    } else if (!lowerCaseRegExp.hasMatch(value)) {
-      return 'Password must contain an lowercase letter';
-    } else if (!digitRegExp.hasMatch(value)) {
-      return 'Password must contain a digit';
+    }
+
+    // разделяю валидацию пароля при логине и регистрации
+    if (!isLogin) {
+      if (!upperCaseRegExp.hasMatch(value)) {
+        return 'Password must contain an uppercase letter';
+      } else if (!lowerCaseRegExp.hasMatch(value)) {
+        return 'Password must contain an lowercase letter';
+      } else if (!digitRegExp.hasMatch(value)) {
+        return 'Password must contain a digit';
+      }
     }
   }
   return null;

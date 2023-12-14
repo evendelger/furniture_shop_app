@@ -56,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.done,
               obscureText: _obscureText,
-              validator: validatePassword,
+              validator: (value) => validatePassword(value, true),
               decoration: InputDecoration(
                 label: getLabel('Password'),
                 suffixIcon:
@@ -67,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             const SizedBox(height: 15),
-            _forgotPasswordButton(),
+            //_forgotPasswordButton(),
             const SizedBox(height: 15),
             _logInButton(),
             const SizedBox(height: 15),
@@ -115,32 +115,21 @@ class _LoginFormState extends State<LoginForm> {
   Padding _logInButton() {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadowColor2,
-              blurRadius: 20,
-              offset: Offset(0, 10),
-            )
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: () => _validateLoginForm(context),
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 0,
-            backgroundColor: AppColors.primary,
-            fixedSize: const Size.fromHeight(50),
+      child: ElevatedButton(
+        onPressed: () => _validateLoginForm(context),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            'Log In',
-            style: AppFonts.nsSemiBold.copyWith(
-              fontSize: 18,
-              color: AppColors.white,
-            ),
+          elevation: 6,
+          backgroundColor: AppColors.primary,
+          fixedSize: const Size.fromHeight(50),
+        ),
+        child: Text(
+          'Log In',
+          style: AppFonts.nsSemiBold.copyWith(
+            fontSize: 18,
+            color: AppColors.white,
           ),
         ),
       ),
@@ -151,7 +140,7 @@ class _LoginFormState extends State<LoginForm> {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () => throw Error(),
         child: Text(
           'Forgot Password',
           style: AppFonts.nsSemiBold.copyWith(
@@ -166,7 +155,10 @@ class _LoginFormState extends State<LoginForm> {
   void _validateLoginForm(BuildContext context) {
     if (_loginFormKey.currentState!.validate()) {
       _loginFormKey.currentState!.save();
-      AuthBlocFunc.logIn(_emailController.text, _passwordController.text);
+      AuthBlocFunc.logIn(
+        _emailController.text,
+        _passwordController.text,
+      );
     }
   }
 }

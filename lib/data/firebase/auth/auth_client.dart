@@ -25,7 +25,7 @@ class AuthClient {
 
   String get getUserName => _currentUser.displayName!;
 
-  String get getUserEmail => _currentUser.email!;
+  String? get getUserEmail => _currentUser.email;
 
   String? get getUserImage => _currentUser.photoURL;
 

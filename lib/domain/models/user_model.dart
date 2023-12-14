@@ -26,7 +26,7 @@ class UserModel {
     if (user == null) return UserModel.empty();
     return UserModel(
       uid: user.uid,
-      displayName: user.displayName ?? 'Guest',
+      displayName: user.displayName ?? 'Anonymous',
       email: user.email,
       photoURL: user.photoURL,
       isAnonymous: user.isAnonymous,

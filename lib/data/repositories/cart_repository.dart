@@ -99,17 +99,22 @@ class CartRepository implements ICartRepository {
 
   @override
   Future<List<CartProductPv>> convertRawItems(List<CartItem> cartItems) async {
-    if (cartItems.isEmpty) return <CartProductPv>[];
-    final productsPv = await dioClient.getProductsByIds(
-      ids: cartItems.map((i) => i.id),
-    );
-    return List<CartProductPv>.generate(
-      productsPv.products.length,
-      (i) => CartProductPv(
-        product: productsPv.products[i],
-        inCartValue: cartItems[i].value!,
-      ),
-    );
+    try {
+      if (cartItems.isEmpty) return <CartProductPv>[];
+      final productsPv = await dioClient.getProductsByIds(
+        ids: cartItems.map((i) => i.id),
+      );
+      return List<CartProductPv>.generate(
+        productsPv.products.length,
+        (i) => CartProductPv(
+          product: productsPv.products[i],
+          inCartValue: cartItems[i].value!,
+        ),
+      );
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      throw errorMessage;
+    }
   }
 
   Stream<List<CartItem>> _streamProducts() =>

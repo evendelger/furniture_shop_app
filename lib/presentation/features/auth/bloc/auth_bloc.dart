@@ -46,7 +46,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _login(AuthLogIn event, Emitter<AuthState> emit) async {
+  Future<void> _login(
+    AuthLogIn event,
+    Emitter<AuthState> emit,
+  ) async {
     final authType = (state as AuthInitial).authType;
     emit(const AuthLoading());
 
@@ -60,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(AuthSuccess(userModel: loggedInUser));
     } catch (e) {
-      emit(AuthFailure(errorMessage: e.toString()));
+      emit(AuthFailed(errorMessage: e.toString()));
       emit(AuthInitial(authType: authType));
     }
   }
@@ -82,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(AuthSuccess(userModel: registeredModel));
     } catch (e) {
-      emit(AuthFailure(errorMessage: e.toString()));
+      emit(AuthFailed(errorMessage: e.toString()));
     }
   }
 
@@ -93,12 +96,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final authType = (state as AuthInitial).authType;
     emit(const AuthLoading());
     try {
-      final userCredential = await _authRepository.signInAnonymously();
-      final userModel = UserModel.fromUserCredential(userCredential)
-          .copyWith(displayName: 'anon');
+      final userModel = await _authRepository.signInAnonymously();
       emit(AuthSuccess(userModel: userModel));
     } catch (e) {
-      emit(AuthFailure(errorMessage: e.toString()));
+      emit(AuthFailed(errorMessage: e.toString()));
       emit(AuthInitial(authType: authType));
     }
   }
@@ -112,7 +113,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authRepository.signOut();
       emit(const AuthInitial());
     } catch (e) {
-      emit(AuthFailure(errorMessage: e.toString()));
+      emit(AuthFailed(errorMessage: e.toString()));
       emit(stateBeforeLogOut);
     }
   }

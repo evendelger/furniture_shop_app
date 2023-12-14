@@ -6,7 +6,6 @@ import 'package:furniture_shop_app/presentation/features/cart/cart.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
 import 'package:furniture_shop_app/presentation/features/home/home.dart';
 import 'package:furniture_shop_app/presentation/features/auth/auth.dart';
-import 'package:furniture_shop_app/presentation/features/loading/loading.dart';
 import 'package:furniture_shop_app/presentation/features/notification/notification.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
@@ -24,22 +23,19 @@ class AppRouter {
   static final _router = GoRouter(
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    initialLocation: Routes.notification,
+    initialLocation: RoutePaths.initial,
     routes: [
+      // GoRoute(
+      //   path: RoutePaths.initial,
+      //   builder: (context, state) => const LoadingScreen(),
+      // ),
       GoRoute(
-        path: Routes.loading,
-        builder: (context, state) => const LoadingScreen(),
+        path: RoutePaths.initial,
+        builder: (context, state) => const BoardingScreen(),
       ),
       GoRoute(
-        path: Routes.boarding,
-        builder: (context, state) => const BoardingScreen(),
-        routes: [
-          GoRoute(
-            path: Routes.auth,
-            name: RouteNames.auth,
-            builder: (context, state) => const AuthScreen(),
-          ),
-        ],
+        path: RoutePaths.auth,
+        builder: (context, state) => const AuthScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -48,7 +44,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.products,
+                path: RoutePaths.products,
                 builder: (context, state) => const ProductsScreen(),
               ),
             ],
@@ -56,9 +52,9 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                  path: Routes.favorites,
+                  path: RoutePaths.favorites,
                   builder: (context, state) {
-                    FavBlocFunc.fetch(context);
+                    FavBlocFunc.fetch(context, false);
                     return const FavoritesScreen();
                   }),
             ],
@@ -66,7 +62,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.notification,
+                path: RoutePaths.notification,
                 builder: (context, state) => const NotificationScreen(),
               ),
             ],
@@ -74,7 +70,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.profile,
+                path: RoutePaths.profile,
                 builder: (context, state) => const ProfileScreen(),
               ),
             ],
@@ -83,15 +79,15 @@ class AppRouter {
       ),
       GoRoute(
           parentNavigatorKey: _rootNavigatorKey,
-          path: Routes.cart,
+          path: RoutePaths.cart,
           pageBuilder: (context, state) {
             // преобразовываю данные при открытии корзины
-            CartBlocFunc.updateState(context);
+            // CartBlocFunc.updateState(context);
             return RightSlideTransition(child: const CartScreen());
           }),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
-        path: Routes.productCard,
+        path: RoutePaths.productCard,
         pageBuilder: (context, state) => CustomFadeTransition(
           child: ProductCardScreen(id: state.extra as String),
         ),
@@ -100,15 +96,15 @@ class AppRouter {
     refreshListenable: AuthBlocListenable(),
     redirect: (context, state) async {
       final authBlocState = locator<AuthBloc>().state;
-      final onAuthPage = state.fullPath!.contains(Routes.auth);
-      final onLoadingPage = state.fullPath! == Routes.loading;
+      final onAuthPage = state.fullPath!.contains(RoutePaths.auth);
+      final onInitialPage = state.fullPath! == RoutePaths.initial;
 
       if (authBlocState is AuthInitial && !onAuthPage) {
-        return Routes.boarding;
+        return RoutePaths.initial;
       }
       if (authBlocState is AuthSuccess) {
-        if (onAuthPage || onLoadingPage) {
-          return Routes.products;
+        if (onAuthPage || onInitialPage) {
+          return RoutePaths.products;
         }
       }
 

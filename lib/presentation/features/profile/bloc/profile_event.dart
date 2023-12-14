@@ -7,20 +7,20 @@ sealed class ProfileEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class FetchProfile extends ProfileEvent {
-  const FetchProfile();
+final class ProfileFetch extends ProfileEvent {
+  const ProfileFetch();
 }
 
-final class SelectGalleryImage extends ProfileEvent {
-  const SelectGalleryImage();
+final class ProfileSelectGalleryImage extends ProfileEvent {
+  const ProfileSelectGalleryImage();
 }
 
-final class SelectCameraImage extends ProfileEvent {
-  const SelectCameraImage();
+final class ProfileSelectCameraImage extends ProfileEvent {
+  const ProfileSelectCameraImage();
 }
 
-final class _SelectImage extends ProfileEvent {
-  const _SelectImage({required this.selectImageSource});
+final class _ProfileSelectImage extends ProfileEvent {
+  const _ProfileSelectImage({required this.selectImageSource});
 
   final SelectImageSource selectImageSource;
 

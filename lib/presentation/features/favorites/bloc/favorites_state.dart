@@ -11,6 +11,15 @@ final class FavoritesLoading extends FavoritesState {
   const FavoritesLoading();
 }
 
+final class FavoritesFailed extends FavoritesState {
+  const FavoritesFailed({required this.errorMessage});
+
+  final String errorMessage;
+
+  @override
+  List<Object?> get props => [errorMessage];
+}
+
 final class FavoritesLoaded extends FavoritesState {
   const FavoritesLoaded({
     required this.products,

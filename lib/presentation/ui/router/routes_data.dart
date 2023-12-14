@@ -1,7 +1,7 @@
-abstract class Routes {
-  static const loading = '/';
-  static const boarding = '/boarding';
-  static const auth = 'auth';
+abstract class RoutePaths {
+  static const initial = '/';
+  //static const initial = '/boarding';
+  static const auth = '/auth';
 
   static const products = '/products';
   static const favorites = '/favorites';

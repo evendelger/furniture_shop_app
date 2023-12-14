@@ -30,31 +30,19 @@ class _GetStartedButtonState extends State<GetStartedButton> {
   Widget build(BuildContext context) {
     return Visibility(
       visible: _isVisible,
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadowColor3,
-              blurRadius: 30,
-              offset: Offset(0, 8),
-            ),
-          ],
+      child: ElevatedButton(
+        onPressed: () => RouterFunc.goToLogin(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          fixedSize: const Size(159, 54),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          elevation: 10,
         ),
-        child: ElevatedButton(
-          onPressed: () => RouterFunc.goToLogin(context),
-          style: ButtonStyle(
-            backgroundColor: const MaterialStatePropertyAll(AppColors.primary),
-            fixedSize: const MaterialStatePropertyAll(Size(159, 54)),
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            ),
-          ),
-          child: Text(
-            'Get Started',
-            style: AppFonts.glsSemiBold.copyWith(
-              fontSize: 18,
-              color: AppColors.white,
-            ),
+        child: Text(
+          'Get Started',
+          style: AppFonts.glsSemiBold.copyWith(
+            fontSize: 18,
+            color: AppColors.white,
           ),
         ),
       ).animate().fadeIn(

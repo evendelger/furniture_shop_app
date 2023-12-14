@@ -66,7 +66,7 @@ class _RegisterFormState extends State<RegisterForm> {
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.next,
               obscureText: _obscureText,
-              validator: validatePassword,
+              validator: (value) => validatePassword(value, false),
               onFieldSubmitted: (_) =>
                   FocusScope.of(context).requestFocus(_confirmPassfocusNode),
               decoration: InputDecoration(
@@ -116,32 +116,21 @@ class _RegisterFormState extends State<RegisterForm> {
   Padding _signUpButton() {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadowColor2,
-              blurRadius: 20,
-              offset: Offset(0, 10),
-            )
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: _validateRegisterForm,
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 0,
-            backgroundColor: AppColors.primary,
-            fixedSize: const Size.fromHeight(50),
+      child: ElevatedButton(
+        onPressed: _validateRegisterForm,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            'Sign up',
-            style: AppFonts.nsSemiBold.copyWith(
-              fontSize: 18,
-              color: AppColors.white,
-            ),
+          elevation: 6,
+          backgroundColor: AppColors.primary,
+          fixedSize: const Size.fromHeight(50),
+        ),
+        child: Text(
+          'Sign up',
+          style: AppFonts.nsSemiBold.copyWith(
+            fontSize: 18,
+            color: AppColors.white,
           ),
         ),
       ),

@@ -43,8 +43,8 @@ final class AuthSuccess extends AuthState {
   List<Object?> get props => [userModel];
 }
 
-final class AuthFailure extends AuthState {
-  const AuthFailure({required this.errorMessage});
+final class AuthFailed extends AuthState {
+  const AuthFailed({required this.errorMessage});
 
   final String errorMessage;
 

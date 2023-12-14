@@ -20,8 +20,8 @@ class TotalPriceWidget extends StatelessWidget {
         double totalPrice = 0;
         switch (state) {
           case CartLoading():
-            enableShimmer = true;
           case CartLoadedRaw():
+          case CartFailed():
             enableShimmer = true;
           case CartLoadedFull():
             enableShimmer = false;

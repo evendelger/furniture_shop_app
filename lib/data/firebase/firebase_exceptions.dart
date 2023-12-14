@@ -28,7 +28,8 @@ class FirebaseExceptions {
         _message = 'User not found';
         break;
       default:
-        _message = firebaseError.toString();
+        _message = 'An unknown error occurred, please try again later';
+      //_message = firebaseError.toString();
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
-import 'package:furniture_shop_app/presentation/features/profile/profile.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
+import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class LoadedUserProfile extends StatelessWidget {
@@ -11,14 +11,6 @@ class LoadedUserProfile extends StatelessWidget {
   });
 
   final ProfileModel profileModel;
-
-  void _showDialog(BuildContext context) => showDialog(
-        context: context,
-        builder: (dialogContext) => BlocProvider.value(
-          value: BlocProvider.of<ProfileBloc>(context),
-          child: const ImageDialog(),
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +26,11 @@ class LoadedUserProfile extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: profileModel.photoUrl == null
-                    ? const AssetImage('assets/images/avatar.png')
+                    ? const AssetImage(ImagePaths.avatar)
                     : Image.network(profileModel.photoUrl!).image,
               ),
             ),
-            child: _inkChild(context),
+            child: profileModel.email.isEmpty ? null : _inkChild(context),
           ),
         ),
         const SizedBox(width: 20),
@@ -70,7 +62,7 @@ class LoadedUserProfile extends StatelessWidget {
   Widget _inkChild(BuildContext context) => Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => _showDialog(context),
+          onTap: () => ProfilePopUpFunc.showPhotoDialog(context),
         ),
       );
 }

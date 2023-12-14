@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({super.key});
@@ -7,7 +8,7 @@ class BackgroundImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Image.asset(
-        'assets/images/start_photo.png',
+        ImagePaths.startPhoto,
         fit: BoxFit.cover,
         height: double.infinity,
         width: double.infinity,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/presentation/features/product_card/product_card.dart';
 import 'package:furniture_shop_app/locator.dart';
+import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 class ProductCardScreen extends StatelessWidget {
   const ProductCardScreen({
@@ -19,7 +20,7 @@ class ProductCardScreen extends StatelessWidget {
       create: (context) => ProductCardBloc(
         favoritesRepository: locator<IFavoritesRepository>(),
         cartRepository: locator<ICartRepository>(),
-      )..add(ProductCardOpen(id: id)),
+      )..add(CardOpen(id: id)),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         body: BlocBuilder<ProductCardBloc, ProductCardState>(
@@ -31,6 +32,14 @@ class ProductCardScreen extends StatelessWidget {
                 return LoadedCardWidget(state: state)
                     .animate()
                     .fadeIn(curve: Curves.easeOut, duration: 300.ms);
+              case ProductCardFailed():
+                return Center(
+                  child: ErrorMessageWidget(
+                    message: state.errorMessage,
+                    productsRefreshType: ProductsRefreshType.card,
+                    id: id,
+                  ),
+                );
             }
           },
         ),

@@ -7,28 +7,18 @@ class PopButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 40,
       height: 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x338A959E),
-            blurRadius: 40,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
       child: ElevatedButton(
         onPressed: () => context.pop(),
-        style: ButtonStyle(
-          padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
-          )),
-          elevation: const MaterialStatePropertyAll(0),
-          backgroundColor: const MaterialStatePropertyAll(AppColors.white),
+          ),
+          backgroundColor: AppColors.white,
+          elevation: 0.5,
         ),
         child: const Icon(
           Icons.arrow_back_ios_new_rounded,

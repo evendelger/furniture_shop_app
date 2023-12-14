@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           children: [
             const Spacer(flex: 2),
             SvgPicture.asset(
-              'assets/icons/app_icon.svg',
+              SvgPaths.appIcon,
               height: size.height / 4,
               width: size.width / 4,
             ),

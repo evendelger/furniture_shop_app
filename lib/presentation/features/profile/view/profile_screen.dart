@@ -12,13 +12,29 @@ class ProfileScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => ProfileBloc(
         profileRepository: locator<IProfileRepository>(),
-      )..add(const FetchProfile()),
+      )..add(const ProfileFetch()),
       child: SingleChildScrollView(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 10),
-        child: const Column(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
           children: [
-            UserProfileWidget(),
+            const UserProfileWidget(),
+            const SizedBox(height: 30),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: SettingsData.data.length,
+              itemBuilder: (context, index) {
+                final entry = SettingsData.entries[index];
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: SettingCardWidget(
+                    title: entry.key,
+                    subtitle: entry.value,
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

@@ -22,18 +22,18 @@ class HomeScreenNavBar extends StatelessWidget {
       label: '',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.bookmark_outline),
-      activeIcon: Icon(Icons.bookmark),
+      icon: Icon(Icons.bookmark_outline_rounded),
+      activeIcon: Icon(Icons.bookmark_rounded),
       label: '',
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.notifications_outlined),
-      activeIcon: Icon(Icons.notifications),
+      activeIcon: Icon(Icons.notifications_rounded),
       label: '',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.person_outline),
-      activeIcon: Icon(Icons.person),
+      icon: Icon(Icons.person_outline_rounded),
+      activeIcon: Icon(Icons.person_rounded),
       label: '',
     ),
   ];
@@ -58,22 +58,20 @@ class HomeScreenNavBar extends StatelessWidget {
       child: Scaffold(
         appBar: selectAppBar(),
         body: navigationShell,
-        bottomNavigationBar: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.092, // TODO
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              splashColor: Colors.transparent,
-            ),
-            child: BottomNavigationBar(
-              currentIndex: navigationShell.currentIndex,
-              onTap: (index) => _openPage(index, context),
-              items: _navBarItems,
-            ),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            splashColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            currentIndex: navigationShell.currentIndex,
+            onTap: (index) => _openPage(index, context),
+            items: _navBarItems,
           ),
         ),
       ),
     );
   }
+  // height: MediaQuery.of(context).size.height * 0.092, // TODO
 
   void _openPage(int index, BuildContext context) {
     navigationShell.goBranch(

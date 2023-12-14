@@ -8,9 +8,9 @@ class CartBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      sliver: BlocBuilder<CartBloc, CartState>(
+      child: BlocBuilder<CartBloc, CartState>(
         buildWhen: (p, c) {
           if (p is CartLoadedFull && c is CartLoadedRaw) {
             return false;
@@ -20,11 +20,21 @@ class CartBodyWidget extends StatelessWidget {
         builder: (context, state) {
           switch (state) {
             case CartLoadedRaw():
-              return const SliverFillRemaining(child: ShimmerProductsList());
             case CartLoading():
-              return const SliverFillRemaining(child: ShimmerProductsList());
+              return const ShimmerProductsList();
             case CartLoadedFull():
-              return CartProducts(cartProducts: state.cartProducts);
+              if (state.cartProducts.isEmpty) {
+                return const Center(child: Text('The cart is empty'));
+              } else {
+                return CartProducts(cartProducts: state.cartProducts);
+              }
+            case CartFailed():
+              return Center(
+                child: ErrorMessageWidget(
+                  message: state.errorMessage,
+                  productsRefreshType: ProductsRefreshType.cart,
+                ),
+              );
           }
         },
       ),

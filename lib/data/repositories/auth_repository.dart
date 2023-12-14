@@ -34,12 +34,14 @@ class AuthRepository implements IAuthRepository {
         email: userRegModel.email,
         password: userRegModel.password,
       );
-      await userCredential.user?.updateDisplayName(userRegModel.displayName);
+      userCredential.user?.updateDisplayName(userRegModel.displayName);
       firestoreClient.createCollections(userId: userCredential.user!.uid);
 
-      final newUserCredential = authClient.getCurrentUser;
+      final userModel = authClient.getCurrentUser.copyWith(
+        displayName: userRegModel.displayName,
+      );
 
-      return newUserCredential;
+      return userModel;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;
@@ -77,11 +79,13 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<UserCredential> signInAnonymously() async {
+  Future<UserModel> signInAnonymously() async {
     try {
       final userCredential = await authClient.signInAnonymous();
       firestoreClient.createCollections(userId: userCredential.user!.uid);
-      return userCredential;
+      final userModel = UserModel.fromUserCredential(userCredential);
+
+      return userModel;
     } on FirebaseException catch (e) {
       final errorMessage = FirebaseExceptions.fromFirebaseError(e).message;
       throw errorMessage;

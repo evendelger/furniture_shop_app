@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/favorites/favorites.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/app_constants.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 class ScrollBody extends StatelessWidget {
@@ -22,11 +23,18 @@ class ScrollBody extends StatelessWidget {
                 if (state.products.isEmpty) {
                   return const Center(
                     child: Text("You don't have any favorite products"),
-                  );
+                  ).animate(effects: AppConstants.fadeInTransition);
                 } else {
                   return FavoritesList(products: state.products);
                 }
               }
+            case FavoritesFailed():
+              return Center(
+                child: ErrorMessageWidget(
+                  message: state.errorMessage,
+                  productsRefreshType: ProductsRefreshType.feature,
+                ),
+              );
           }
         },
       ),
@@ -49,9 +57,7 @@ class FavoritesList extends StatelessWidget {
       child: ListView.separated(
         itemCount: products.length,
         itemBuilder: (context, index) =>
-            FavoriteProductWidget(favProduct: products[index])
-                .animate()
-                .fadeIn(duration: 750.ms, begin: 0.3),
+            FavoriteProductWidget(favProduct: products[index]),
         separatorBuilder: (_, __) => const Padding(
           padding: EdgeInsets.symmetric(vertical: 5),
           child: Divider(),

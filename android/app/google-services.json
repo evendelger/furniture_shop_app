@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "929181135219",
+    "firebase_url": "https://furniture-shop-app-5427-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "furniture-shop-app-5427",
+    "storage_bucket": "furniture-shop-app-5427.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929181135219:android:adb943476c4f1513c8d506",
+        "android_client_info": {
+          "package_name": "com.example.furniture_shop_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKInDBa4tdupGRtQmKodNy7ra8z201Zag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

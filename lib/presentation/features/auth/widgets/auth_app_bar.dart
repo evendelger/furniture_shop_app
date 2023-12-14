@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 const _customHeight = kToolbarHeight + 50;
@@ -21,9 +22,7 @@ class LoginAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             const Expanded(child: divider),
             const SizedBox(width: 20),
-            SvgPicture.asset(
-              'assets/icons/app_icon.svg',
-            ),
+            SvgPicture.asset(SvgPaths.appIcon),
             const SizedBox(width: 20),
             const Expanded(child: divider),
           ],

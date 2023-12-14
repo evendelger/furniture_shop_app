@@ -11,6 +11,15 @@ final class ProductCardLoading extends ProductCardState {
   List<Object?> get props => [];
 }
 
+final class ProductCardFailed extends ProductCardState {
+  const ProductCardFailed({required this.errorMessage});
+
+  final String errorMessage;
+
+  @override
+  List<Object?> get props => [errorMessage];
+}
+
 final class ProductCardLoaded extends ProductCardState {
   const ProductCardLoaded({
     this.color = AppColors.colorSelect1,

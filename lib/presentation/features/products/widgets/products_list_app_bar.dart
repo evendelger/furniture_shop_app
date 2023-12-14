@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,7 @@ class ProductsAppBar extends StatelessWidget {
       leading: IconButton(
         onPressed: () => _showSearchBottomsheet(context),
         icon: SvgPicture.asset(
-          'assets/icons/search.svg',
+          SvgPaths.search,
           color: AppColors.grey,
           fit: BoxFit.scaleDown,
         ),
@@ -49,7 +50,7 @@ class ProductsAppBar extends StatelessWidget {
           child: IconButton(
             onPressed: () => RouterFunc.goToCart(context),
             icon: SvgPicture.asset(
-              'assets/icons/shopping_cart.svg',
+              SvgPaths.shoppingCart,
               width: 26,
               height: 26,
             ),

@@ -44,17 +44,14 @@ class _AddToFavoritesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () => PrCardBlocFunc.changeFavStatus(context),
-      style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(
-            isFavorite ? AppColors.blueGray : AppColors.primary),
-        fixedSize: const MaterialStatePropertyAll(Size(60, 60)),
-        padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isFavorite ? AppColors.blueGray : AppColors.primary,
+        fixedSize: const Size(60, 60),
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        elevation: const MaterialStatePropertyAll(0),
+        elevation: 3,
       ),
       child: Icon(
         Icons.bookmark_outline,
@@ -76,47 +73,31 @@ class _AddToCartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x3F303030),
-            blurRadius: 20,
-            offset: Offset(0, 10),
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: () => PrCardBlocFunc.changeCartStatus(context),
-        style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(
-              isInCart ? AppColors.blueGray : AppColors.primary),
-          minimumSize: const MaterialStatePropertyAll(Size.fromHeight(60)),
-          padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-          shape: MaterialStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          elevation: const MaterialStatePropertyAll(0),
+    return ElevatedButton(
+      onPressed: () => PrCardBlocFunc.changeCartStatus(context),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isInCart ? AppColors.blueGray : AppColors.primary,
+        minimumSize: const Size.fromHeight(60),
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: isInCart
-            ? Text(
-                'Remove from cart',
-                style: AppFonts.nsSemiBold.copyWith(
-                  fontSize: 20,
-                  color: AppColors.primary,
-                ),
-              )
-            : Text(
-                'Add to cart',
-                style: AppFonts.nsSemiBold.copyWith(
-                  fontSize: 20,
-                  color: AppColors.white,
-                ),
-              ),
       ),
+      child: isInCart
+          ? Text(
+              'Remove from cart',
+              style: AppFonts.nsSemiBold.copyWith(
+                fontSize: 20,
+                color: AppColors.primary,
+              ),
+            )
+          : Text(
+              'Add to cart',
+              style: AppFonts.nsSemiBold.copyWith(
+                fontSize: 20,
+                color: AppColors.white,
+              ),
+            ),
     );
   }
 }

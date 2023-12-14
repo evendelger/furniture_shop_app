@@ -132,3 +132,14 @@ class CustomFadeTransition extends CustomTransitionPage {
           );
         });
 }
+
+//----------------------------------------------------------
+//                        EMPTY
+//----------------------------------------------------------
+class CustomEmptyTransition extends CustomTransitionPage {
+  CustomEmptyTransition({required super.child})
+      : super(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              child,
+        );
+}

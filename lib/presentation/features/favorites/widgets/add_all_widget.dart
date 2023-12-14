@@ -14,6 +14,7 @@ class AddAllWidget extends StatelessWidget {
         builder: (context, state) {
           switch (state) {
             case FavoritesLoading():
+            case FavoritesFailed():
               return const SizedBox.shrink();
             case FavoritesLoaded():
               {

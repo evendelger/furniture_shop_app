@@ -9,35 +9,21 @@ class AddAllButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadowColor2,
-              blurRadius: 20,
-              offset: Offset(0, 10),
-            ),
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: () => FavBlocFunc.addAll(context),
-          style: ButtonStyle(
-            backgroundColor: const MaterialStatePropertyAll(AppColors.primary),
-            minimumSize: const MaterialStatePropertyAll(Size.fromHeight(50)),
-            padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            elevation: const MaterialStatePropertyAll(0),
+      child: ElevatedButton(
+        onPressed: () => FavBlocFunc.addAll(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          minimumSize: const Size.fromHeight(50),
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            'Add all to my cart',
-            style: AppFonts.nsSemiBold.copyWith(
-              fontSize: 18,
-              color: AppColors.white,
-            ),
+        ),
+        child: Text(
+          'Add all to my cart',
+          style: AppFonts.nsSemiBold.copyWith(
+            fontSize: 18,
+            color: AppColors.white,
           ),
         ),
       ),

@@ -17,7 +17,7 @@ class FurnitureStoreApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CartBloc(
             cartRepository: locator<ICartRepository>(),
-          ),
+          )..add(const CartUpdateFullState()),
         ),
       ],
       child: MaterialApp.router(

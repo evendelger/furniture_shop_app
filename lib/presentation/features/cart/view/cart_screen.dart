@@ -13,12 +13,7 @@ class CartScreen extends StatelessWidget {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height - 263,
-            child: const CustomScrollView(
-              shrinkWrap: true,
-              slivers: [
-                CartBodyWidget(),
-              ],
-            ),
+            child: const CartBodyWidget(),
           ),
           BlocBuilder<CartBloc, CartState>(
             buildWhen: (p, c) {
@@ -30,8 +25,8 @@ class CartScreen extends StatelessWidget {
             builder: (context, state) {
               switch (state) {
                 case CartLoadedRaw():
-                  return const ShimmerBottomWidget();
                 case CartLoading():
+                case CartFailed():
                   return const ShimmerBottomWidget();
                 case CartLoadedFull():
                   return const LoadedBottomWidget();

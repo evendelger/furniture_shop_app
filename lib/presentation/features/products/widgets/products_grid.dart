@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 
@@ -19,9 +18,7 @@ class ProductsGrid extends StatelessWidget {
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {
-        return ProductCardItem(productItem: products[index])
-            .animate()
-            .fadeIn(duration: 1000.ms);
+        return ProductCardItem(productItem: products[index]);
       },
     );
   }

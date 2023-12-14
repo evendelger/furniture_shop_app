@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/app_constants.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
 class ProductsSearchList extends StatelessWidget {
@@ -10,7 +10,7 @@ class ProductsSearchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      cacheExtent: Constants.customScrollCacheExtent,
+      cacheExtent: AppConstants.customScrollCacheExtent,
       slivers: [
         const SliverPadding(
           padding: EdgeInsets.only(top: 20),

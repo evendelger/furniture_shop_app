@@ -15,18 +15,18 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   })  : _favoritesRepository = favoritesRepository,
         _cartRepository = cartRepository,
         super(const ProductCardLoading()) {
-    on<ProductCardChangeFavoriteStatus>(_changeFavoriteStatus);
-    on<ProductCardOpen>(_changeProduct);
-    on<ProductCardChangeColor>(_changeColor);
-    on<ProductCardChangeCount>(_changeCount);
-    on<ProductCardChangeCartStatus>(_changeCartStatus);
+    on<CardChangeFavoriteStatus>(_changeFavoriteStatus);
+    on<CardOpen>(_open);
+    on<CardChangeColor>(_changeColor);
+    on<CardChangeCount>(_changeCount);
+    on<CardChangeCartStatus>(_changeCartStatus);
   }
 
   final IFavoritesRepository _favoritesRepository;
   final ICartRepository _cartRepository;
 
   Future<void> _changeFavoriteStatus(
-    ProductCardChangeFavoriteStatus event,
+    CardChangeFavoriteStatus event,
     Emitter<ProductCardState> emit,
   ) async {
     if (state is ProductCardLoaded) {
@@ -41,7 +41,7 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   }
 
   Future<void> _changeCartStatus(
-    ProductCardChangeCartStatus event,
+    CardChangeCartStatus event,
     Emitter<ProductCardState> emit,
   ) async {
     if (state is ProductCardLoaded) {
@@ -55,23 +55,28 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
     }
   }
 
-  Future<void> _changeProduct(
-    ProductCardOpen event,
+  Future<void> _open(
+    CardOpen event,
     Emitter<ProductCardState> emit,
   ) async {
-    final isFavorite = await _favoritesRepository.isFavorite(id: event.id);
-    final cartProduct = await _cartRepository.getCartProduct(id: event.id);
-    final isInCart = cartProduct.inCartValue != 0;
-    emit(ProductCardLoaded(
-      product: cartProduct.product,
-      isFavorite: isFavorite,
-      isInCart: isInCart,
-      inCartValue: isInCart ? cartProduct.inCartValue : null,
-    ));
+    emit(const ProductCardLoading());
+
+    try {
+      final isFavorite = await _favoritesRepository.isFavorite(id: event.id);
+      final cartProduct = await _cartRepository.getCartProduct(id: event.id);
+      final isInCart = cartProduct.inCartValue != 0;
+      emit(ProductCardLoaded(
+        product: cartProduct.product,
+        isFavorite: isFavorite,
+        isInCart: isInCart,
+        inCartValue: isInCart ? cartProduct.inCartValue : null,
+      ));
+    } catch (e) {
+      emit(ProductCardFailed(errorMessage: e.toString()));
+    }
   }
 
-  void _changeColor(
-      ProductCardChangeColor event, Emitter<ProductCardState> emit) {
+  void _changeColor(CardChangeColor event, Emitter<ProductCardState> emit) {
     if (state is ProductCardLoaded) {
       final stateCopy = (state as ProductCardLoaded);
       emit(stateCopy.copyWith(color: event.color));
@@ -79,7 +84,7 @@ class ProductCardBloc extends Bloc<ProductCardEvent, ProductCardState> {
   }
 
   Future<void> _changeCount(
-    ProductCardChangeCount event,
+    CardChangeCount event,
     Emitter<ProductCardState> emit,
   ) async {
     if (state is ProductCardLoaded) {

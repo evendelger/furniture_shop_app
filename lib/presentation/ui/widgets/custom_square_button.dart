@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 
 class CustomSquareButton extends StatelessWidget {
   const CustomSquareButton({
@@ -35,7 +36,7 @@ class CustomSquareButton extends StatelessWidget {
         height: sideLength,
         padding: EdgeInsets.zero,
         child: SvgPicture.asset(
-          'assets/icons/$iconName.svg',
+          SvgPaths.getByName(iconName),
           width: iconLength,
           height: iconLength,
           fit: BoxFit.scaleDown,

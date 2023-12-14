@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:furniture_shop_app/data/firebase/firebase.dart';
-import 'package:furniture_shop_app/data/permissions/permission_client.dart';
-import 'package:furniture_shop_app/data/permissions/constants/permission_exceptions.dart';
+import 'package:furniture_shop_app/data/permission_client/permission_client.dart';
+import 'package:furniture_shop_app/data/permission_client/constants/permission_exceptions.dart';
 import 'package:furniture_shop_app/domain/i_repositories/i_repositories.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,9 +31,10 @@ class ProfileRepository implements IProfileRepository {
       final userEmail = authClient.getUserEmail;
       final userPhoto = authClient.getUserImage;
 
-      if (userName.isEmpty && userEmail.isEmpty) {
+      if (userEmail == null || userEmail.isEmpty) {
         return ProfileModel.anon();
       }
+
       return ProfileModel(
         displayName: userName,
         email: userEmail,

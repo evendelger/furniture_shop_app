@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:furniture_shop_app/domain/models/models.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
 import 'package:furniture_shop_app/presentation/ui/functions/functions.dart';
+import 'package:furniture_shop_app/presentation/ui/assets_paths/assets_paths.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 
 class SearchProductWidget extends StatefulWidget {
@@ -65,7 +66,7 @@ class _SearchProductWidgetState extends State<SearchProductWidget> {
             backgroundColor: MaterialStatePropertyAll(AppColors.primary),
           ),
           icon: SvgPicture.asset(
-            'assets/icons/search.svg',
+            SvgPaths.search,
             height: 30,
             color: AppColors.white,
             fit: BoxFit.cover,

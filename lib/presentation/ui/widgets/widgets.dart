@@ -11,3 +11,4 @@ export 'rounded_container.dart';
 export 'favorites_app_bar.dart';
 export 'notification_app_bar.dart';
 export 'profile_app_bar.dart';
+export 'error_message_widget.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:furniture_shop_app/presentation/features/products/products.dart';
-import 'package:furniture_shop_app/presentation/ui/constants/constants.dart';
+import 'package:furniture_shop_app/presentation/ui/constants/app_constants.dart';
 import 'package:furniture_shop_app/presentation/ui/theme/theme.dart';
 import 'package:furniture_shop_app/presentation/ui/widgets/widgets.dart';
 
@@ -21,7 +21,7 @@ class ProductsCategoriesList extends StatelessWidget {
           edgeOffset: 180,
           displacement: 10,
           child: CustomScrollView(
-            cacheExtent: Constants.customScrollCacheExtent,
+            cacheExtent: AppConstants.customScrollCacheExtent,
             slivers: [
               const SliverPadding(
                 padding: EdgeInsets.only(top: 20),
